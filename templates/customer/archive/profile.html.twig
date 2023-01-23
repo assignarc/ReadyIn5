@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+    <div style="width:50%;float:middle">
+    <h1>Profile</h1>
+        Phone Number : {{phone}}<br>
+        <div id="login">
+            {{ form_start(form) }}
+                {%if step=='edit'%}
+                    {{ form_label(form.firstname) }} : {{ form_widget(form.firstname,{value: customer.getFirstname}) }}<br>
+                    {{ form_label(form.lastname) }}  : {{ form_widget(form.lastname,{value: customer.lastname}) }}<br>
+                    {{ form_label(form.save) }}  {{ form_widget(form.save) }} 
+                    {% do form.edit.setRendered %}
+                {% elseif step=='view'%}
+                    First Name : {{customer.firstname}}<br>
+                    Last Name : {{customer.lastname}}<br>
+                    {{ form_label(form.edit) }}  {{ form_widget(form.edit) }} 
+                    {% do form.firstname.setRendered %}
+                    {% do form.lastname.setRendered %}
+                    {% do form.save.setRendered %}
+                {%endif%}
+            {{ form_end(form) }}
+        </div>  
+    </div>
+
+
+{% endblock %}

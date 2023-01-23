@@ -1,0 +1,85 @@
+{% set page = {
+    "title"       : "Establishment Login" ,
+    "description" : "Establishment Login",
+    "context" : "place",
+    "keywords": "",
+    "menu":false
+} %}
+{% extends 'base.html.twig' %}
+{% block body %}
+
+<div id="tabs">
+	<ul>
+		<li>
+			<a href="#tabs-1">
+                <span class="material-symbols-outlined">supervisor_account</span>&nbsp;<span class="tabTitle">Owner</span>
+			</a>
+		</li>
+		<li>
+			<a href="#tabs-2">
+				<span class="material-symbols-outlined">manage_accounts</span>&nbsp;<span class="tabTitle">Manager</span>
+			</a>
+		</li>
+      
+		<li>
+            <a href="#tabs-3">
+                <span class="material-symbols-outlined">help</span>&nbsp;<span class="tabTitle">Help</span>
+            </a>
+		</li>
+	</ul>
+	<div id="tabs-1">
+        <form name="formLogin" method="post" id="loginForm" class="wlLoginForm">
+            <p>
+                <input type="hidden" name="logintype" value="place" id="logintype"/>
+                <label for="phone" class="required">Phone Number :
+                </label>
+                <input type="tel" id="phone" required="required" value="+14403825835">
+            </p>
+            <p>
+                <label for="toggle">Contact Method:</label>
+                <span class="toggle" name="toggle">
+                    <input type="radio" name="method" value="whatsapp" id="methodWA" />
+                    <label for="methodWA" title="WhatsApp"><img class="material-symbols-outlined" src="/images/whatsapp.png"></label>
+                    <input type="radio" name="method" value="sms" id="methodSMS" checked="checked" />
+                    <label for="methodSMS" title="SMS/Text"><span class="material-symbols-outlined">sms</span></label>
+                </span>
+            </p>
+            <p id="otpsection" style="display:none">
+                <label for="otp" class="required">OTP :</label>
+                <input type="text" id="otp" required="required">
+            </p>
+            <p>
+                <button type="button" id="sendcode" onmousedown="processButton('sendcode')">
+                    <span class="material-symbols-outlined">pin</span>&nbsp;Send Code
+                </button>
+                <button type="button" style="display:none" id="verify" onmousedown="processButton('verify')">
+                        <span class="material-symbols-outlined">task_alt</span>&nbsp;Verify
+                </button>
+            </p>
+            <p id="nextsteps" style="display:none">
+                <button type="button" id="placeinfo" onmousedown="processButton('placeinfo')">
+                    <span class="material-symbols-outlined">visibility</span>&nbsp;Public View
+                </button>
+                <button type="button" id="placeprofile" onmousedown="processButton('placeprofile')">
+                    <span class="material-symbols-outlined">place</span>&nbsp;Manage Profile
+                </button>
+                <button type="button" id="placeeservations" onmousedown="processButton('placereservations')">
+                    <span class="material-symbols-outlined">hourglass_bottom</span>&nbsp;Manage Reservations
+                </button>
+            </p>
+        </form>
+	</div>
+	<div id="tabs-2">
+	</div>
+    <div id="tabs-3">
+	</div>
+</div>
+<script>
+    $("#tabs").tabs();
+</script>
+
+
+<script type="text/javascript" src="/js/place/login.js"></script>
+<script type="text/javascript" src="/js/phonefield.js"></script>
+
+{% endblock %}

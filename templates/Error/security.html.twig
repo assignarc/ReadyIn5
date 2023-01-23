@@ -1,0 +1,29 @@
+{% set page = {
+    "title"       : "Error occured!" ,
+    "description" : "Errro occured.",
+    "context" : "error",
+    "keywords": "",
+} %}
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="wLContentI" style="text-align:center">
+        <span class="material-symbols-outlined">front_hand</span>&nbsp;
+        <label class="tabtitle">Sincere apologies, an unexpected error has occured, please signin again.</label><br> 
+        <label>{{exception.code}} - {{exception.message}}</label>
+            <div>
+                <p>
+                    <button type="button" id="home" onmousedown="processButton('home')">
+                        <span class="material-symbols-outlined">home</span>&nbsp;Home
+                    </button>
+                    <button type="button" id="customerLogin" onmousedown="processButton('customerLogin')">
+                        <span class="material-symbols-outlined">login</span>&nbsp;Customer Signin
+                    </button>
+                    <button type="button" id="placeLogin" onmousedown="processButton('placeLogin')">
+                            <span class="material-symbols-outlined">task_alt</span>&nbsp;Place Signin
+                    </button>
+                </p>
+            </div>
+    </div>
+
+    <script type="text/javascript" src="/js/error/security.js"></script>
+{% endblock %}

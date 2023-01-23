@@ -1,0 +1,66 @@
+{% set page = {
+    "title"       : "Place Profile" ,
+    "description" : "Place Profile",
+    "context" : "place",
+    "keywords": "",
+    "menu":true
+} %}
+{% extends 'base.html.twig' %}  
+{% block body %}
+    
+    <div class="wLContentI">
+        <div id="tabs">
+            <ul>
+                <li>
+                    <a href="#tabs-1"><span class="material-symbols-outlined">Configuration</span>&nbsp;<span class="tabTitle">Profile</span></a>
+                </li>
+                <li>
+                    <a href="#tabs-2"><span class="material-symbols-outlined">Plan Info</span>&nbsp;<span class="tabTitle">Schedule</span></a>
+                </li>
+                <li>
+                    <a href="#tabs-3"><span class="material-symbols-outlined">Payment Details</span>&nbsp;<span class="tabTitle">Holidays</span></a>
+                </li>
+            
+            </ul>
+            <div id="tabs-1">
+                <div>
+                    <form name="profileForm" id="profileForm">
+                        <p><label for="slug" class="required">Slug :</label><input type="text" id="slug"  name="slug"  required="required" placeholder="READ ONLY" readonly class="wlReadonly"></p>
+                        <p><label for="name" class="required">Name :</label><input type="text" id="name"  name="name"  required="required" value=""></p>
+                        <p><label for="addressline1" class="required">Address Line 1:</label><input type="text" name="addressline1"  id="addressline1"  required="required" value=""></p>
+                        <p><label for="addressline2" class="required">Address Line 2:</label><input type="text" name="addressline2"  id="addressline2" value=""></p>
+                        <p><label for="addressline3" class="required">Address Line 3:</label><input type="text" name="addressline3" id="addressline3" value=""></p>
+                        <p><label for="city" class="required">City :</label><input type="text" name="city" id="city"  required="required" value=""></p>
+                        <p><label for="state" class="required">State :</label><input type="text" name="state" id="state"  required="required" value=""></p>
+                        <p><label for="country" class="required">Country :</label><input type="text" name="country" id="country"  required="required" value=""></p>
+                        <p><label for="postalcode" class="required">Postal Code :</label><input type="text" name="postalcode" id="postalcode" required="required" value=""></p>
+                        <p><label for="phone" class="required">Phone :</label><input type="tel" id="phone" name="phone" required="required" value=""></p>
+                        <p><button type="submit" id="save" name="form[save]" onmousedown="process(event)">
+                                <span class="material-symbols-outlined">save</span>&nbsp;Save
+                            </button></p>
+                    </form>
+                </div>
+            </div>
+            <div id="tabs-2">
+             
+            </div>
+            <div id="tabs-3">
+            </div>
+            <div id="tabs-4">
+        
+            </div>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="/js/place/update.js"></script>   
+    
+    <!--JCrop Image Cropping-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.15/css/jquery.Jcrop.min.css" integrity="sha512-bbAsdySYlqC/kxg7Id5vEUVWy3nOfYKzVHCKDFgiT+GsHG/3MD7ywtJnJNSgw++HBc+w4j71MLiaeVm1XY5KDQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.15/js/jquery.Jcrop.min.js" integrity="sha512-KKpgpD20ujD3yJ5gIJqfesYNuisuxguvTMcIrSnqGQP767QNHjEP+2s1WONIQ7j6zkdzGD4zgBHUwYmro5vMAw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- Image edits and File Uploads -->
+    <script src="/js/load-image/load-image-WL.js"></script>
+    <script type="text/javascript" src="/js/load-image/load-image.all.min.js"></script>
+    <script type="text/javascript" src="/js/phonefield.js"></script>
+
+{% endblock %}

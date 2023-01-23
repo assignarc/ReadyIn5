@@ -1,0 +1,46 @@
+    <div class="wlPlaceInfo" id="wlPlaceInfo">
+        <div class="placeImage">
+            <img class="wlLogo" src="/images/ri5/default-place-logo.png" id="placeLogo">
+        </div>
+        <div class="placeMeta">
+            <label id="placeName"></label>
+            <br>
+            <span class="material-symbols-outlined">gps_fixed</span>&nbsp;<a href="#" id="placeAddressLink" style="display:none"><span class="material-symbols-outlined">map</span></a><br>
+            <label id="placeAddress"></label>
+            <br>
+            <span class="material-symbols-outlined">deskphone</span>&nbsp;<a href="#" id="placePhoneLink"><label id="placePhone"></label></a>
+        </div>
+    </div>
+    <script type="text/javascript">
+        var placeSlug = '{{placeSlug}}';
+        $.ajax({
+            url: "/svc/place/"+wlPlaceSlug+"/info" ,  
+            contentType: "json",
+            method:'GET',
+        }).done(function(response) {
+            if(response.hasOwnProperty('details'))
+                if(response.details.hasOwnProperty('place')){
+                    $("#placeName").text(response.details.place.name);
+                    $("#placePhone").text(response.details.place.phone);
+                    $("#placePhoneLink").attr("href", "tel:"+response.details.place.phone);
+                    if(response.details.place.hasOwnProperty('addressdata')){
+                    
+                        if(response.details.place.addressdata.hasOwnProperty('address_formatted')){
+                            $("#placeAddress").text(response.details.place.addressdata.address_formatted);
+                        }
+                        else 
+                            $("#placeAddress").text("Address not available");
+                        
+                        if(response.details.place.addressdata.hasOwnProperty('placeId')){
+                            $("#placeAddressLink").show();
+                            $("#placeAddressLink").attr("href","https://www.google.com/maps/place/?q=place_id:" + response.details.place.addressdata.placeId);
+                        }
+                    }
+                }
+
+            showNotification("info",response.text);
+        }).fail(function(jqXHR,textStatus, errorThrow){
+            showNotification("error",JSON.parse(jqXHR.responseText).text );
+        });
+
+    </script> 

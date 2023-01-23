@@ -1,0 +1,24 @@
+{% set page = {
+    "title"       : "Guest Login" ,
+    "description" : "Guest Login",
+    "context" : "customer",
+    "keywords": "",
+    "menu": false
+} %}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+    <div style="width:50%;float:middle">
+        <h1>OTP</h1>
+        
+        <div>
+        Error occured : Please start at <a href="/">home page</a>.<br>
+        {{exception.message}}
+        </div>  
+    </div>
+
+
+{% endblock %}

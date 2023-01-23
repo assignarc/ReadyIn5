@@ -1,0 +1,7 @@
+<script type="text/javascript">
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            showNotification('{{label}}','{{message}}');
+        {% endfor %}
+    {% endfor %}
+</script>

@@ -1,0 +1,39 @@
+{% set page = {
+    "title"       : "Place Management Home" ,
+    "description" : "Place Management Home",
+    "context" : "place",
+    "keywords": "",
+    "menu": true
+} %}
+{% extends 'base.html.twig' %}
+{% block body %}
+
+<div id="tabs">
+	<ul>
+		<li>
+			<a href="#tabs-1">
+                <span class="material-symbols-outlined">supervisor_account</span>&nbsp;<span class="tabTitle">Owner</span>
+			</a>
+		</li>
+		<li>
+			<a href="#tabs-2">
+				<span class="material-symbols-outlined">manage_accounts</span>&nbsp;<span class="tabTitle">Manager</span>
+			</a>
+		</li>
+		
+	</ul>
+	<div id="tabs-1">
+        <div id="wlOwnerDash" class="wlOwnerDash">
+            <div id="jsRestaurants"></div>
+        </div>
+	</div>
+	<div id="tabs-2">
+	</div>
+</div>
+<script>
+    $("#tabs").tabs();
+</script>
+
+
+<script type="text/javascript" src="/js/place/manager.js"></script>
+{% endblock %}

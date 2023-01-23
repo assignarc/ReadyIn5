@@ -1,0 +1,14 @@
+    <a href="#" class="logo placeLogo">
+        <img src="/images/ri5/default-place-logo.png" class="wlLogo" alt="{{place.name}}"><br>
+    </a>
+    <div class="wlPlaceInfo" id="wlPlaceInfo">
+        <div class="placeMeta">
+            <label id="placeName">{{place.name}}</label>
+            <br>
+            <a href="/place/{{place.addressdata.placeId}}/info" id="placeInfoLink"><span class="material-symbols-outlined material-symbols-small" title="info">gps_fixed</span></a>&nbsp;
+            <a href="https://www.google.com/maps/place/?q=place_id:{{place.addressdata.placeId}}" id="placeAddressLink"><span class="material-symbols-outlined material-symbols-small">map</span></a>
+            <!--<label id="placeAddress">{{place.addressdata.address_formatted}}</label>-->
+            <span class="material-symbols-outlined material-symbols-small">deskphone</span>&nbsp;<a href="tel:{{place.phone}}" id="placePhoneLink"><label id="placePhone">{{place.phone}}</label></a>
+        </div>
+    </div>
+    

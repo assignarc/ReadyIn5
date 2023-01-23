@@ -1,0 +1,100 @@
+# config/services.yaml
+imports:
+    - { resource: 'config.yaml' }
+    - { resource: 'controllers.yaml' }
+  
+  
+services:
+  # default configuration for services in *this* file
+  _defaults:
+    public: true    
+    autowire: true  
+    autoconfigure: true
+    #bind:
+      #$otpRepository: '@RI5\DB\Repository\OtpRepository'
+      #$customerRepository: '@RI5\DB\Repository\CustomerRepository'
+      # $placeRepository: '@RI5\DB\Repository\PlaceRepository'
+      # #$entityManagerInterface: '@Doctrine\ORM\EntityManagerInterface'
+      # $placeHolidaysRepository: '@RI5\DB\Repository\PlaceHolidaysRepository'
+      # $placeUserRepository: '@RI5\DB\Repository\PlaceUserRepository'
+      # $placeQueueRepository: '@RI5\DB\Repository\PlaceQueueRepository'
+      # $placeScheduleRepository: '@RI5\DB\Repository\PlaceScheduleRepository'
+      # $placeImageRepository: '@RI5\DB\Repository\PlaceImageRepository'
+      # $placeOwnerRepository: '@RI5\DB\Repository\PlaceOwnerRepository'
+      #$logger: '@monolog.logger'
+      #$messenger: '@App\Services\Provider\TwilioMessageService'
+      #$params : "@parameter_bag"
+      # $container : "@service_container"
+
+  RI5\:
+        resource: '../../../src/*'
+
+  # RI5\Services\Subscribers\ReservationStatusChangedSubscriber: 
+  #     public: true
+  #     autowire: true
+
+  # RI5\Services\BaseService:
+  #   autowire: true
+  #   public : true
+  #   lazy: true
+  #   tags:  
+  #       - {name : '@RI5.service.base'}
+  #   calls: 
+  #       - [setLogger,[ '@monolog.logger' ]]
+  #       - [setParameterBag,['@parameter_bag']]
+  #       - [setEntityManager,['@doctrine.orm.default_entity_manager']]
+  
+  # RI5\Services\CustomerService:
+  #   parent: RI5\Services\BaseService
+  #   autowire: true
+  #   public : true
+  #   tags:  
+  #       - {name : '@RI5.service.customer'}
+  #   # calls: 
+  #   #     - [setLogger,[ '@monolog.logger' ]]
+ 
+  RI5\Services\TwilioMessageService:
+    #parent: RI5\Services\BaseService
+    public: true
+    autowire: true
+    lazy: true
+    tags:
+        - {name : '@RI5.services.messenger'}
+
+  RI5\Services\Traits\MessengerTrait:
+    calls:
+      - [setMessenger,[ '@RI5\Services\TwilioMessageService' ]]
+  
+  
+  # RI5.service.place:
+  #   class: RI5\Services\PlaceService
+  #   public: true
+  #   autowire: true
+  #   autoconfigure: true
+  #   lazy: true
+  #   arguments: ['@RI5\DB\Repository\PlaceRepository',
+  #               '@Doctrine\ORM\EntityManagerInterface',
+  #               '@RI5\DB\Repository\PlaceHolidaysRepository',
+  #               '@RI5\DB\Repository\PlaceUserRepository',
+  #               '@RI5\DB\Repository\PlaceQueueRepository',
+  #               '@RI5\DB\Repository\PlaceScheduleRepository',
+  #               '@RI5\DB\Repository\PlaceImageRepository',
+  #               '@RI5\DB\Repository\PlaceOwnerRepository']
+  #   tags:
+  #       - {name : '@RI5.service.place'}
+  
+  # RI5.service.customer:
+  #   class: RI5\Services\CustomerService
+  #   public: true
+  #   autowire: true
+  #   lazy: true
+  #   tags:
+  #       - {name : '@RI5.service.customer'}
+  
+  # RI5.service.reservation:
+  #   class: RI5\Services\ReservationService
+  #   public: true
+  #   autowire: true
+  #   lazy: true
+  #   tags:
+  #       - {name : '@RI5.service.reservation'}

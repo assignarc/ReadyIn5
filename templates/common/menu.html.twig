@@ -1,0 +1,17 @@
+<div class="menu">
+  <ul>
+    {%if menucontext=="customer"%}
+      <a href="/customer/profile"><li>Profile</li></a>
+      <a href="/customer/reservations"><li>Reservations</li></a>
+      <a href="/customer/logout"><li>Logout</li></a>
+    {% elseif menucontext=="place"%}
+      <a href="/place/{{placeSlug}}/info"><li>View Place</li></a>
+      <a href="/place/{{placeSlug}}/profile"><li>Update Place</li></a>
+      <a href="/place/{{placeSlug}}/reservations"><li>Manage Reservations</li></a>
+      <a href="/place/{{placeSlug}}/logout"><li>Logout</li></a>
+    {% endif %}
+  </ul>
+</div> 
+<!-- Menu has Document Ready function to start in jscript.js
+<script type="text/javascript" src="/js/menu.js"></script>
+-->

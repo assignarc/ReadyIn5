@@ -1,0 +1,49 @@
+{% set page = {
+    "title"       : "Guest Login" ,
+    "description" : "Guest Login",
+    "context" : "customer",
+    "keywords": "",
+} %}
+{% extends 'base.html.twig' %}
+{% block body %}
+    <div class="wLContentI">
+        Place: {{place.name}}
+            {{ form_start(form) }}
+                {%if step=='1'%}
+                    <p>{{ form_label(form.phone) }} : {{ form_widget(form.phone,{value:phone}) }}</p>
+                    <p>{{ form_label(form.sendcode) }}  {{ form_widget(form.sendcode) }} </p>
+                    {% do form.login.setRendered %}
+                    {% do form.proceed.setRendered %}
+                    {% do form.code.setRendered %}
+                {% elseif step=='2'%}
+                    Phone Number : {{phone}}<br>
+                    {{ form_label(form.code ) }} : {{ form_widget(form.code) }} <br>
+                    {{ form_label(form.login) }} {{ form_widget(form.login) }}
+                    {% do form.phone.setRendered %}
+                    {% do form.sendcode.setRendered %}
+                    {% do form.proceed.setRendered %}
+                    {% do form.phone.setRendered %}
+                {% elseif step=='3'%}
+                    Phone Number : {{phone}}<br>
+                    {{ form_label(form.proceed) }} {{ form_widget(form.proceed) }}
+                    {% do form.sendcode.setRendered %}
+                    {% do form.phone.setRendered %}
+                    {% do form.code.setRendered %}
+                    {% do form.login.setRendered %}
+                {%endif%}
+            {{ form_end(form) }}
+      
+    </div>
+<script>
+    const phoneInputField = document.querySelector("#form_phone");
+    const phoneInput = window.intlTelInput(phoneInputField, {
+        utilsScript:
+        "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+    });
+   
+    function process(event) {
+       document.querySelector("#form_phone").value= phoneInput.getNumber();
+    }
+</script>
+
+{% endblock %}

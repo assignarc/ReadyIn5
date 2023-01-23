@@ -1,0 +1,44 @@
+{% set page = {
+    "title"       : "Place Information" ,
+    "description" : "Place Information",
+    "context" : "place",
+    "keywords": "",
+    "menu":false,
+} %}
+{% extends 'base.html.twig' %} 
+{% block body %}
+
+        <div class="wlPlaceInfo" id="wlPlaceInfo">
+            <div class="placeMeta wlHighlight">
+                <label id="placeName">{{place.name}}</label>
+                <br>
+                <span class="material-symbols-outlined">gps_fixed</span>&nbsp;<a href="https://www.google.com/maps/place/?q=place_id:{{place.addressdata.placeId}}" id="placeAddressLink"><span class="material-symbols-outlined">map</span></a>
+                <label id="placeAddress">{{place.addressdata.address_formatted}}</label><br>
+                <span class="material-symbols-outlined">deskphone</span>&nbsp;<a href="tel:{{place.phone}}" id="placePhoneLink"><label id="placePhone">{{place.phone}}</label></a>
+            </div>
+        </div>  
+    
+        <div id="tabs">
+            <ul>
+                <li>
+                    <a href="#tabs-1"><span class="material-symbols-outlined">calendar_month</span>&nbsp;<span class="tabTitle">Schedule</span></a>
+                </li>
+                <li>
+                    <a href="#tabs-2"><span class="material-symbols-outlined">holiday_village</span>&nbsp;<span class="tabTitle">Holidays</span></a>
+                </li>
+            </ul>
+           
+            <div id="tabs-1">
+                <div id="jsSchedule"  wlWidth="96%"></div>
+            </div>
+            <div id="tabs-2">
+                <div id="jsHolidays" wlWidth="96%"></div><br>
+            </div>
+      
+        </div>
+   
+    
+    <script type="text/javascript" src="/js/place/info.js"></script>   
+    
+   
+{% endblock %}

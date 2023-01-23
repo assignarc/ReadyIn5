@@ -1,0 +1,55 @@
+{% set page = {
+    "title"       : "Customer Reservations" ,
+    "description" : "Customer Reservations",
+    "context" : "customer",
+    "keywords": "",
+    "menu":true
+} %}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.countdown/2.2.0/jquery.countdown.min.js" integrity="sha512-lteuRD+aUENrZPTXWFRPTBcDDxIGWe5uu0apPEn+3ZKYDwDaEErIK9rvR0QzUGmUQ55KFE2RqGTVoZsKctGMVw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+<div id="tabs">
+    <ul>
+        <li>
+            <a href="#tabs-1"><span class="material-symbols-outlined">today</span>&nbsp;<span class="tabTitle">Current</span></a>
+        </li>
+        <li>
+            <a href="#tabs-2"><span class="material-symbols-outlined">calendar_month</span>&nbsp;<span class="tabTitle">Past</span></a>
+        </li>
+    </ul>
+    <div id="tabs-1">
+        <div id="reservationsDiv" class="wlCustRes">
+            <div id="jsGridCurrent"></div>
+        </div> 
+    </div>
+    <div id="tabs-2">
+        <div id="reservationsDiv" class="wlCustRes">
+            <div id="jsGridPast"></div>
+        </div>  
+    </div>
+    <script>
+        $("#tabs").tabs();
+    </script>
+    <script type="text/javascript" src="/js/customer/reservations.js"></script>
+
+    <div id="hourGlassTemplate" style="display:none">
+        <div class="hourglassBackground">
+            <div class="hourglassContainer">
+                <div class="hourglassCurves"></div>
+                <div class="hourglassCapTop"></div>
+                <div class="hourglassGlassTop"></div>
+                <div class="hourglassSand"></div>
+                <div class="hourglassSandStream"></div>
+                <div class="hourglassCapBottom"></div>
+                <div class="hourglassGlass"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}

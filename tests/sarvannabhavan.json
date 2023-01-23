@@ -1,0 +1,94 @@
+{
+    "name": "Saravanaa Bhavan",
+    "lat": 32.9236552,
+    "long": -96.95463290000001,
+    "placeId": "ChIJg9NKwFAoTIYRUfHTausS4Tc",
+    "phone": "+1 972-506-7755",
+    "address_formatted": "8604 N MacArthur Blvd, Irving, TX 75063, USA",
+    "address_adr_address": "<span class=\"street-address\">8604 N MacArthur Blvd</span>, <span class=\"locality\">Irving</span>, <span class=\"region\">TX</span> <span class=\"postal-code\">75063-4113</span>, <span class=\"country-name\">USA</span>",
+    "address": {
+        "home": "8604",
+        "street": "North MacArthur Boulevard",
+        "intersection": "",
+        "colloquialarea": "",
+        "neighborhood": "Valley Ranch",
+        "landmark": "",
+        "city": "Irving",
+        "postalcode": "75063",
+        "region": "Texas",
+        "country": "United States",
+        "phone": ""
+    },
+    "address_components": [
+        {
+            "long_name": "8604",
+            "short_name": "8604",
+            "types": [
+                "street_number"
+            ]
+        },
+        {
+            "long_name": "North MacArthur Boulevard",
+            "short_name": "N MacArthur Blvd",
+            "types": [
+                "route"
+            ]
+        },
+        {
+            "long_name": "Valley Ranch",
+            "short_name": "Valley Ranch",
+            "types": [
+                "neighborhood",
+                "political"
+            ]
+        },
+        {
+            "long_name": "Irving",
+            "short_name": "Irving",
+            "types": [
+                "locality",
+                "political"
+            ]
+        },
+        {
+            "long_name": "Dallas County",
+            "short_name": "Dallas County",
+            "types": [
+                "administrative_area_level_2",
+                "political"
+            ]
+        },
+        {
+            "long_name": "Texas",
+            "short_name": "TX",
+            "types": [
+                "administrative_area_level_1",
+                "political"
+            ]
+        },
+        {
+            "long_name": "United States",
+            "short_name": "US",
+            "types": [
+                "country",
+                "political"
+            ]
+        },
+        {
+            "long_name": "75063",
+            "short_name": "75063",
+            "types": [
+                "postal_code"
+            ]
+        },
+        {
+            "long_name": "4113",
+            "short_name": "4113",
+            "types": [
+                "postal_code_suffix"
+            ]
+        }
+    ],
+    "plus_compoundCode": "W2FW+F4 Irving, TX, USA",
+    "plus_globalCode": "8645W2FW+F4"
+}

@@ -3,14 +3,21 @@
 
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+
+
 parameters:
+
 
 services:
     # default configuration for services in *this* file
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-
+        bind:
+            #$logger: '@monolog.logger'
+            #$messenger: '@App\Services\Provider\TwilioMessageService'
+            #$parameters : "@parameter_bag"
+           # $container : "@service_container"
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
@@ -18,7 +25,44 @@ services:
         exclude:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
+            - '../src/Exception/'
             - '../src/Kernel.php'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    
+    # App\Controller\BaseController :
+    #     autowire: true
+    #     public : true
+    #     calls: 
+    #         - [setConfig,[ '%RI5%' ]]
+    #     lazy: true
+        #calls:
+    # App\Services\Provider\TwilioMessageService :
+    #     autowire: true
+    #     public : true
+    #     tags:  
+    #         - {name : '@service.messenger'}
+    #     calls: 
+    #         - [setParameters,[ '%RI5.TWILIO%' ]]
+    #     lazy: true
+    #     #calls:
+
+    # service.messenger: '@App\Services\Provider\TwilioMessageService'
+    
+    # App\Services\OtpService :
+    #     autowire: true
+    #     public: true
+    #     lazy: true
+    #     calls:
+    #         - [setMessenger, ['@RI5\Services\TwilioMessageService']]
+    #         - [setParameters,[ '%RI5.OTP%' ]]
+   
+    # App\Services\BaseService:
+    #     lazy: true
+    #     abstract: true
+    #     calls: 
+    #         - [setParameters,[ '%RI5.GENERAL%' ]]
+   
+
+    

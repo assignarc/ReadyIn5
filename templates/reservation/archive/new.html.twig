@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Reserve{% endblock %}
+
+{% block body %}
+<span type="text" id="firstName">{{customer.firstname}}</span>&nbsp;<span type="text" id="lastName">{{customer.lastname}}&nbsp;(<span id="phoneNumber">{{customer.phone}}</span>)
+	
+<div style="width:50%;float:middle">
+	<h1>Signup</h1>
+	place: {{placeHash}}
+    Queue : {{queueHash}}
+    {{ form_start(form) }}
+    {{ form_label(form.adults) }} : {{ form_widget(form.adults) }} <br>
+    {{ form_label(form.children) }} :  {{ form_widget(form.children)}} <br>
+    {{ form_label(form.notes) }} :  {{ form_widget(form.notes) }} <br>
+    {{ form_label(form.save) }} {{ form_widget(form.save) }} <br>
+    {{ form_end(form) }}
+
+	</div>
+
+</div>
+
+{% endblock %}

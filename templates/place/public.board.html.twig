@@ -1,0 +1,35 @@
+{% set page = {
+    "title"       : "Place Dashboard" ,
+    "description" : "Place Management Home",
+    "context" : "place",
+    "keywords": "",
+    "menu": false
+} %}
+{% extends 'base.simple.html.twig' %}
+{% block body %}
+<div id="wlBoard" class="wlBoard">
+	<div id="wlBoardL" class="wlBoardL">
+		<div class="wlBoardLT">
+			<div class="col">
+				<img src="{{qrcode}}" /><br>
+				<a href="{{url}}">{{place.name}}</a>
+
+			</div>
+		</div>
+		<div class="wlBoardLB"></div>
+	</div>
+	<div id="wlBoardR" class="wlBoardR">
+		<h3>Ready to Serve</h3>
+		<div id="jsGridCall" class="wlBoardRB"
+			wlBaseUrl="/svc/place/{wlPlaceSlug}/reservations/current/" 
+			wlFromStatus="CALL" wlWidth="96%" wlPageSize="10"></div>
+		<h3>Currently Waiting</h3>
+		<div id="jsGridWait" class="wlBoardRT"
+			wlBaseUrl="/svc/place/{wlPlaceSlug}/reservations/current/" 
+			wlFromStatus="WAIT"  wlWidth="96%" wlPageSize="10"></div>
+		
+	</div>
+</div>
+
+<script type="text/javascript" src="/js/place/public.board.js"></script>
+{% endblock %}

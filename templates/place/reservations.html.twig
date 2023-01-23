@@ -1,0 +1,70 @@
+{% set page = {
+    "title"       : "Place Reservations" ,
+    "description" : "Place Reservations",
+    "context" : "place",
+    "keywords": "",
+    "menu":true
+} %}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<script src="/js/jquery-plugin/jquery.plugin.min.js"></script> 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-countdown/2.1.0/css/jquery.countdown.min.css" integrity="sha512-3TZ6IiaoL7KEeLwJgOfw+/dEOxOUpb9YhmUokvcFOvNuFJ7t9kvilMNAMqeJ8neRT4iBnCe35TZsPwD2Y1Gl6g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.countdown/2.2.0/jquery.countdown.min.js" integrity="sha512-lteuRD+aUENrZPTXWFRPTBcDDxIGWe5uu0apPEn+3ZKYDwDaEErIK9rvR0QzUGmUQ55KFE2RqGTVoZsKctGMVw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>   
+        <div id="tabs">
+            <ul>
+                <li>
+                    <a href="#tabs-1"><span class="material-symbols-outlined">
+                    hourglass_bottom
+                    </span>&nbsp;<span class="tabTitle">Waiting</span></a>
+                </li>
+                <li>
+                    <a href="#tabs-2">
+                        <span class="material-symbols-outlined">smartphone</span>&nbsp;<span class="tabTitle">Called</span></a>
+                </li>
+                <li>
+                    <a href="#tabs-3">
+                        <span class="material-symbols-outlined">airline_seat_recline_normal</span>&nbsp;<span class="tabTitle">Seated</span></a>
+                </li>
+                <li>
+                    <a href="#tabs-4"><span class="material-symbols-outlined">restaurant_menu</span>&nbsp;<span class="tabTitle">Served</span></a>
+                </li>
+                <li>
+                    <a href="#tabs-5"><span class="material-symbols-outlined">event_busy</span>&nbsp;<span class="tabTitle">Past</span></a>
+                </li>
+            </ul>
+            <div id="tabs-1">
+                <div id="jsGridWait" 
+                        wlBaseUrl="/svc/place/{wlPlaceSlug}/reservations/current/" 
+                        wlFromStatus="WAIT" wlToStatus="CALL" wlWidth="96%" wlPageSize="10"></div>
+            </div>
+            <div id="tabs-2">
+                <div id="jsGridCall" 
+                        wlBaseUrl="/svc/place/{wlPlaceSlug}/reservations/current/" 
+                        wlFromStatus="CALL" wlToStatus="SEAT" wlWidth="96%" wlPageSize="10"></div>
+            </div>
+            <div id="tabs-3">
+                <div id="jsGridSeat" 
+                        wlBaseUrl="/svc/place/{wlPlaceSlug}/reservations/current/" 
+                        wlFromStatus="SEAT" wlToStatus="SERVE" wlWidth="96%" wlPageSize="10"></div>
+            </div>
+            <div id="tabs-4">
+                <div id="jsGridServe" 
+                        wlBaseUrl="/svc/place/{wlPlaceSlug}/reservations/current/" 
+                        wlFromStatus="SERVE" wlToStatus="NOSHOW" wlWidth="96%" wlPageSize="10"></div>
+            </div>
+            <div id="tabs-5">
+                <div id="jsGridNoShow" 
+                        wlBaseUrl="/svc/place/{wlPlaceSlug}/reservations/current/" 
+                        wlFromStatus="NOSHOW" wlWidth="96%" wlPageSize="10"></div>
+            </div>
+        </div>
+    
+
+    <script>
+        $("#tabs").tabs();
+    </script>
+    <script type="text/javascript" src="/js/place/reservations.js"></script>
+    
+
+{% endblock %}

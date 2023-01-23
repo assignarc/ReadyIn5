@@ -1,0 +1,62 @@
+{% set page =  {
+    "title"       : "",
+    "description" : "",
+    "context"     : "",
+    "keywords"    : "",
+    "canonical"     :"",
+    "menu" : false
+}  | merge(page)
+%}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ReadyIn5 - {{page.title}}</title>
+        {{include('meta.includes.html.twig')}}
+        <meta name="description" content="{{page.keywords}}" />
+        <meta name="keywords" content="{{page.keywords}}}">
+        {{include('includes.html.twig')}}
+    </head>
+    <body>
+        <header>
+            <script type="text/javascript">
+                var wlPlaceSlug = '{{placeSlug}}';
+            </script>
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="flash-{{ label }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            <div class="wlPageTitle">
+                {% if menucontext=="place"%}
+                    {{include ("place/banner.html.twig" , {'version' : 'banner'})}} 
+                {% elseif menucontext=="customer" %}
+                    {{include("customer/banner.html.twig", {'version' : 'banner'})}}
+                {% else %}
+                    {{include("banner-default.html.twig", {'version' : 'banner'})}}
+                {% endif %}
+            </div>
+            <nav>
+                {% if page.menu%}
+                    <button class="hamburger">&#9776;</button>
+                    <button class="cross">X</button>
+                    {{include('menu.html.twig')}}
+                {% endif %}
+            </nav>
+        </header>
+       
+        <article>
+            <div class="wlContent">
+                {% block body %}{% endblock %}
+            </div>
+            <div id="dialog" style="display:none;">   
+            </div>
+        </article>
+        <footer>
+            <div id="wlNotifications">
+            </div>
+            {{include('footer.html.twig')}}
+        </footer>
+    </body>
+</html>

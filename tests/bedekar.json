@@ -1,0 +1,95 @@
+{
+    "name": "Bedekar Misal",
+    "lat": 18.5148471,
+    "long": 73.84992969999999,
+    "placeId": "ChIJyaFFIHHAwjsR8EPkdCKUoSM",
+    "address_formatted": "418, Munjabacha Bole Rd, Narayan Peth, Pune, Maharashtra 411030, India",
+    "address_adr_address": "<span class=\"street-address\">418, Munjabacha Bole Rd</span>, <span class=\"extended-address\">Narayan Peth</span>, <span class=\"locality\">Pune</span>, <span class=\"region\">Maharashtra</span> <span class=\"postal-code\">411030</span>, <span class=\"country-name\">India</span>",
+    "address": {
+        "home": "418",
+        "street": "Munjabacha Bole Road",
+        "intersection": "",
+        "colloquialarea": "",
+        "neighborhood": "",
+        "landmark": "",
+        "city": "Pune",
+        "postalcode": "411030",
+        "region": "Maharashtra",
+        "country": "India",
+        "sublocality": "Narayan Peth"
+    },
+    "address_components": [
+        {
+            "long_name": "418",
+            "short_name": "418",
+            "types": [
+                "street_number"
+            ]
+        },
+        {
+            "long_name": "Munjabacha Bole Road",
+            "short_name": "Munjabacha Bole Rd",
+            "types": [
+                "route"
+            ]
+        },
+        {
+            "long_name": "Narayan Peth",
+            "short_name": "Narayan Peth",
+            "types": [
+                "sublocality_level_1",
+                "sublocality",
+                "political"
+            ]
+        },
+        {
+            "long_name": "Pune",
+            "short_name": "Pune",
+            "types": [
+                "locality",
+                "political"
+            ]
+        },
+        {
+            "long_name": "Pune",
+            "short_name": "Pune",
+            "types": [
+                "administrative_area_level_3",
+                "political"
+            ]
+        },
+        {
+            "long_name": "Pune Division",
+            "short_name": "Pune Division",
+            "types": [
+                "administrative_area_level_2",
+                "political"
+            ]
+        },
+        {
+            "long_name": "Maharashtra",
+            "short_name": "MH",
+            "types": [
+                "administrative_area_level_1",
+                "political"
+            ]
+        },
+        {
+            "long_name": "India",
+            "short_name": "IN",
+            "types": [
+                "country",
+                "political"
+            ]
+        },
+        {
+            "long_name": "411030",
+            "short_name": "411030",
+            "types": [
+                "postal_code"
+            ]
+        }
+    ],
+    "plus_compoundCode": "GR7X+WX Pune, Maharashtra, India",
+    "plus_globalCode": "7JCMGR7X+WX"
+}

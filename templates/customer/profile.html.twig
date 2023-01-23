@@ -1,0 +1,47 @@
+
+{% set page = {
+    "title"       : "Customer Profile" ,
+    "description" : "Customer Profile",
+    "context" : "customer",
+    "keywords": "",
+    "menu":true
+} %}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <form id="detailsForm" novalidate="novalidate" action="#">
+        <p class="details-form-field">
+            <label for="custfirstname" >First Name:</label>
+            <input id="custfirstname" name="custfirstname" type="text" required="required" autocomplete="off" class="valid"></input>
+        </p>
+        <p class="details-form-field">
+            <label for="custlastname">Last Name:</label>
+            <input id="custlastname" name="custlastname" required="required" type="text"></input>
+        </p>
+        <p class="details-form-field">
+            <label for="toggle">Contact Method:</label>
+            <span class="toggle" name="toggle">
+                <input type="radio" name="custMethod" value="whatsapp" id="methodWA" checked="checked" />
+                <label for="methodWA" title="WhatsApp"><img class="material-symbols-outlined" src="/images/whatsapp.png"></label>
+                <input type="radio" name="custMethod" value="sms" id="methodSMS"/>
+                <label for="methodSMS" title="SMS/Text"><span class="material-symbols-outlined">sms</span></label>
+            </span>
+        </p>
+        <p><label for="addressline1" class="required">Address Line 1:</label><input type="text" name="addressline1"  id="addressline1"  required="required" value=""></p>
+        <p><label for="addressline2" class="required">Address Line 2:</label><input type="text" name="addressline2"  id="addressline2" value=""></p>
+        <p><label for="addressline3" class="required">Address Line 3:</label><input type="text" name="addressline3" id="addressline3" value=""></p>
+        <p><label for="city" class="required">City :</label><input type="text" name="city" id="city"  required="required" value=""></p>
+        <p><label for="state" class="required">State :</label><input type="text" name="state" id="state"  required="required" value=""></p>
+        <p><label for="country" class="required">Country :</label><input type="text" name="country" id="country"  required="required" value=""></p>
+        <p><label for="postalcode" class="required">Postal Code :</label><input type="text" name="postalcode" id="postalcode" required="required" value=""></p>
+  
+        <p class="details-form-field">
+            <input id="custphone" name="custphone" type="hidden" required="required" autocomplete="off" class="valid"></input>
+        </p>
+        <p class="details-form-field">
+            <button type="submit" id="save"><span class="material-symbols-outlined">save</span>&nbsp;Save</button>
+        </p>
+    </form> 
+    <script type="text/javascript" src="/js/customer/profile.js"> </script>
+
+{% endblock %}

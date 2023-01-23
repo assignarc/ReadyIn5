@@ -1,0 +1,30 @@
+    <div class="wlCustInfo" id="wlCustInfo">
+        <img class="wlLogo" id="customerPicture">
+     
+        <label id="customerBannerName">{{customer.firstname}} {{customer.lastname}}</label><br>
+        <span class="material-symbols-outlined material-symbols-small">smartphone</span>
+        <label id="customerBannerPhone">{{customer.phone}}</label>  
+    </div>
+    <script type="text/javascript">
+    /*
+        $.ajax({
+            url: "/svc/customer/info" ,
+            contentType: "json",
+            method:'GET',
+        }).done(function(response) {
+            $("#customerBannerName").text(response.details.customer.firstname + " " + response.details.customer.lastname);
+            $("#customerBannerPhone").text(response.details.customer.phone);
+
+            showNotification("info",response.text);
+        }).fail(function(jqXHR,textStatus, errorThrow){
+            showNotification("error",JSON.parse(jqXHR.responseText).text );
+        });
+
+        function displayLocationMeta(name, value) {
+            $("<label>", {"class": "wlPlaceKey", "for": "i-" + name , "id" : "l-" + name }).text(name +" : ").appendTo($("#locationMeta"));
+            $("<br>").appendTo($("#locationMeta"));
+            $("<label>", {"class": "wlPlaceValue", "id": "i" + name}).html(value).appendTo($("#locationMeta"));
+            $("<br>").appendTo($("#locationMeta"));
+        }
+        */
+    </script> 

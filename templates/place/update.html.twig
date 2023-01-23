@@ -1,0 +1,169 @@
+{% set page = {
+    "title"       : "Place Profile" ,
+    "description" : "Place Profile",
+    "context" : "place",
+    "keywords": "",
+    "menu":true
+} %}
+{% extends 'base.html.twig' %}  
+{% block body %}
+    
+    <div class="wLContentI">
+        <div id="tabs">
+            <ul>
+                <li>
+                    <a href="#tabs-1"><span class="material-symbols-outlined">place</span>&nbsp;<span class="tabTitle">Profile</span></a>
+                </li>
+                <li>
+                    <a href="#tabs-2"><span class="material-symbols-outlined">calendar_month</span>&nbsp;<span class="tabTitle">Schedule</span></a>
+                </li>
+                <li>
+                    <a href="#tabs-3"><span class="material-symbols-outlined">holiday_village</span>&nbsp;<span class="tabTitle">Holidays</span></a>
+                </li>
+                <li>
+                    <a href="#tabs-4"><span class="material-symbols-outlined">photo_library</span>&nbsp;<span class="tabTitle">Logo/Banner</span></a>
+                </li>
+            </ul>
+            <div id="tabs-1">
+                <div>
+                    <form name="profileForm" id="profileForm">
+                        <p><label for="slug" class="required">Slug :</label><input type="text" id="slug"  name="slug"  required="required" placeholder="READ ONLY" readonly class="wlReadonly"></p>
+                        <p><label for="name" class="required">Name :</label><input type="text" id="name"  name="name"  required="required" value=""></p>
+                        <p><label for="addressline1" class="required">Address Line 1:</label><input type="text" name="addressline1"  id="addressline1"  required="required" value=""></p>
+                        <p><label for="addressline2" class="required">Address Line 2:</label><input type="text" name="addressline2"  id="addressline2" value=""></p>
+                        <p><label for="addressline3" class="required">Address Line 3:</label><input type="text" name="addressline3" id="addressline3" value=""></p>
+                        <p><label for="city" class="required">City :</label><input type="text" name="city" id="city"  required="required" value=""></p>
+                        <p><label for="state" class="required">State :</label><input type="text" name="state" id="state"  required="required" value=""></p>
+                        <p><label for="country" class="required">Country :</label><input type="text" name="country" id="country"  required="required" value=""></p>
+                        <p><label for="postalcode" class="required">Postal Code :</label><input type="text" name="postalcode" id="postalcode" required="required" value=""></p>
+                        <p><label for="phone" class="required">Phone :</label><input type="tel" id="phone" name="phone" required="required" value=""></p>
+                        <p><button type="submit" id="save" name="form[save]" onmousedown="process(event)">
+                                <span class="material-symbols-outlined">save</span>&nbsp;Save
+                            </button></p>
+                    </form>
+                </div>
+            </div>
+            <div id="tabs-2">
+                <div id="jsSchedule"></div>
+            </div>
+            <div id="tabs-3">
+                <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-draggable ui-resizable" tabindex="-1" role="dialog" style="position: absolute; height: auto; width: 400px; top: 209.5px; left: 312px; display: none;">
+                    <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix ui-draggable-handle">
+                        <span id="ui-id-1" class="ui-dialog-title">Edit Client</span>
+                        <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-dialog-titlebar-close" role="button" title="Close">
+                            <span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span>
+                            <span class="ui-button-text">Close</span>
+                        </button>
+                    </div>
+                    <div id="detailsDialog" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 93px; max-height: none; height: auto;">
+                        <form id="detailsForm" novalidate="novalidate">
+                            <input id="holidayid" name="holidayid" type="hidden" autocomplete="off">
+                            <p class="details-form-field">
+                                <label for="holidayName">Holiday:</label>
+                                <input id="holidayName" name="holidayName" type="text" autocomplete="off" class="valid">
+                            </p>
+                            <p class="details-form-field">
+                                <label for="specialNote">Special Notes:</label>
+                                <input id="specialNote" name="specialNote" type="text">
+                            </p>
+                            <p class="details-form-field">
+                                <label for="holidayDate">Date:</label>
+                                <input id="holidayDate" name="holidayDate" type="text">
+                            </p>
+                            <p class="details-form-field">
+                                <button type="submit" id="save">Save</button>
+                            </p>
+                        </form>
+                    </div>
+                    <div class="ui-resizable-handle ui-resizable-n" style="z-index: 90;"></div>
+                    <div class="ui-resizable-handle ui-resizable-e" style="z-index: 90;"></div>
+                    <div class="ui-resizable-handle ui-resizable-s" style="z-index: 90;"></div>
+                    <div class="ui-resizable-handle ui-resizable-w" style="z-index: 90;"></div>
+                    <div class="ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se" style="z-index: 90;"></div>
+                    <div class="ui-resizable-handle ui-resizable-sw" style="z-index: 90;"></div>
+                    <div class="ui-resizable-handle ui-resizable-ne" style="z-index: 90;"></div>
+                    <div class="ui-resizable-handle ui-resizable-nw" style="z-index: 90;"></div>
+                </div>
+                
+                <div id="jsHolidays"></div><br>
+                <button type="button" id="addNewHoliday" onclick="javascript:showDetailsDialog('Add',{});"><span class="material-symbols-outlined">holiday_village</span>&nbsp;Add a Holiday</button>
+            </div>
+            <div id="tabs-4">
+                <div id="wlImgEditor" class="wlImgEditor">
+                    <div id="wlImgControls" class="wlChild wlImgControls">
+                        <div id="wlImgControl">
+                            <h3>Image Selection</h3>
+                            <div class="group">
+                                <p>
+                                    <label for="file-input">Select an image file:</label>
+                                    <input type="file" id="file-input" class="wlFileInput"/>
+                                </p>
+                                <!-- Additional Image Editing controls
+                                    <p>
+                                        <label for="url">Or enter an image URL into the following field:</label>
+                                        <input type="url" id="url" placeholder="Image URL"/>
+                                    </p>
+
+                                    <p>Or
+                                        <strong>drag &amp; drop</strong>
+                                        an image file onto this webpage.
+                                    </p>
+                                -->
+                            </div>
+                            <h3>View/Edit</h3>
+                            <div class="group">
+                                <p>
+                                    <label for="orientation">Orientation:</label>
+                                    <select id="orientation">
+                                        <option value="-1">undefined: Browser default</option>
+                                        <option value="0" selected>true: Automatic</option>
+                                        <option value="1">1: Original</option>
+                                        <option value="2">2: Horizontal flip</option>
+                                        <option value="3">3: Rotate 180° CCW</option>
+                                        <option value="4">4: Vertical flip</option>
+                                        <option value="5">5: Vertical flip + Rotate 90° CW</option>
+                                        <option value="6">6: Rotate 90° CW</option>
+                                        <option value="7">7: Horizontal flip + Rotate 90° CW</option>
+                                        <option value="8">8: Rotate 90° CCW</option>
+                                    </select><br>
+                                    <input type="checkbox" id="image-smoothing" checked/>
+                                    <label for="image-smoothing">Image smoothing</label>
+                                </p>
+                                <div id="wlImgImg" class="wlImgImg">
+                                    <p id="actions" style="display: none;">
+                                        <button type="button" id="edit">Edit</button>
+                                        <button type="submit" id="crop">Crop</button>
+                                        <button type="reset" id="cancel">Cancel</button>
+                                        <span id="wlImgSize"></span>
+                                    </p>
+                                    <figure id="result">
+                                        <figcaption style="display: none;">
+                                        </figcaption>
+                                    </figure>
+                                </div>
+                            </div>
+                            <h3>Image metadata</h3>
+                            <div class="group">
+                                <div id="meta" style="display: none;">
+                                    <figure id="thumbnail" style="display: none;"></figure>
+                                </div>   
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="/js/place/update.js"></script>   
+    
+    <!--JCrop Image Cropping-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.15/css/jquery.Jcrop.min.css" integrity="sha512-bbAsdySYlqC/kxg7Id5vEUVWy3nOfYKzVHCKDFgiT+GsHG/3MD7ywtJnJNSgw++HBc+w4j71MLiaeVm1XY5KDQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.15/js/jquery.Jcrop.min.js" integrity="sha512-KKpgpD20ujD3yJ5gIJqfesYNuisuxguvTMcIrSnqGQP767QNHjEP+2s1WONIQ7j6zkdzGD4zgBHUwYmro5vMAw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- Image edits and File Uploads -->
+    <script src="/js/load-image/load-image-WL.js"></script>
+    <script type="text/javascript" src="/js/load-image/load-image.all.min.js"></script>
+    <script type="text/javascript" src="/js/phonefield.js"></script>
+
+{% endblock %}

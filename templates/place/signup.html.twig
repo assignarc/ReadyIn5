@@ -1,0 +1,176 @@
+{% set page = {
+    "title"       : "Place Signup" ,
+    "description" : "Place Signup",
+    "context" : "place",
+    "keywords": "",
+    "menu":false
+} %}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="wLContentI">
+        <h1>Place Signup</h1><br>
+        <div id="signupWizard">
+            <ul class="nav">
+                <li class="nav-item">
+                <a class="nav-link" href="#step-1">
+                    <div class="num"><span class="material-symbols-outlined">verified_user</span></div>
+                    Validate
+                </a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="#step-2">
+                    <div class="num"><span class="material-symbols-outlined">place</span></div>
+                    Place
+                </a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="#step-3">
+                    <div class="num"><span class="material-symbols-outlined">supervisor_account</span></div>
+                    Owner
+                </a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link " href="#step-4">
+                    <div class="num"><span class="material-symbols-outlined">verified</span></div>
+                    Finish
+                </a>
+                </li>
+            </ul>
+        
+            <div class="tab-content">
+                <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1">
+                    <form name="formLogin" method="post" id="loginForm">
+                        <p>
+                            <label for="phone" class="required">Phone Number:</label>
+                            <input type="tel" id="phone" required="required" value="+14403825835"><span style="display:none" id="phoneVerified" class="material-symbols-outlined">verified_user</span>
+                        </p>
+                        <p>
+                            <label for="toggle">Contact Method:</label>
+                            <span class="toggle" name="toggle">
+                                <input type="radio" name="method" value="whatsapp" id="methodWA" />
+                                <label for="methodWA" title="WhatsApp" class="wlMethodWA"><img class="material-symbols-outlined" src="/images/whatsapp.png"></label>
+                                <input type="radio" name="method" value="sms" id="methodSMS" checked="checked" />
+                                <label for="methodSMS" title="SMS/Text" class="wlMethodSMS"><span class="material-symbols-outlined">sms</span></label>
+                            </span>
+                        </p>
+                        <p id="otpsection" style="display:none">
+                            <label for="otp" class="required">OTP</label>
+                            <input type="text" id="otp" required="required">
+                        </p>
+                        <p>  
+                            <button type="button"  id="sendcode" onmousedown="processButton('sendcode')">
+                                <span class="material-symbols-outlined">pin</span>&nbsp;Send Code
+                            </button>
+                            <button type="button" style="display:none" id="verify"  onmousedown="processButton('verify')">
+                                <span class="material-symbols-outlined">task_alt</span>&nbsp;Verify
+                            </button> 
+                        </p>
+                    </form>
+                   </div>
+                <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
+                    <p>
+                        <div class="two-columns">
+                            <div class="col">
+                                <div id="placeMap" class="wlMap"></div>
+                                <div id="infowindow-content">
+                                    <span id="place-name" class="title"></span><br/>
+                                    <span id="place-address"></span>
+                                </div>
+                            </div>
+                            <div  class="col">
+                                <div id="title">Enter Name of your establishment</div>
+                                
+                                <div id="type-selector" class="pac-controls">
+                                    <input id="pac-input" type="text" style="width:100%" placeholder="Enter a location"/>
+                                    <!-- Additional Controls for Google Maps
+                                    <label for="changetype">Type:</label>
+                                    <select id="changetype" name="changetype">
+                                        <option value="changetype-all">All</option>
+                                        <option value="establishment">Establishment</option>
+                                        <option value="address">Address</option>
+                                        <option value="geocode">geocode</option>
+                                        <option value="(cities)">(cities)</option>
+                                        <option value="(regions)">(regions)</option>
+                                    </select>-->
+                                </div>
+                                <form id="formRestMeta">
+                                    <div class="wlPlace" id="locationMeta">
+                                        
+                                    </div>
+                                </form>
+                                <br/>
+                                <div id="strict-bounds-selector" class="pac-controls" style="display:none">
+                                    <input type="checkbox" id="use-location-bias" value="" checked/>
+                                    <label for="use-location-bias">Bias to map viewport</label>
+                                    <input type="checkbox" id="use-strict-bounds" value=""/>
+                                    <label for="use-strict-bounds">Strict bounds</label>
+                                </div>
+                                <div class="clear"></div>
+                                <input type="checkbox" id="termsAndConditions" name="termsAndConditions" value="IAgree">
+                                <label for="termsAndConditions">I agree to Terms and Conditions</label><br>
+                                <input type="checkbox" id="confimrMyEstablishment" name="confimrMyEstablishment" value="IAgree">
+                                <label for="confimrMyEstablishment">I am a control/in-charge person of this establishment.</label><br>
+                                <div class="clear"></div>
+                                <button id="establish" type="button" onclick="processButton('establish')" style="display:none">This is my Establishment</button>
+                            </div>
+                        </div>
+                        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?language=&amp;hl=en&key=AIzaSyAfWzCJqeFCkGQe0ONg_drO6_14NE0cW8E&libraries=places"></script>
+                        <script type="text/javascript" src="/js/googlemaps.js"></script>
+                    </p>
+                </div>
+                <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
+                <form name="profileForm" id="profileForm">
+                    <p>
+                        <label for="phoneOwner" class="required">Phone :</label>
+                        <input id="phoneOwner" name="phoneOwner" required="required" value=""  readonly class="wlReadonly"> 
+                        <span id="phoneVerified" class="material-symbols-outlined">verified_user</span>
+                    </p>
+                    <p><label for="name" class="required">Your Name :</label><input type="text" id="name"  name="name"  required="required" placeholder="Your full name" value="VK"></p>
+                    <p><label for="addressline1" class="required">Address Line 1:</label><input type="text" name="addressline1"  id="addressline1"  required="required" placeholder="Address line" value="Line 1"></p>
+                    <p><label for="addressline2" class="required">Address Line 2:</label><input type="text" name="addressline2"  id="addressline2"  placeholder="Address line" value="Line 2"></p>
+                    <p><label for="addressline3" class="required">Address Line 3:</label><input type="text" name="addressline3" id="addressline3"  placeholder="Address line" value="Line 3"></p>
+                    <p><label for="city" class="required">City :</label><input type="text" name="city" id="city"  required="required"  placeholder="City" value="My City"></p>
+                    <p><label for="state" class="required">State :</label><input type="text" name="state" id="state"  required="required"  placeholder="State" value="My State"></p>
+                    <p><label for="country" class="required">Country :</label><input type="text" name="country" id="country"  required="required"  placeholder="Country" value="US"></p>
+                    <p><label for="postalcode" class="required">Postal Code :</label><input type="text" name="postalcode" id="postalcode" required="required"  placeholder="Postal Code" value="12345"></p>
+                    <p><label for="email" class="required">Email :</label><input type="email" id="email" name="email" required="required"  placeholder="Email Address" value="a@b.com"></p>
+                    <p><button type="button" id="save" name="save" onClick="processButton('save')">
+                        <span class="material-symbols-outlined">save</span>&nbsp;Save
+                    </button></p>
+                </form>
+                </div>
+                <div id="step-4" class="tab-pane" role="tabpanel" aria-labelledby="step-4">
+                    
+                    <p>
+                        <div id="finishWizard" style="display:none">
+                            <button type="button" id="finish" name="finish" onClick="processButton('finish')">
+                                <span class="material-symbols-outlined">key</span>&nbsp;Login to your place
+                            </button>
+                        </div>
+                    </p>
+                    <p>
+                        <div id="placeCreationStatus"></div>
+                    </p>
+                </div>
+            </div>
+            <div class="clear"></div>
+            <blockquote id="message">Note: Select an establishment. Once registered, you can update contact/address information.</blockquote>
+
+            <!-- Include optional progressbar HTML -->
+            <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+       
+        </div>   
+        
+        <!-- Smart Wizard  -->
+        <link href="https://cdn.jsdelivr.net/npm/smartwizard@6/dist/css/smart_wizard_all.min.css" rel="stylesheet" type="text/css" />
+        <script src="https://cdn.jsdelivr.net/npm/smartwizard@6/dist/js/jquery.smartWizard.min.js" type="text/javascript"></script>
+        <script type="text/javascript" src="/js/phonefield.js"></script>  
+        <script type="text/javascript" src="/js/place/signup.js"></script> 
+       
+    </div>
+
+   
+{% endblock %}

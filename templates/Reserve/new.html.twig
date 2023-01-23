@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Reservation{% endblock %}
+
+{% block body %}
+    <div style="width:50%;float:middle">
+    <h1>Signup</h1>
+    Place: {{struct.place.slug}}
+    
+        <!-- SmartWizard html -->
+        <div id="smartwizard">
+            <ul class="nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="#step-1">
+                        <div class="num">1</div>
+                        Signin
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " href="#step-2">
+                        <span class="num">2</span>
+                        Verify
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#step-3">
+                        <span class="num">3</span>
+                        Profile
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#step-4">
+                        <span class="num">4</span>
+                        Reserve
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#step-5">
+                        <span class="num">5</span>
+                        Confirmation
+                    </a>
+                 </li>
+               
+            </ul>
+
+            <div class="tab-content">
+                <div id="step-1" class="tab-pane" role="tabpanel" aria-labelledby="step-1">
+                   Phone Number: <input type="text" id="phoneNumberIn" value="1234567">
+                </div>
+                <div id="step-2" class="tab-pane" role="tabpanel" aria-labelledby="step-2">
+                    Code: <input type="text" id="otpIn">
+                </div>
+                <div id="step-3" class="tab-pane" role="tabpanel" aria-labelledby="step-3">
+                    Phone Number: <span id="phoneNumber"></span>
+                    First Name: <input type="text" id="firstNameIn">
+                    Last Name: <input type="text" id="firstNameIn">
+                </div>
+                <div id="step-4" class="tab-pane" role="tabpanel" aria-labelledby="step-4">
+                   <span type="text" id="firstName"></span>&nbsp;<span type="text" id="lastName">&nbsp;(<span id="phoneNumber"></span>)
+                   Adults: <input type="text" id="adultsIn">
+                   Children: <input type="text" id="childrenIn">
+                </div>
+               
+            </div>
+
+            <!-- Include optional progressbar HTML -->
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

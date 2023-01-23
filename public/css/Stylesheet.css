@@ -1,0 +1,1331 @@
+h1, h2, h3, h4, h5, h6 {
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+.header-area.header-sticky .logo {
+  height: 40px;
+  text-align: center;
+}
+.header-area.header-sticky .placeLogo{
+  margin: 10px 10px 5px 10px;
+}
+
+.header-area .main-nav .logo img {
+  -webkit-transition: all 0.3s ease 0s;
+  -moz-transition: all 0.3s ease 0s;
+  -o-transition: all 0.3s ease 0s;
+  transition: all 0.3s ease 0s;
+  height: 60px;
+}
+.fa {
+
+  top: 10px;
+  position: relative;
+}
+
+button {
+  display: inline-block;
+  text-decoration: none;
+  text-align: center;
+  text-transform: none;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  margin:10px;
+  cursor: pointer;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.25rem;
+  font-weight: 400;
+  color: white;
+  background-color: #0a2730;
+  border: 1px solid #0a2730;
+  font-size: unset;
+  line-height: 24px;
+
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  outline: none;
+}
+button:hover {
+  background-color: #e56f30;
+  box-shadow: 0px 15px 20px rgba(225, 151, 82, 0.743);
+  color: #000;
+  transform: translateY(-3px);
+  font-weight: bolder;
+}
+.wlButtonTxt{
+  font-family:unset;
+  font-size: 14px;
+  vertical-align: top;
+}
+
+.jsgrid-table{
+  font-size: 12px;
+}
+.jsgrid {
+  padding: 2px;
+  margin:auto;
+}
+/*WL Structural*/
+form {
+  grid-template-columns: 200px 2fr;
+  grid-gap: 16px;
+  grid-template-rows: 20px 2fr;
+  height: auto;
+}
+
+form label {
+  min-width: 100px;
+  padding: 2px;
+  text-align: right;
+  line-height: 24px;
+  max-width: auto;
+}
+
+form button {
+  float: left;
+
+}
+
+form input,
+textarea {
+  min-width: 194px;
+}
+
+form input.error,
+select.error {
+  border: 1px solid #ff9999;
+  background: #ffeeee;
+}
+
+form label.error {
+  margin-left: 1px;
+  font-size: .8em;
+  color: #ff6666;
+  text-align: left;
+}
+input#slug {
+  font-size: 9px;
+  line-height: 26px;
+}
+
+/*WL Specifics*/
+.wlResDateCur .section {
+  position: relative;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+.wlResDateCur{
+  text-align: center;
+}
+.wlResDateCur b {
+  font-size: 18px;
+}
+.wlFooter{
+  display: grid;
+  padding: 5px;
+  margin:5px;
+  min-height:auto;
+  border-top: 1px dotted gray;
+}
+.wlPageInfo{
+  float:left;
+}
+.wlPower{
+  float:right;
+}
+.wlCopy{
+ margin:auto;
+}
+.wlContent {
+  max-width: 780px;
+  margin: 0 auto;
+  height: auto;
+}
+
+.wlPageTitle {
+  font-size: 25px;
+  font-weight: bold;
+  display: contents;
+}
+
+.wlGridTable{
+  width:100%
+}
+/*WL Individual Sub*/
+.wlMap {
+  width: 300px;
+  height: 400px;
+
+}
+.wlBanner{
+  
+}
+.wlBanner img{
+  max-width: 100px;
+  max-height: 100px;
+}
+.wlLogo{
+ 
+}
+.wlCustRes{
+  width:100%;
+  margin:5px;
+}
+div[class^="wlStatus-"]{
+  text-align: center;
+  padding: 2px;
+  border-radius: 5px;
+  border: 1px dotted black;
+}
+.wlStatus-SERVE{
+  background-color: #0a9732 ;
+  color: white;
+}
+.wlStatus-SEAT{
+  background-color: yellow ;
+}
+.wlStatus-CALL{
+  background-color: lightgreen ;
+}
+
+.wlStatus-WAIT{
+  background-color: rgb(24, 13, 224) ;
+  color:white
+}
+.wlStatus-CANCEL,.wlStatus-EXPIRE,.wlStatus-NOSHOW,.wlStatus-COMPLETE{
+  background-color: rgb(100, 11, 15) ;
+  color:white
+}
+.wlStatus-EMPTY{
+  background-color: white ;
+  color:black
+}
+
+
+.wlRestName {
+  font-size: 14px;
+}
+.wlLoginPanel{
+  width:95%;
+  margin:auto;
+  border-radius: 10px;
+  padding:15px;
+  border: 1px dotted gray;
+}
+.wlLoginForm{
+  display: inline-block;
+  width: 95%;
+}
+
+
+
+.wlPlace {
+  margin: 2px;
+  padding: 2px;
+  height: fit-content;
+}
+.wlPlaceInfo{
+  padding: 5px 0 0 0px;
+  text-align: left;
+  vertical-align: middle;
+  left: 2px;
+  position: relative;
+  margin: 0px;
+  display: inline-block;
+}
+.wlCustInfo{
+  margin: 10px 2px 10px 20px;
+  display: inline-block;
+  float: left;
+}
+
+.wlPlaceInfo div,.wlCustInfo div{
+  margin: 3px;
+  padding: 5px;
+}
+.wlHighlight{
+  
+  width:100%;
+  margin:0px 0 5px 20px !important;
+}
+.placeImage, .customerImage{
+  border : 1px dotted gray;
+  width: 60px;
+    height: 60px;
+    display: flex;
+  
+}
+
+
+.wlPlaceInfo label{
+  max-width: 80%;
+  font-size: small;
+  font-weight: normal;
+  display: inline;
+}
+.wlCustInfo label{
+  max-width: 80%;
+  font-size: small;
+  font-weight: normal;
+  display: inline;
+}
+.wlPlaceInfo img, .wlCustInfo img{
+  max-width: 60px;
+  max-height: 60px;
+}
+
+.wlPlaceInfo #placeName, .wlCustInfo #customerBannerName{
+ font-size: large;
+ font-weight: bold;
+}
+label.wlPlaceKey,
+.wlPlaceKey {
+  width: 100%;
+  font-size: 9px;
+  float: unset;
+  margin: auto;
+  line-height: unset;
+  text-align: left;
+  padding:unset;
+}
+
+.wlPlaceValue {
+  font-weight: bolder;
+  width: 100%;
+  font-size: 14px;
+  float: unset;
+  padding: unset;
+  text-align: unset;
+  margin: auto;
+}
+.wlRestName {
+  margin: 10px 0;
+  padding: 10px;
+  height: unset;
+}
+
+
+label.wlPlaceName,.wlPlaceName{
+  margin: 10px 0;
+  padding: 10px;
+  height: unset;
+  font-weight: bold;
+  font-size: larger;
+}
+
+
+
+.material-symbols-outlined {
+  vertical-align: bottom;
+  width:24px;
+  height: 24px;
+}
+.material-symbols-small {
+  vertical-align: bottom;
+  width:18px;
+  height: 18px;
+  font-size: 18px;
+
+}
+
+#wlMessageType {
+  height: 30px;
+  width: 30px;
+  ;
+}
+
+#wlNotifications {
+  font-size: 9px;
+    width: 95%;
+    margin: auto;
+    padding: 10px;
+}
+
+.wLRestScheduleHeader {
+ 
+}
+
+.wlReadonly {
+  background: rgba(0, 0, 0, 0);
+  border: none;
+  line-height: 26px;
+}
+
+.wlBoard {
+  display: flex;
+  flex-wrap:nowrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.wlBoardL {
+  flex: 1 0 40%;
+  white-space: nowrap;
+  text-align: center;
+  padding: 10px;
+  box-sizing: border-box;
+}
+.wlBoardR {
+  flex: 1 0 60%;
+  white-space: nowrap;
+  text-align: center;
+  padding: 10px;
+  box-sizing: border-box;
+}
+.wlBoardR, .wlBoardL{
+  border : 1px solid gray;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+
+/* imports the font */
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+.wlReadonly:after { 
+  /* https://github.com/google/material-design-icons/blob/master/iconfont/codepoints */
+  content: "\E8E8"; 
+  font-family: "Material Icons"; 
+}
+
+.wlFileInput {
+  font-family: unset;
+}
+.wlContentI{
+  width: 95%;
+  margin:auto;
+}
+input[type="file" i].wlFileInput {
+  appearance: none;
+  background-color: initial;
+  cursor: default;
+  align-items: baseline;
+  color: inherit;
+  text-overflow: ellipsis;
+  white-space: pre;
+  text-align: start !important;
+  padding: initial;
+  border: initial;
+  overflow: hidden !important;
+  font-family: "Hind Vadodara", Tahoma, Calibri;
+}
+
+.wlImgEditor {
+  vertical-align: top;
+}
+
+.wlImgControls {
+  float: left;
+  overflow: hidden;
+}
+
+.wlImgResults {
+  overflow: hidden;
+}
+
+.wlChild {
+  display: inline-block;
+  border: 1px dotted gray;
+  overflow-wrap: break-word;
+}
+
+.wlImgImg {
+  width: 98%;
+}
+
+.wlImgImg figure {
+  width: 98%;
+  min-width: 350px;
+}
+
+.wlImgImg figure canvas {
+  width: 98%;
+  min-width: 350px;
+}
+
+
+
+/*Tabs*/
+#tabs {
+  background: transparent;
+  border: none;
+  border-top: 1px lightgray solid;
+}
+
+#tabs .ui-widget-header {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #c0c0c0;
+  -moz-border-radius: 0px;
+  -webkit-border-radius: 0px;
+  border-radius: 0px;
+}
+
+#tabs .ui-tabs-nav .ui-state-default {
+  background: transparent;
+  border: none;
+}
+
+#tabs .ui-tabs-nav .ui-state-active {
+  background: transparent url(/images/TabsArrow.png) no-repeat bottom center;
+  border: none;
+}
+
+#tabs .ui-tabs-nav .ui-state-default a {
+  color: #c0c0c0;
+}
+
+#tabs .ui-tabs-nav .ui-state-active a {
+  color: black;
+}
+
+/*Phone*/
+#phone .btn,
+#form_phone .btn {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/*   
+  .btn {
+    color: #ffffff;
+    background-color: #428BCA;
+    border-color: #357EBD;
+    font-size: 14px;
+    outline: none;
+    cursor: pointer;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  
+  .btn:focus, .btn:hover {
+    background-color: #3276B1;
+    border-color: #285E8E;
+  }
+  
+  .btn:active {
+    box-shadow: inset 0 3px 5px rgba(0,0,0,.125);
+  } */
+
+.alert {
+  padding: 15px;
+  margin-top: 10px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+.alert-info {
+  border-color: #bce8f1;
+  color: #31708f;
+  background-color: #d9edf7;
+}
+
+.alert-error {
+  color: #a94442;
+  background-color: #f2dede;
+  border-color: #ebccd1;
+}
+
+/*Toggle CSS*/
+/*
+fieldset {
+  margin: 0;
+  padding: 2rem;
+  box-sizing: border-box;
+  display: block;
+  border: none;
+  border: solid 1px #CCC;
+  min-width: 0;
+  background-color: #FFF;
+}
+fieldset legend {
+  margin: 0 0 1.5rem;
+  padding: 0;
+  width: 100%;
+  float: left;
+  display: table;
+  font-size: 1.5rem;
+  line-height: 140%;
+  font-weight: 600;
+  color: #333;
+}
+fieldset legend + * {
+clear: both;
+}
+*/
+/* TOGGLE STYLING */
+.toggle {
+  margin: 2px 10px;
+  box-sizing: border-box;
+  font-size: 0;
+  display: inline-block;
+  align-items: stretch;
+}
+.toggle label, .toggle input {
+  min-width: 40px;
+  width: 40px;
+}
+.logintype {
+  margin: 10px;
+  padding: 10px;
+  margin: auto;
+}
+
+.logintype input+label {
+  font-size: 0.5rem;
+  flex: 0 0 50%; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center
+}
+.logintype input:checked+label {
+  font-size: 1.5rem;
+}
+
+.toggle input {
+  width: 0;
+  height: 0;
+  position: absolute;
+  left: -9999px;
+}
+
+.toggle input+label {
+  margin: 0;
+  padding: 2px;
+  box-sizing: border-box;
+  position: relative;
+  display: inline-block;
+  border: solid 1px #DDD;
+  background-color: #FFF;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  box-shadow: 0 0 0 rgba(255, 255, 255, 0);
+  transition: border-color 0.15s ease-out, color 0.25s ease-out, background-color 0.15s ease-out, box-shadow 0.15s ease-out;
+  /* ADD THESE PROPERTIES TO SWITCH FROM AUTO WIDTH TO FULL WIDTH */
+  /*flex: 0 0 50%; display: flex; justify-content: center; align-items: center;*/
+  /* ----- */
+}
+
+.toggle input+label:first-of-type {
+  border-radius: 6px 0 0 6px;
+  border-right: none;
+}
+
+.toggle input+label:last-of-type {
+  border-radius: 0 6px 6px 0;
+  border-left: none;
+}
+
+.toggle input:hover+label {
+  border-color: #213140;
+}
+
+.toggle input:checked+label {
+  background-color: #4B9DEA;
+  color: #FFF;
+  box-shadow: 0 0 10px rgba(102, 179, 251, 0.5);
+  border-color: #4B9DEA;
+  z-index: 1;
+}
+
+.toggle input:focus+label {
+  outline: dotted 1px #CCC;
+  outline-offset: 0.45rem;
+}
+
+/*jQuery CSS Overrides*/
+.ui-widget {
+  font-family: unset;
+}
+.ui-widget-content a {
+  color:#007bff;
+}
+
+.ui-widget input,
+.ui-widget select,
+.ui-widget textarea,
+.ui-widget button {
+  font-family: unset;
+}
+
+.ui-accordion .ui-accordion-content {
+  padding: 1em 2.2em;
+  border-top: 0;
+  overflow: auto;
+}
+
+.ui-accordion .ui-accordion-content {
+  padding: 5px;
+}
+
+.ui-state-active,
+.ui-widget-content .ui-state-active,
+.ui-widget-header .ui-state-active,
+a.ui-button:active,
+.ui-button:active,
+.ui-button.ui-state-active:hover {
+  border: 1px solid #000;
+  background: #000;
+}
+
+.ui-accordion .ui-accordion-header {
+  margin: 8px 0 0 0;
+}
+
+.ui-accordion-header-collapsed .material-symbols-outlined {
+  font-size: 16px;
+  vertical-align: sub;
+  padding: 0 5px 0 0;
+}
+
+.ui-accordion-header-collapsed label {
+  font-size: xx-small;
+
+}
+
+.ui-accordion-header-collapsed {
+  padding: 2px !important;
+
+}
+
+
+
+.wlGridCustName{
+  display: inline-block;
+  font-size: larger;
+  font-weight: bolder;
+  padding :4px;
+  text-align: center;
+  
+}
+.wlGridPhone{
+  text-align: center;
+}
+.wlGridGuestCount{
+  border-top: 1px dotted black;
+}
+.wlGridResDt,.wlGridGuestCount{
+    display: inline-block;
+    padding: 2px;
+    text-align: center;
+}
+
+.two-columns {
+  display: inline;
+}
+
+/* columns */
+.two-columns .col {
+  width: 50%;
+  float:left;
+  display:grid;
+}
+/*Tabs*/
+.ui-tabs .ui-tabs-panel {
+  display: inline-block;
+  width: 100%;
+  padding:10px 0 0 0;
+  clear: both;
+}
+.tabTitle {
+  font-size: 16px;
+  line-height: 30px;
+}
+
+/*Smart Wizard Style */
+:root {
+  --sw-progress-width: 50%;
+  --sw-border-color: #eeeeee;
+  --sw-toolbar-btn-color: #ffffff;
+  --sw-toolbar-btn-background-color: #0a2730;
+  --sw-anchor-default-primary-color: #757575;
+  --sw-anchor-default-secondary-color: #b0b0b1;
+  --sw-anchor-active-primary-color: #000000;
+  --sw-anchor-active-secondary-color: #ffffff;
+  --sw-anchor-done-primary-color: #333333;
+  --sw-anchor-done-secondary-color: #aaaaaa;
+  --sw-anchor-disabled-primary-color: #f8f9fa;
+  --sw-anchor-disabled-secondary-color: #dbe0e5;
+  --sw-anchor-error-primary-color: #dc3545;
+  --sw-anchor-error-secondary-color: #ffffff;
+  --sw-anchor-warning-primary-color: #ffc107;
+  --sw-anchor-warning-secondary-color: #ffffff;
+  --sw-progress-color: #0a2730;
+  --sw-progress-background-color: #f8f9fa;
+  --sw-loader-color: #0a2730;
+  --sw-loader-background-color: #f8f9fa;
+  --sw-loader-background-wrapper-color: rgba(255, 255, 255, 0.7);
+}
+
+.sw>.tab-content {
+  height: auto;
+  overflow: unset;
+}
+
+.sw .toolbar {
+  text-align: center;
+}
+
+.sw-theme-dots>.nav .nav-link>.num {
+  top: -30px;
+}
+
+
+.progressbar{
+  width:100%;
+  position:absolute;
+  bottom:1px;
+  margin: 0 0px 0 40px;
+  display:none;
+}
+.progress{
+  position: relative;
+  height: 5px;
+  width: 90%;
+  border: 1px solid white;
+  border-radius: 15px;
+}
+.progress .color{
+  position: absolute;
+  background-color: #f4a261;
+  width: 0px;
+  height: 5px;
+  border-radius: 15px;
+  animation: progres 4s infinite linear;    
+}
+@keyframes progres{
+  0%{
+    width: 0%;
+  }
+  25%{
+      width: 50%;
+  }
+  50%{
+      width: 75%;
+  }
+  75%{
+      width: 85%;
+  }
+  100%{
+      width: 100%;
+  }
+};
+
+
+
+/* Small Screens Phones */
+@media (max-width: 991px) {
+  form label {
+    min-width: 200px;
+    padding: 2px;
+    text-align: left;
+    line-height: 24px;
+    max-width: auto;
+    margin: 0;
+  }
+  form input {
+    min-width: 300px;
+  }
+  .ui-tabs .ui-tabs-nav .ui-tabs-anchor {
+    float: left;
+    padding: 0.5em 5px 1em 5px;
+    text-decoration: none;
+  }
+  .wlPageInfo,.wlCopy,.wlPower{
+    float:right;
+    width:100%;
+    text-align: right;
+  }
+  .toggle{
+    margin: 5px;
+    padding: 5px;
+  }
+  .toggle input+label {
+    min-width: 100px;
+    width:50%;
+    margin: auto;
+  }
+
+
+  .ui-widget *,
+  .ui-widget input,
+  .ui-widget select,
+  .ui-widget button {
+    
+  }
+  .ui-widget .material-symbols-outlined{
+    font-size: 24px;
+    vertical-align: middle;
+    width: 24px;
+    height: 24px;
+  }
+  .tabTitle {
+    display: none;
+  }
+}
+
+/* Hourglass */
+.hourglassBackground {
+  position: relative;
+  background-color: #333;
+  height: 130px;
+  width: 130px;
+  border-radius: 50%;
+  margin: 10px auto;
+  zoom: 40%;
+}
+
+.hourglassContainer {
+  position: absolute;
+  top: 30px;
+  left: 40px;
+  width: 50px;
+  height: 70px;
+  -webkit-animation: hourglassRotate 2s ease-in 0s infinite;
+          animation: hourglassRotate 2s ease-in 0s infinite;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+.hourglassContainer div,
+.hourglassContainer div:before,
+.hourglassContainer div:after {
+  transform-style: preserve-3d;
+}
+
+@-webkit-keyframes hourglassRotate {
+  0% {
+    transform: rotateX(0deg);
+  }
+  50% {
+    transform: rotateX(180deg);
+  }
+  100% {
+    transform: rotateX(180deg);
+  }
+}
+
+@keyframes hourglassRotate {
+  0% {
+    transform: rotateX(0deg);
+  }
+  50% {
+    transform: rotateX(180deg);
+  }
+  100% {
+    transform: rotateX(180deg);
+  }
+}
+[class^=hourglassCap] {
+  position: absolute;
+  left: 0;
+  height: 5px;
+  width: 50px;
+  background-color: white;
+}
+[class^=hourglassCap]:before, [class^=hourglassCap]:after {
+  content: "";
+  display: block;
+  position: absolute;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  transform: rotateX(90deg);
+  background-color: white;
+}
+
+.hourglassCapTop {
+  top: 0;
+}
+.hourglassCapTop:before {
+  top: -25px;
+}
+.hourglassCapTop:after {
+  top: -20px;
+}
+
+.hourglassCapBottom {
+  bottom: 0;
+}
+.hourglassCapBottom:before {
+  bottom: -25px;
+}
+.hourglassCapBottom:after {
+  bottom: -20px;
+}
+
+.hourglassGlassTop {
+  transform: rotateX(90deg);
+  position: absolute;
+  top: -16px;
+  left: 3px;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  background-color: #999999;
+}
+
+.hourglassGlass {
+  perspective: 100px;
+  position: absolute;
+  top: 32px;
+  left: 20px;
+  width: 10px;
+  height: 6px;
+  background-color: #999999;
+  opacity: 0.5;
+}
+.hourglassGlass:before, .hourglassGlass:after {
+  content: "";
+  display: block;
+  position: absolute;
+  background-color: #999999;
+  left: -17px;
+  width: 44px;
+  height: 28px;
+}
+.hourglassGlass:before {
+  top: -27px;
+  border-radius: 0 0 25px 25px;
+}
+.hourglassGlass:after {
+  bottom: -27px;
+  border-radius: 25px 25px 0 0;
+}
+
+.hourglassCurves:before, .hourglassCurves:after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 32px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #333;
+  -webkit-animation: hideCurves 2s ease-in 0s infinite;
+          animation: hideCurves 2s ease-in 0s infinite;
+}
+.hourglassCurves:before {
+  left: 15px;
+}
+.hourglassCurves:after {
+  left: 29px;
+}
+
+@-webkit-keyframes hideCurves {
+  0% {
+    opacity: 1;
+  }
+  25% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes hideCurves {
+  0% {
+    opacity: 1;
+  }
+  25% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 0;
+  }
+  40% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+.hourglassSandStream:before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 24px;
+  width: 3px;
+  background-color: white;
+  -webkit-animation: sandStream1 2s ease-in 0s infinite;
+          animation: sandStream1 2s ease-in 0s infinite;
+}
+.hourglassSandStream:after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 36px;
+  left: 19px;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid #fff;
+  -webkit-animation: sandStream2 2s ease-in 0s infinite;
+          animation: sandStream2 2s ease-in 0s infinite;
+}
+
+@-webkit-keyframes sandStream1 {
+  0% {
+    height: 0;
+    top: 35px;
+  }
+  50% {
+    height: 0;
+    top: 45px;
+  }
+  60% {
+    height: 35px;
+    top: 8px;
+  }
+  85% {
+    height: 35px;
+    top: 8px;
+  }
+  100% {
+    height: 0;
+    top: 8px;
+  }
+}
+
+@keyframes sandStream1 {
+  0% {
+    height: 0;
+    top: 35px;
+  }
+  50% {
+    height: 0;
+    top: 45px;
+  }
+  60% {
+    height: 35px;
+    top: 8px;
+  }
+  85% {
+    height: 35px;
+    top: 8px;
+  }
+  100% {
+    height: 0;
+    top: 8px;
+  }
+}
+@-webkit-keyframes sandStream2 {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  51% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  91% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes sandStream2 {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  51% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  91% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.hourglassSand:before, .hourglassSand:after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 6px;
+  background-color: white;
+  perspective: 500px;
+}
+.hourglassSand:before {
+  top: 8px;
+  width: 39px;
+  border-radius: 3px 3px 30px 30px;
+  -webkit-animation: sandFillup 2s ease-in 0s infinite;
+          animation: sandFillup 2s ease-in 0s infinite;
+}
+.hourglassSand:after {
+  border-radius: 30px 30px 3px 3px;
+  -webkit-animation: sandDeplete 2s ease-in 0s infinite;
+          animation: sandDeplete 2s ease-in 0s infinite;
+}
+
+@-webkit-keyframes sandFillup {
+  0% {
+    opacity: 0;
+    height: 0;
+  }
+  60% {
+    opacity: 1;
+    height: 0;
+  }
+  100% {
+    opacity: 1;
+    height: 17px;
+  }
+}
+
+@keyframes sandFillup {
+  0% {
+    opacity: 0;
+    height: 0;
+  }
+  60% {
+    opacity: 1;
+    height: 0;
+  }
+  100% {
+    opacity: 1;
+    height: 17px;
+  }
+}
+@-webkit-keyframes sandDeplete {
+  0% {
+    opacity: 0;
+    top: 45px;
+    height: 17px;
+    width: 38px;
+    left: 6px;
+  }
+  1% {
+    opacity: 1;
+    top: 45px;
+    height: 17px;
+    width: 38px;
+    left: 6px;
+  }
+  24% {
+    opacity: 1;
+    top: 45px;
+    height: 17px;
+    width: 38px;
+    left: 6px;
+  }
+  25% {
+    opacity: 1;
+    top: 41px;
+    height: 17px;
+    width: 38px;
+    left: 6px;
+  }
+  50% {
+    opacity: 1;
+    top: 41px;
+    height: 17px;
+    width: 38px;
+    left: 6px;
+  }
+  90% {
+    opacity: 1;
+    top: 41px;
+    height: 0;
+    width: 10px;
+    left: 20px;
+  }
+}
+@keyframes sandDeplete {
+  0% {
+    opacity: 0;
+    top: 45px;
+    height: 17px;
+    width: 38px;
+    left: 6px;
+  }
+  1% {
+    opacity: 1;
+    top: 45px;
+    height: 17px;
+    width: 38px;
+    left: 6px;
+  }
+  24% {
+    opacity: 1;
+    top: 45px;
+    height: 17px;
+    width: 38px;
+    left: 6px;
+  }
+  25% {
+    opacity: 1;
+    top: 41px;
+    height: 17px;
+    width: 38px;
+    left: 6px;
+  }
+  50% {
+    opacity: 1;
+    top: 41px;
+    height: 17px;
+    width: 38px;
+    left: 6px;
+  }
+  90% {
+    opacity: 1;
+    top: 41px;
+    height: 0;
+    width: 10px;
+    left: 20px;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .sw-theme-dots>.nav .nav-link>.num {
+    top: 0px;
+  }
+  .wlPlaceInfo{
+    display: inherit;
+  }
+  label.wlPlaceName, .wlPlaceName{
+    padding: unset;
+  }
+  .wlButtonTxt {
+   display: none;
+  }
+  .wlPlaceInfo #placeName, .wlCustInfo #customerBannerName {
+    font-size: small;
+  }
+  .wlCustInfo{
+    display: inherit;
+  }
+
+  .progressbar {
+    width: 90%;
+    margin: 0 0px 0 25px ; 
+  }
+  .tabTitle{
+    display: none;
+  }
+  .material-symbols-small::after {
+    content: "\a";
+    white-space: pre;
+  }
+}

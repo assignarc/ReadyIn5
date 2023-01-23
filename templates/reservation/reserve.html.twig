@@ -1,0 +1,28 @@
+<form id="reservationForm" novalidate="novalidate" action="#">
+    <p class="details-form-field">
+        <label for="adults" >Adults : </label>
+        <input id="adults" name="adutls" type="number" min="1" max="20" required="required" autocomplete="off" style="text-align:right" value="1" placeholder="Atleast 1 adult"></input>
+    </p>
+    <p class="details-form-field">
+        <label for="children">Children : </label>
+        <input id="children" name="children" min="0" max="20"  required="required" type="number" value="0" style="text-align:right"></input>
+    </p>
+    <p class="details-form-field">
+        <label for="specialNotes">Special Notes : </label>
+        <textarea id="specialNotes" name="specialNotes" lines="2" placeholder="Special Notes"></textarea>
+    </p>
+    <p class="details-form-field">
+        <button type="submit" id="saveReservation">
+            <span class="material-symbols-outlined">event_seat</span>&nbsp;Reserve
+        </button>
+    </p>
+    <p class="details-form-field" >
+        <button type="button" id="viewReservation" style="display:none">
+            <span class="material-symbols-outlined">hourglass_top</span>&nbsp;View Status of Reservation
+        </button>
+    </p>
+</form>
+<script type="text/javascript" src="/js/reservation/reserve.js">
+   
+
+</script>

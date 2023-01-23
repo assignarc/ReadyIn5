@@ -1,0 +1,20 @@
+parameters:
+      #General Parameters
+      RI5:
+            RI5.GEN.cache.statusExpiry: 43200 # in Seconds
+
+            #In general send any message Used by Messenger
+            RI5.MESSAGE.send: false                                     # Global flag for all outgoing messages.
+            #Twilio Parameters
+            RI5.TWILIO.sid : "AC315aef638ff3320ac5489ce3773af68e"
+            RI5.TWILIO.token: "09ab57748104595a87b154756eee3ed5"
+            RI5.TWILIO.fromnumber : "+19124000081"
+
+            #OTP parameters
+            RI5.OTP.send : true                                         # Generate new OTP or not.
+            RI5.OTP.defaultcode : "1234"
+            RI5.OTP.expiryInterval: "PT30S"                             # DateIntverval format seconds
+
+            RI5.RESERVATION.cleanuptime : "-6 hour"                     # Clean all reservations that are older than this time.
+            RI5.RESERVATION.archivetime : "-12 hour"                    # Archive all reserveratiosn that are older than this time. 
+

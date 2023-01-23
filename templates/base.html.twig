@@ -1,0 +1,171 @@
+{% set page =  {
+    "title"       : "",
+    "description" : "",
+    "context"     : "",
+    "keywords"    : "",
+    "canonical"     :"",
+    "menu" : false
+}  | merge(page)
+%}
+<html lang="en">
+    <head>
+        {{include('common/header.html.twig')}}
+        {{include('common/includes.header.html.twig')}}
+    </head>
+    
+    <body>
+    
+    <!-- ***** Preloader Start ***** -->
+    <div id="preloader" style="visibility: hidden; display: none; opacity: 0;">
+        <div class="jumper">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>  
+    <!-- ***** Preloader End ***** -->
+    
+    
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky">
+        <script type="text/javascript">
+            var wlPlaceSlug = '{{placeSlug}}'; 
+        </script>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <!-- ***** Logo Start ***** -->
+                        {% if menucontext=="place"%}
+                            {% if place is not defined or place is not null or place!='' %}
+                                {{include ("place/banner.html.twig" , {'version' : 'banner'})}} 
+                            {% else %}
+                                {{include("common/banner-default.html.twig", {'version' : 'banner'})}} 
+                            {% endif %}
+                        {% elseif menucontext=="customer" %}
+                            {% if customer is not defined or customer is not null or customer!='' %}
+                                <a href="/" class="logo">
+                                    <img src="/images/ri5/ri5.logo-name.png" class="wlLogo" alt="Ready-In-5"><br>
+                                </a>
+                                {{include("customer/banner.html.twig", {'version' : 'banner'})}}
+                            {% else %}
+                                {{include("common/banner-default.html.twig", {'version' : 'banner'})}} 
+                            {% endif %}
+                        {% elseif menucontext=="NONE" %}
+                            {{include("common/banner-default.html.twig", {'version' : 'banner'})}}
+                        {% else %}
+                           {{include("common/banner-default.html.twig", {'version' : 'banner'})}} 
+                        {% endif %}
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav" style="display: none;">
+                            {% if page.menu %}
+                                {% if menucontext=="customer" %}
+                                    {% if customer is not defined or customer is not null or customer!='' %}
+                                        <li><a href="/customer/profile">Profile</a></li>
+                                        <li><a href="/customer/reservations"><li>Reservations</li></a>
+                                        <li><a href="/customer/logout"><li>Logout</li></a>
+                                    {% endif %}
+                                {% elseif menucontext=="place"%}
+                                    <li><a href="/place/manager">Manager</a></li>
+                                    {% if place is not null%}
+                                        <li><a href="/place/{{placeSlug}}/profile">Update</a></li>
+                                        <li><a href="/place/{{placeSlug}}/reservations">Reservations</a></li>
+                                        <li><a href="/place/{{placeSlug}}/plan">Plan</a></li>
+                                    {% endif %}
+                                    <li><a href="/place/logout">Logout</a></li>
+                                {% endif %}
+                            {% endif %}
+                        </ul>
+                        <a class="menu-trigger">
+                            <span>Menu</span>
+                        </a>
+                        <!-- ***** Menu End ***** -->
+                        <div class="progressbar" id="progressbar">
+                            <div class="progress">
+                                <div class="color"></div>
+                            </div>
+                        </div>
+                    </nav>
+                    
+                </div>
+            </div>
+        </div>
+        <div id="netStatus" class="wlNetStatus"></div>
+    </header>
+    <!-- ***** Header Area End ***** -->
+
+   
+    <section class="section padding-bottom-100">
+        <div class="container">
+            <div class="row">   
+                <div class="wLContentI">   
+               
+                </div>
+            </div>
+            <div class="row">   
+                <div class="wLContentI">   
+                 {% block body %}{% endblock %}
+                </div>
+            </div>
+            <div class="row">      
+                <div id="wlNotifications"></div>
+            </div>
+        </div>
+    </section>
+    <!-- ***** Features Big Item End ***** -->
+
+    <!-- ***** Home Parallax Start ***** -->
+    {{include('common/work-process.html.twig')}}
+    <!-- ***** Home Parallax End ***** -->
+
+    <!-- ***** Testimonials Start ***** -->
+    
+    <!-- ***** Testimonials End ***** -->
+
+    <!-- ***** Pricing Plans Start ***** -->
+    
+    <!-- ***** Pricing Plans End ***** -->
+
+    <!-- ***** Counter Parallax Start ***** -->
+    
+    <!-- ***** Counter Parallax End ***** -->   
+
+    <!-- ***** Blog Start ***** -->
+    
+    <!-- ***** Blog End ***** -->
+
+    <!-- ***** Contact Us Start ***** -->
+    
+    <!-- ***** Contact Us End ***** -->
+    
+    <!-- ***** Footer Start ***** -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <ul class="social">
+                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                        <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                        <li><a href="#"><i class="fa fa-rss"></i></a></li>
+                        <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="wlFooter copyright">
+                    {{include('common/footer.html.twig')}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    {{include('common/includes.footer.html.twig')}}
+    
+   
+</body>
+</html>
