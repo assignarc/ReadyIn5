@@ -7,7 +7,7 @@
 // This example requires the Places library. Include the libraries=places
 // parameter when you first load the API. For example:
 // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
-//<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?language=&amp;hl=en&key=AIzaSyAfWzCJqeFCkGQe0ONg_drO6_14NE0cW8E&libraries=places"></script>
+
 function initMap() {
     const map = new google.maps.Map(document.getElementById("placeMap"), {
       center: { lat: 40.749933, lng: -73.98633 },

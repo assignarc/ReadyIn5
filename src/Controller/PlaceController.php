@@ -115,7 +115,7 @@ class PlaceController extends BaseController
             // if($this->getSessionParm(WLConstants::SESSION_REST_TOKEN, WLConstants::NONE) != $placeSlug)
             //     throw new PlaceInvalidRequestException("Invalid Place Link, please scan code to reserve.",4041);
 
-            $this->checkPlacePermissions([WLConstants::AUTHROLE_PLACE_OWNER, WLConstants::AUTHROLE_PLACE_MANAGER],$placeSlug);
+            $this->checkPlacePermissions([WLConstants::AUTHROLE_CUSTOMER],$placeSlug);
            
             $place = $placeService->findPlace($placeSlug);
             if(!$place)
@@ -152,7 +152,8 @@ class PlaceController extends BaseController
             $this->logout();
             return $this->render('Place/signup.html.twig', [
                 "placeSlug" => WLConstants::NONE,
-                "menucontext"=>WLConstants::NONE
+                "menucontext"=>WLConstants::NONE,
+                "MAP_KEY"=> $this->getParameter("MAP_KEY"),
             ]);
         }
         catch(Exception $ex){
