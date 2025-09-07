@@ -70,10 +70,8 @@ class ServiceController extends BaseController
                 default:
                     $this->setSessionParm(WLConstants::S_CUST_AUTHORIZED,WLConstants::AUTH_UNAUTHORIZED);
                     $this->setSessionParm(WLConstants::S_CUST_PHONE,WLConstants::NONE);
-                    $this->setSessionParm(WLConstants::S_CUST_ROLE, WLConstants::NONE);
-                   
-                    throw new InvalidRequestException("Invalid OTP request.");
-                    break;
+                    $this->setSessionParm(WLConstants::S_CUST_ROLE, WLConstants::NONE);        
+                    throw new InvalidRequestException("Invalid OTP request.", 0,[],null);
                 }
                 $response->setStatusCode(Response::HTTP_OK);
         }
@@ -151,8 +149,7 @@ class ServiceController extends BaseController
                     $this->setSessionParm(WLConstants::S_PLACE_PHONE,WLConstants::NONE);
                     $this->setSessionParm(WLConstants::S_PLACE_ROLE,WLConstants::NONE);
                    
-                    throw new InvalidRequestException("Invalid OTP request.");
-                    break;
+                    throw new InvalidRequestException("Invarlid OTP request.", 0,[],null);
                 }
                 $response->setStatusCode(Response::HTTP_OK);
         }

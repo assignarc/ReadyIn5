@@ -57,12 +57,32 @@ class PlaceSchedule extends BaseEntity implements JsonSerializable
      * @ORM\Column(name="placeid", type="integer", nullable=false)
      */
     private $placeid;
-  
+    
+    /**
+     * Many Schedules has One Place.
+     * @ORM\ManyToOne(targetEntity="Place", inversedBy="schedules" , cascade={"persist","refresh"})
+     * @ORM\JoinColumn(name="placeid", referencedColumnName="placeid")
+    */
+    private Place $place;
+
+    public function getPlace(): Place
+    {
+        return $this->place;
+    }
+
+    public function setPlace(Place $place): self
+    {
+        $this->place = $place;
+        if($place->getPlaceid())
+            $this->setPlaceid($place->getPlaceid());
+        return $this;
+    }
 
     public function getScheduleid(): ?int
     {
         return $this->scheduleid;
     }
+
 
     public function getDay(): ?string
     {
@@ -124,6 +144,7 @@ class PlaceSchedule extends BaseEntity implements JsonSerializable
 
         return $this;
     }
+    
     public function jsonSerialize() : mixed
     {
         return get_object_vars($this);

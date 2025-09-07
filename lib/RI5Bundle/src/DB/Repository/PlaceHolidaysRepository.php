@@ -1,10 +1,12 @@
 <?php
 
 namespace RI5\DB\Repository;
-
+use PDO;
 use RI5\DB\Entity\PlaceHolidays;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use RI5\Exception\DatabaseException;
+
 
 /**
  * @extends ServiceEntityRepository<PlaceHolidays>
@@ -39,6 +41,43 @@ class PlaceHolidaysRepository  extends ServiceEntityRepository
         }
     }
 
+    public function persistHoliday(PlaceHolidays $holiday): void
+    {
+        //         INSERT INTO `waitlist`.`place_holidays`
+        // (`holidayid`,
+        // `placeid`,
+        // `holiday_date`,
+        // `holiday_name`,
+        // `special_note`)
+        // VALUES
+        // (<{holidayid: }>,
+        // <{placeid: }>,
+        // <{holiday_date: }>,
+        // <{holiday_name: }>,
+        // <{special_note: }>);
+
+        $sql = "INSERT INTO `waitlist`.`place_holidays` 
+                            (`placeid`, `holiday_date`, `holiday_name`,`special_note`) 
+                    VALUES
+                        (:placeid, :holiday_date,:holiday_name,:special_note)";
+        try{
+            $conn = $this->getEntityManager()->getConnection();
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue(':placeid', $holiday->getPlace()->getPlaceid());
+            $stmt->bindValue(':holiday_date', $holiday->getHolidayDate()->format('Y-m-d'), PDO::PARAM_STR);
+            $stmt->bindValue(':holiday_name', $holiday->getHolidayName());
+            $stmt->bindValue(':special_note', $holiday->getSpecialNote());
+            $resultSet = $stmt->executeQuery();
+        }
+        catch (\Exception $e){
+            throw new DatabaseException(
+                "Error saving holiday for placeid: " . $holiday->getPlace()->getPlaceid() . " Error: " . $e->getMessage(),
+                0,
+                [],
+                $e
+            );
+        }
+    }
 //    /**
 //     * @return PlaceHolidays[] Returns an array of PlaceHolidays objects
 //     */

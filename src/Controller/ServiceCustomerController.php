@@ -33,7 +33,7 @@ class ServiceCustomerController extends BaseController
      
         try{
            
-            $this->checkCustomerPermissions([WLConstants::AUTHROLE_CUSTOMER], null, $this->postParm("phone",null));
+            $this->checkCustomerPermissions([WLConstants::AUTHROLE_CUSTOMER], "", $this->postParm("phone",null));
 
             $customerDB = $customerService->findCustomer($this->postParm("phone","0"));
             
@@ -84,7 +84,7 @@ class ServiceCustomerController extends BaseController
             //     throw new SecurityException("Unauthorized request");
             // }
 
-            $this->checkCustomerPermissions([WLConstants::AUTHROLE_CUSTOMER], null, null);
+            $this->checkCustomerPermissions([WLConstants::AUTHROLE_CUSTOMER], "", "");
             $customerDB = $customerService->findCustomer($this->getSessionParm(WLConstants::S_CUST_PHONE,"0"));
         
             $this->responseDetails->setMessage("Customer found!");
@@ -113,14 +113,11 @@ class ServiceCustomerController extends BaseController
             // if($this->getSessionParm(WLConstants::SESSION_AUTH_TOKEN,"0")!="1"){
             //     throw new SecurityException("User unauthorized");
             // }
-            $this->checkCustomerPermissions([WLConstants::AUTHROLE_CUSTOMER], null, null);
+            $this->checkCustomerPermissions([WLConstants::AUTHROLE_CUSTOMER], "", );
 
-            $inResStatuses=[];
-            $inResStatuses[] = ReservationStatus::STATUS_CALL;
-            $inResStatuses[] = ReservationStatus::STATUS_WAIT;
-            $inResStatuses[] = ReservationStatus::STATUS_CANCEL;
+            $inResStatuses=[ReservationStatus::STATUS_CALL,ReservationStatus::STATUS_WAIT,ReservationStatus::STATUS_CANCEL];
             $customer = $customerService->findCustomer($this->getSessionParm(WLConstants::S_CUST_PHONE,""));
-            $reservations = $reservationService->findAllByCustomerId($customer->getUserid(), null,0,100, $inResStatuses,null);
+            $reservations = $reservationService->findAllByCustomerId($customer->getUserid(), null,0,100, $inResStatuses,[]);
             
             $this->responseDetails->setMessage("Current reservations loaded.");
             $this->responseDetails->addDetail('reservations',$reservations);
@@ -147,10 +144,10 @@ class ServiceCustomerController extends BaseController
         $response = new Response();
         $response->headers->set('Content-Type', 'application/json');
         try{
-            // if($this->getSessionParm(WLConstants::SESSION_AUTH_TOKEN,"0")!="1"){
+            // if($this->getSessionParm(WLConstants::SESSION_AUTH_TOKEN,"0")!="1"){ 
             //     throw new SecurityException("User unauthorized");
             // }
-            $this->checkCustomerPermissions([WLConstants::AUTHROLE_CUSTOMER], null, null);
+            $this->checkCustomerPermissions([WLConstants::AUTHROLE_CUSTOMER], placeSlug: "", phone: "");
             $customer = $customerService->findCustomer($this->getSessionParm(WLConstants::S_CUST_PHONE,""));
             $reservations = $reservationService->findAllByCustomerId($customer->getUserid(), 
                             (new \DateTime())->modify('-1 day'));//new DateTime());

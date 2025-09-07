@@ -9,7 +9,7 @@ class ReservationStatusException extends BaseException
 {
     
     // Redefine the exception so message isn't optional
-    public function __construct($message ="Invalid reservation status", $code = 9100, array $exceptionData=[],Throwable $previous = null) {
+    public function __construct(string $message ="Invalid reservation status",int $code = 9100, array $exceptionData=[],?Throwable $previous = null) {
         // make sure everything is assigned properly
         parent::__construct($message, $code, $previous);
         $this->__REDIRECTION_PAGE__ = "/";

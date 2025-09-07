@@ -165,7 +165,7 @@ class Place extends BaseEntity implements JsonSerializable
 
   
      /**
-     * @var \PlaceOwner
+     * @var PlaceOwner
      *
      * @ORM\ManyToOne(targetEntity="PlaceOwner", inversedBy="Places",cascade={"refresh"})
      * @ORM\JoinColumn(name="ownerid", referencedColumnName="ownerid")
@@ -333,12 +333,12 @@ class Place extends BaseEntity implements JsonSerializable
 
     public function getPlaceHolidays(): ?array
     {
-        return $this->placeHolidays->getValues();
+        return $this->placeHolidays->toArray();
     }
 
     public function setPlaceQueues(array $placeQueues): self
     {
-        $this->placeQueues = $placeQueues;
+        $this->placeQueues = new ArrayCollection($placeQueues);
         return $this;
     }
 
@@ -349,7 +349,7 @@ class Place extends BaseEntity implements JsonSerializable
 
     public function setPlaceSchedules(array $placeSchedules): self
     {
-        $this->placeSchedules = $placeSchedules;
+        $this->placeSchedules = new ArrayCollection($placeSchedules);
         return $this;
     }
 
@@ -359,7 +359,7 @@ class Place extends BaseEntity implements JsonSerializable
     }
     public function setPlacePrefs(array $placePrefs): self
     {
-        $this->placePrefs = $placePrefs;
+        $this->placePrefs = new ArrayCollection($placePrefs);
         return $this;
     }
 
@@ -370,7 +370,7 @@ class Place extends BaseEntity implements JsonSerializable
 
     public function setPlaceUsers(array $placeUsers): self
     {
-        $this->placeUsers = $placeUsers;
+        $this->placeUsers = new ArrayCollection($placeUsers);
         return $this;
     }
 
@@ -381,7 +381,7 @@ class Place extends BaseEntity implements JsonSerializable
 
     public function setPlaceImages(array $placeImages): self
     {
-        $this->placeImages = $placeImages;
+        $this->placeImages = new ArrayCollection($placeImages);
         return $this;
     }
 
@@ -392,7 +392,7 @@ class Place extends BaseEntity implements JsonSerializable
 
     public function setReservations(array $reservations): self
     {
-        $this->reservations = $reservations;
+        $this->reservations = new ArrayCollection($reservations);
         return $this;
     }
 
@@ -451,7 +451,7 @@ class Place extends BaseEntity implements JsonSerializable
         $this->ownerid =$ownerid;
         return $this;
     }
-    public function getPlaceOwner() 
+    public function getPlaceOwner(): PlaceOwner 
     {
         return $this->placeOwner;
     }

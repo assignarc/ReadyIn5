@@ -6,7 +6,7 @@ use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelLow;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Label\Label;
-use Endroid\QrCode\Label\Font\NotoSans;
+use Endroid\QrCode\Label\Font\Font;
 
 trait QrCodeTrait{
     
@@ -17,24 +17,24 @@ trait QrCodeTrait{
     private int $IMAGE_MARGIN = 0;
     private $LABEL_SIZE = 20;
     
-    function gnerateQrCode(string $url, string $labelText=null, bool $includeLogo=true) : string {
+    function gnerateQrCode(string $url, string $labelText, bool $includeLogo=true) : string {
         $writer = new \Endroid\QrCode\Writer\SvgWriter();
-        $qrCode = QrCode::create($url)
-                            ->setEncoding(new Encoding($this->ENCODING))
-                            ->setErrorCorrectionLevel(new ErrorCorrectionLevelLow())
-                            ->setSize($this->IMAGE_SIZE)
-                            ->setMargin($this->IMAGE_MARGIN)
-                            ->setForegroundColor(new Color(0, 0, 0))
-                            ->setBackgroundColor(new Color(255, 255, 255));
-
+       $qrCode = new QrCode(
+            data: $url,
+            encoding: new Encoding('UTF-8'),
+            size: 300,
+            margin: 10,
+            foregroundColor: new Color(0, 0, 0),
+            backgroundColor: new Color(255, 255, 255)
+        );
         $label =null;
         $logo = null;
        
         if($labelText && $labelText!=""){
-            $label = Label::create($labelText)->setFont(new NotoSans($this->LABEL_SIZE));
+            $label = new Label($labelText, font: new Font($this->LABEL_SIZE));
         }
         if($includeLogo)
-            $logo = \Endroid\QrCode\Logo\Logo::create($this->LOGO_URL)->setResizeToWidth($this->LOGO_RESIZETOWIDTH);
+            $logo = new \Endroid\QrCode\Logo\Logo($this->LOGO_URL, resizeToWidth: $this->LOGO_RESIZETOWIDTH);
       
         $result =  $writer->write($qrCode,$logo,$label)->getDataUri();
 

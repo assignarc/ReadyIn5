@@ -23,6 +23,7 @@ class AuthToken extends BaseObject
 
     public static string $TokenSignatureStart = "ri5:[*//";
     public static string $TokenSignatureEnd = "//*]";
+    public string $userId = "";
 
     public function __construct(mixed $sessionData=null)
     {

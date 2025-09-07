@@ -9,7 +9,7 @@ class SecurityException extends BaseException
 {
     
     // Redefine the exception so message isn't optional
-    public function __construct($message ="User unathorized, please login!", $code = 4030, array $exceptionData=[], Throwable $previous = null) {
+    public function __construct(string $message ="User unathorized, please login!",int $code = 4030, array $exceptionData=[], ?Throwable $previous = null) {
         // make sure everything is assigned properly
         parent::__construct($message, $code, $previous);
         $this->__REDIRECTION_ROUTE__ = "CUST_Login";

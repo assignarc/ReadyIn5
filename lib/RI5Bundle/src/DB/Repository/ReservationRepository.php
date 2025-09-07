@@ -52,10 +52,10 @@ class ReservationRepository extends ServiceEntityRepository
  
     public function getAllByDate(DateTimeInterface $minReservationDt, 
                                 DateTimeInterface $maxReservationDt, 
-                                DateTimeInterface $minStatusDt = null, 
-                                DateTimeInterface $maxStatusDt = null, 
-                                array $inReservationStatuses = null,
-                                array $notInReservationStatuses = null
+                                ?DateTimeInterface $minStatusDt = null, 
+                                ?DateTimeInterface $maxStatusDt = null, 
+                                ?array $inReservationStatuses = null,
+                                ?array $notInReservationStatuses = null
                         ): ?array{
 
         $qb = $this->getEntityManager()->createQueryBuilder()
@@ -128,10 +128,7 @@ class ReservationRepository extends ServiceEntityRepository
         if(empty($maxId) || !isset($maxId[0]) || !isset($maxId[0][1]))
             return ReservationId::GetNext($resId->id(), $tableCapacity);
         else
-            return ReservationId::GetNext($maxId[0][1], $tableCapacity);
-        
-        throw new ReservationNotFoundException("Unable to generate next reservation id. " + $resId);
-       
+            return ReservationId::GetNext($maxId[0][1], $tableCapacity);       
     }
    /**
     * Find the first reservation waiting in the line for the queue and place specified. 
@@ -160,7 +157,7 @@ class ReservationRepository extends ServiceEntityRepository
         else
             return ReservationId::from($latestWaitingReservationId[0][1]);
 
-        throw new ReservationNotFoundException("Unable to get last waiting reservation id. " + $baseReservationId);
+       // throw new ReservationNotFoundException("Unable to get last waiting reservation id. " + $baseReservationId);
     }
 
 

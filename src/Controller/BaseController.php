@@ -95,7 +95,7 @@ class BaseController extends AbstractController
      * Security Functions
      */
 
-    public function checkPlacePermissions(array $placePermissionRequired, string $placeSlug = null, bool $checkPublicPermissions = false){
+    public function checkPlacePermissions(array $placePermissionRequired, string $placeSlug = "", bool $checkPublicPermissions = false){
         /** 
          *  $this->setSessionParm(WLConstants::SESSION_AUTH_TOKEN,"1");
          *   $this->setSessionParm(WLConstants::SESSION_PHONE_TOKEN,$this->postParm("phone", ""));
@@ -109,6 +109,8 @@ class BaseController extends AbstractController
          *   $this->setSessionParm(WLConstants::SESSION_REST_ADMIN_TOKEN, $placeSlug); 
         */
         
+        //$this->logError(json_encode($this->getSessionAllParms()));
+
         if($checkPublicPermissions){ 
             if($this->getSessionParm(WLConstants::S_PLACE_PUBLIC,WLConstants::NONE)!=$placeSlug){
                 throw new SecurityException("Access denied.", 
@@ -118,32 +120,32 @@ class BaseController extends AbstractController
                         ]);
             }
         }
-
-        if($this->getSessionParm(WLConstants::S_PLACE_AUTHORIZED,WLConstants::NONE)!="1"){
-            throw new SecurityException("Access denied.", 
-                                        4030,
-                                        [   
-                                            "S_PLACE_AUTHORIZED"=>$this->getSessionParm(WLConstants::S_PLACE_AUTHORIZED,WLConstants::NONE)
-                                        ]);
+        if($checkPublicPermissions){
+            if($this->getSessionParm(WLConstants::S_PLACE_AUTHORIZED,WLConstants::NONE)!="1"){
+                throw new SecurityException("Access denied.", 
+                                            4030,
+                                            [   
+                                                "S_PLACE_AUTHORIZED"=>$this->getSessionParm(WLConstants::S_PLACE_AUTHORIZED,WLConstants::NONE)
+                                            ]);
+            }
+            if($placeSlug && !str_contains($this->getSessionParm(WLConstants::S_PLACE_PLACESLUGS,WLConstants::NONE), $placeSlug)){
+                throw new SecurityException("Access denied.", 
+                                            4031,
+                                            [   
+                                                "S_PLACE_PLACESLUGS"=>$this->getSessionParm(WLConstants::S_PLACE_PLACESLUGS,WLConstants::NONE)
+                                            ]);
+            }
+            if(!in_array($this->getSessionParm(WLConstants::S_PLACE_ROLE,WLConstants::NONE),$placePermissionRequired)){
+                throw new SecurityException("Access denied.", 
+                                            4032,
+                                            [   
+                                                "S_PLACE_ROLE"=>$this->getSessionParm(WLConstants::S_PLACE_ROLE,WLConstants::NONE)
+                                            ]);
+            }
         }
-        if($placeSlug && !str_contains($this->getSessionParm(WLConstants::S_PLACE_PLACESLUGS,WLConstants::NONE), $placeSlug)){
-            throw new SecurityException("Access denied.", 
-                                        4031,
-                                        [   
-                                            "S_PLACE_PLACESLUGS"=>$this->getSessionParm(WLConstants::S_PLACE_PLACESLUGS,WLConstants::NONE)
-                                        ]);
-        }
-        if(!in_array($this->getSessionParm(WLConstants::S_PLACE_ROLE,WLConstants::NONE),$placePermissionRequired)){
-            throw new SecurityException("Access denied.", 
-                                        4032,
-                                        [   
-                                            "S_PLACE_ROLE"=>$this->getSessionParm(WLConstants::S_PLACE_ROLE,WLConstants::NONE)
-                                        ]);
-        }
-       
 
     }
-    public function checkCustomerPermissions(array $placePermissionRequired, string $placeSlug = null, string $phone=null){
+    public function checkCustomerPermissions(array $placePermissionRequired, string $placeSlug = "", string $phone=""){
         /** 
          *  $this->setSessionParm(WLConstants::SESSION_AUTH_TOKEN,"1");
          *   $this->setSessionParm(WLConstants::SESSION_PHONE_TOKEN,$this->postParm("phone", ""));

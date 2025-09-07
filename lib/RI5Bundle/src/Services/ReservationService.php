@@ -161,7 +161,7 @@ class ReservationService extends BaseService
             //$reservationDB = null; 
         }
         */
-        $reservationDB = $this->timeCheckforNew($reservation);
+        //$reservationDB = $this->timeCheckforNew($reservation);
         $notes = [];
        
         $notesTag = date_format(new DateTime(),"Y-m-d-H:i:s");
@@ -197,7 +197,7 @@ class ReservationService extends BaseService
 
    
     /**
-     * Create or update new reservation
+     * Create or update new reservationS
      *
      * @param Reservation $reservation
      * @param boolean $mustCreateNew
@@ -407,9 +407,9 @@ class ReservationService extends BaseService
     /*
     *   $currentDateTime = Null means Current List, otherwise it is past. 
     */
-    public function findAllByCustomerId(string $customerId, DateTime $currentDateTime = null, 
+    public function findAllByCustomerId(string $customerId, ?DateTime $currentDateTime, 
                                         int $start=0, int $max=100, 
-                                        array $inStatuses=null, array $notInStatuses=null) : ?array {
+                                        array $inStatuses=[], array $notInStatuses=[]) : ?array {
         
        
         $criteria = Criteria::create()
@@ -472,7 +472,7 @@ class ReservationService extends BaseService
      /*
     *   $currentDateTime = Null means Current List, otherwise it is past. 
     */
-    public function findAllByPlaceSlug(string $placeSlug, string $status="WAIT", DateTimeInterface $currentDateTime = null, int $start=0, int $max=100) : ?array {
+    public function findAllByPlaceSlug(string $placeSlug, string $status="WAIT", DateTimeInterface $currentDateTime, int $start=0, int $max=100) : ?array {
         
         $place = $this->placeService->findPlace($placeSlug);
 
@@ -537,7 +537,7 @@ class ReservationService extends BaseService
             $hours = ($diff->y * 365 * 24) + ($diff->m * 30 * 24) + ($diff->d * 24) + ($diff->h) + ($diff->i)/60;
          
             if($hours < 12 && $reservationDB->getStatus()=="WAIT") {
-                throw new InvalidRequestException("You aleady have a reservation, cancel that before creating a new one");
+                throw new InvalidRequestException("You aleady have a reservation, cancel that before creating a new one", 9501, [], null);
             }      
         }
         return $reservationDB;

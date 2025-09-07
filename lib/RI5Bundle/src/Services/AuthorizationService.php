@@ -26,7 +26,7 @@ class AuthorizationService extends BaseService
         return $token;
     }
 
-    public function isCustomerAuthorized(string $tokenString ="", AuthToken $token = null, Customer $customer = null ):bool{
+    public function isCustomerAuthorized(string $tokenString ="", AuthToken $token, Customer $customer ):bool{
         if($token)
             return ($token->userId == $customer->getUserid()) && $token->isAuthorized();
         if($tokenString!=""){

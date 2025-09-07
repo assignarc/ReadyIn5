@@ -27,6 +27,43 @@ services:
             - '../src/Entity/'
             - '../src/Exception/'
             - '../src/Kernel.php'
+    RI5\Exception\BaseException:
+        arguments:
+            $message: 'A default error message for BaseException' # Provide the explicit string value
+            # Add other arguments if needed
+    RI5\Exception\CustomerNotFoundException:
+        arguments:
+            $message: 'Customer not found.' # Or a more dynamic message if needed
+    RI5\Exception\DatabaseException:
+        arguments:
+            $message: 'Database error' # Or a more dynamic message if needed
+    RI5\Exception\InvalidRequestException:
+        arguments:
+            $message: 'Invalid input provided' # Or a more dynamic message if needed
+    RI5\Exception\MessageException:
+        arguments:
+            $message: 'Resource not found' # Or a more dynamic message if needed
+    RI5\Exception\OtpException:
+        arguments:
+            $message: 'Operation failed' # Or a more dynamic message if needed
+    RI5\Exception\PlaceInvalidRequestException:
+        arguments:
+            $message: 'External service error' # Or a more dynamic message if needed
+    RI5\Exception\PlaceNotFoundException:
+        arguments:
+            $message: 'Payment required' # Or a more dynamic message if needed
+    RI5\Exception\PlaceOwnerNotFoundException:
+        arguments:
+            $message: 'Rate limit exceeded' # Or a more dynamic message if needed
+    RI5\Exception\ReservationNotFoundException:
+        arguments:
+            $message: 'Reservation not found' # Or a more dynamic message if needed
+    RI5\Exception\ReservationStatusException:
+        arguments:
+            $message: 'Invalid reservation status' # Or a more dynamic message if needed
+    RI5\Exception\SecurityException:
+        arguments:
+            $message: 'Security violation' # Or a more dynamic message if needed
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

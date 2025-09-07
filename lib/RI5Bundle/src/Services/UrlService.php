@@ -39,7 +39,7 @@ class UrlService extends BaseService
        return $this->objectRepository->findOneByEntity($entityType,$entityId);
     }
 
-    public function createUpdateUrl(string $entityType,string $entityId, string $redirectUrl, array $notes = null, bool $forceCreate = false) : string {
+    public function createUpdateUrl(string $entityType,string $entityId, string $redirectUrl, ?array $notes, bool $forceCreate = false) : string {
         
         if($entityType==null || $entityType =="")
             throw new UrlException("Invalid URL.");

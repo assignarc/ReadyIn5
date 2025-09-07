@@ -114,8 +114,9 @@ class PlaceController extends BaseController
         try{
             // if($this->getSessionParm(WLConstants::SESSION_REST_TOKEN, WLConstants::NONE) != $placeSlug)
             //     throw new PlaceInvalidRequestException("Invalid Place Link, please scan code to reserve.",4041);
-
-            $this->checkPlacePermissions([WLConstants::AUTHROLE_CUSTOMER],$placeSlug);
+            $this->setSessionParm(WLConstants::S_PLACE_SLUG,$placeSlug);
+            $this->setSessionParm(WLConstants::S_CUST_PLACESLUG,$placeSlug);
+            $this->checkPlacePermissions([WLConstants::AUTHROLE_CUSTOMER],$placeSlug,false);
            
             $place = $placeService->findPlace($placeSlug);
             if(!$place)
@@ -206,8 +207,19 @@ class PlaceController extends BaseController
             //Key|PlaceSlug|timeUrlCreated
             $slugParts = explode("|",  EncryptionTrait::Decode($urlSlug, $placeSlug));
             //Key|timeUrlCreated|timeUrlCreated
-            $url = $router->generate("WL_Home",[], UrlGeneratorInterface::ABSOLUTE_URL) . "place/" . $placeSlug . "/" .  EncryptionTrait::Encode("{$slugParts[0]}|{$slugParts[2]}|{$slugParts[2]}", $placeSlug) . "/check";
-            $qrCode = $this->gnerateQrCode($url,null,true);
+            $url = $router->generate(
+                        name: "WL_Home",
+                        parameters: [], 
+                        referenceType: 
+                            UrlGeneratorInterface::ABSOLUTE_URL) . 
+                            "place/" . 
+                            $placeSlug . 
+                            "/" .  
+                            EncryptionTrait::Encode(string: "{$slugParts[0]}|{$slugParts[2]}|{$slugParts[2]}
+                            ", 
+                        key: $placeSlug) 
+                    . "/check";
+            $qrCode = $this->gnerateQrCode($url,"",true);
             $this->setSessionParm(WLConstants::S_PLACE_PUBLIC,$placeSlug);
             
             return $this->render('place/public.board.html.twig', [
@@ -230,7 +242,7 @@ class PlaceController extends BaseController
         }
     }
    
-    #[Route('/{placeSlug}/board', name: 'PLACE_Board' , methods: ["GET"])]
+    #[Route('/{placeSlug}/board', name: 'PLACE_Board' , methods: ["GET"])]    
     public function placeBoard(string $placeSlug,PlaceService $placeService, UrlService $urlService): Response
     { 
        
@@ -241,13 +253,18 @@ class PlaceController extends BaseController
            
             $place = $placeService->findPlace($placeSlug,true);
             $time = time();
-            $key = $urlService->createUpdateUrl(WLConstants::ENTITY_PLACE,$place->getPlaceid(), 
-                                                "/place/".$placeSlug . "/reserve", 
-                                                ["placeName"=> $place->getName()],
-                                                false);
+            $key = $urlService->createUpdateUrl(entityType: WLConstants::ENTITY_PLACE,
+                                                entityId: $place->getPlaceid(), 
+                                                redirectUrl: "/place/".$placeSlug . "/reserve", 
+                                                notes: ["placeName"=> $place->getName()],
+                                                forceCreate: false);
             
             //Key|PlaceSlug|timeUrlCreated
-            $url = "/place/" . $placeSlug . "/" . EncryptionTrait::Encode("{$key}|{$placeSlug}|{$time}", $placeSlug) . "/public";
+            $url = "/place/" . 
+                    $placeSlug . 
+                    "/" . 
+                    EncryptionTrait::Encode(string: "{$key}|{$placeSlug}|{$time}", key: $placeSlug) . 
+                    "/public";
            
             return $this->redirect($url, 302);
             
@@ -267,15 +284,17 @@ class PlaceController extends BaseController
     public function plan(string $placeSlug,PlaceService $placeService): Response
     { 
         try{
-            $this->checkPlacePermissions([WLConstants::AUTHROLE_PLACE_OWNER, WLConstants::AUTHROLE_PLACE_MANAGER],$placeSlug);
+            $this->checkPlacePermissions(
+                placePermissionRequired: [WLConstants::AUTHROLE_PLACE_OWNER, WLConstants::AUTHROLE_PLACE_MANAGER],
+                placeSlug: $placeSlug);
            
-            $this->setSessionParm(WLConstants::S_PLACE_SLUG,$placeSlug);
+            $this->setSessionParm(key: WLConstants::S_PLACE_SLUG,value: $placeSlug);
            
-            $place = $placeService->findPlace($placeSlug,true);
+            $place = $placeService->findPlace(placeSlug: $placeSlug,fromCache: true);
           
-            return $this->render('Place/payplan.html.twig', [
+            return $this->render(view: 'Place/payplan.html.twig', parameters: [
                 "placeSlug" => $placeSlug,
-                "place" => $placeService->findPlace($placeSlug),
+                "place" => $placeService->findPlace(placeSlug: $placeSlug),
                 "menucontext" => "place"
             ]);
         }
@@ -295,17 +314,23 @@ class PlaceController extends BaseController
     {
        
         try{
-            $this->checkPlacePermissions([WLConstants::AUTHROLE_PLACE_OWNER, WLConstants::AUTHROLE_PLACE_MANAGER]);
+            $this->checkPlacePermissions(
+                placePermissionRequired: [WLConstants::AUTHROLE_PLACE_OWNER, WLConstants::AUTHROLE_PLACE_MANAGER]
+            );
            
             
-            return $this->render('place/manager.html.twig', [
-                'phone' => $this->getSessionParm(WLConstants::S_PLACE_PHONE,WLConstants::NONE),
-                'placeSlug'=>$this->getSessionParm(WLConstants::S_PLACE_SLUG,WLConstants::NONE),
-                'owner'=> $placeService->getPlaceOwner($this->getSessionParm(WLConstants::S_PLACE_PHONE,WLConstants::NONE)),
-                "menucontext" => "place",
-                "place" => null
+            return $this->render(
+                view: 'place/manager.html.twig', 
+                parameters: [   
+                    'phone' => $this->getSessionParm(parm: WLConstants::S_PLACE_PHONE,defaultValue: WLConstants::NONE),
+                    'placeSlug'=>$this->getSessionParm(parm: WLConstants::S_PLACE_SLUG,defaultValue: WLConstants::NONE),
+                    'owner'=> $placeService->getPlaceOwner(
+                                    ownerPhoneNumber: $this->getSessionParm(parm: WLConstants::S_PLACE_PHONE,defaultValue: WLConstants::NONE)
+                                ),
+                    "menucontext" => "place",
+                    "place" => null
 
-            ]);
+                    ]);
         }
         catch(Exception $ex){
             $this->logException($ex);
@@ -322,7 +347,7 @@ class PlaceController extends BaseController
     }
     #[Route('/{placeSlug}/login', name: 'PLACE_Specific_Login')]
     #[Route('/login', name: 'PLACE_Login')]
-    public function placeLogin(PlaceService $placeService, string $placeSlug=null): Response
+    public function placeLogin(PlaceService $placeService, string $placeSlug=""): Response
     {
         if($placeSlug)
             $this->setSessionParm(WLConstants::S_PLACE_SLUG,$placeSlug);

@@ -9,7 +9,7 @@ class PlaceNotFoundException extends BaseException
 {
     
     // Redefine the exception so message isn't optional
-    public function __construct($message ="Place not found!", $code = 9310,  array $exceptionData=[],Throwable $previous = null) {
+    public function __construct(string $message ="Place not found!",int $code = 9310,  array $exceptionData=[],?Throwable $previous = null) {
         // make sure everything is assigned properly
         parent::__construct($message, $code, $previous);
         $this->__REDIRECTION_PAGE__ = "/";
@@ -19,7 +19,7 @@ class PlaceNotFoundException extends BaseException
     }
 
     // custom string representation of object
-    public function __toString() {
+    public function __toString(): string {
         return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
     }
 }

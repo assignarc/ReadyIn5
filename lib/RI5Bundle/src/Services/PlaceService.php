@@ -138,7 +138,7 @@ class PlaceService extends BaseService
       * @param string|null $holidayid
       * @return void
       */
-    public function createUpdatePlaceHolidays(PlaceHolidays $holiday, string $holidayid=null)  {
+    public function createUpdatePlaceHolidays(PlaceHolidays $holiday, string $holidayid="")  {
         if($holidayid){
             $holidayDB =  $this->placeHolidaysRepository->findOneByHolidayid($holidayid);   
             if($holidayDB->getPlaceid() != $holiday->getPlaceid())
@@ -149,16 +149,49 @@ class PlaceService extends BaseService
                                                                     "placeid"=>$holiday->getPlaceid() ,
                                                                     "holidayDate"=> $holiday->getHolidayDate(),
                                                                 ));   
-        if(!$holidayDB){
-            $holidayDB = new PlaceHolidays();
+        if(!$holidayDB)
+            $this->placeHolidaysRepository->save($holiday,true);
+        else{
             $holidayDB->setPlaceId($holiday->getPlaceId());
+            $holidayDB->setHolidayDate($holiday->getHolidayDate());
+            $holidayDB->setHolidayName($holiday->getHolidayName());
+            $holidayDB->setSpecialNote($holiday->getSpecialNote());
+            $this->placeHolidaysRepository->persistHoliday($holidayDB);
+            $this->logInfo("Holiday updated for placeid: " . $holiday->getPlaceid() . " on date: " . $holiday->getHolidayDate()->format('Y-m-d'));
         }
-        $holidayDB->setHolidayDate($holiday->getHolidayDate());
-        $holidayDB->setHolidayName($holiday->getHolidayName());
-        $holidayDB->setSpecialNote($holiday->getSpecialNote());
+       
+    }
 
-       $this->placeHolidaysRepository->save($holidayDB,true);
-
+     public function createUpdatePlaceSchedule(PlaceSchedule $schedule, string $scheduleid="")  {
+         
+        if($scheduleid){
+            $scheduleDB =  $this->placeScheduleRepository->findOneByScheduleid($scheduleid); 
+            $this->logMessageArray(["scheduleid" , $scheduleid]);
+           
+            if($scheduleDB->getPlaceid() != $schedule->getPlaceid())
+                throw new PlaceInvalidRequestException("Invalid Schedule Change request for the Place");  
+        }
+        else{
+            $scheduleDB =  $this->placeScheduleRepository->findOneBy(array(
+                                                                    "placeid"=>$schedule->getPlaceid() ,
+                                                                    "day"=> $schedule->getDay(),
+                                                                    "shift"=>$schedule->getShift()
+                                                                ));   
+        }
+       
+        if(!$scheduleDB){
+            $scheduleDB = new PlaceSchedule();
+            $scheduleDB->setPlaceid($schedule->getPlaceid());
+            
+        }
+       
+        $scheduleDB->setDay($schedule->getDay());
+        $scheduleDB->setOpenTime($schedule->getOpenTime());
+        $scheduleDB->setCloseTime($schedule->getCloseTime());
+        $scheduleDB->setShift($schedule->getShift());
+        // $this->logMessageArray(["schedule" , json_encode(value: $schedule)]);
+        $this->logMessageArray(["scheduleDB" , json_encode($scheduleDB)]);
+        $this->placeScheduleRepository->save($scheduleDB, true);
     }
     /**
      * Get Place Owner
@@ -168,7 +201,7 @@ class PlaceService extends BaseService
      * @param string|null $ownerId
      * @return PlaceOwner|null
      */
-    public function getPlaceOwner(string $ownerPhoneNumber=null, string $placeSlug=null, string $ownerId=null) :?PlaceOwner{
+    public function getPlaceOwner(string $ownerPhoneNumber="", string $placeSlug="", string $ownerId="") :?PlaceOwner{
 
         if($ownerPhoneNumber)
             return $this->placeOwnerRepository->findOneByPhone($ownerPhoneNumber);
@@ -254,7 +287,7 @@ class PlaceService extends BaseService
     public function createDefaultPlaceSchedule(Place $place)  {
             foreach(array('Sunday', 'Monday', 'Tuesday', 'Wednesday','Thursday','Friday', 'Saturday') as &$day){
                 $schedule = new PlaceSchedule();
-                $schedule->setPlaceid($place->getPlaceid());
+                $schedule->setPlace($place);
                 $schedule->setDay($day);
                 $now = new DateTime();
                 $now->setTime(0,0,0,0);
@@ -266,39 +299,13 @@ class PlaceService extends BaseService
         }
      }
    
-     public function createUpdatePlaceSchedule(PlaceSchedule $schedule, string $scheduleid=null)  {
-        if($scheduleid){
-            $scheduleDB =  $this->placeScheduleRepository->findOneByScheduleid($scheduleid); 
-            if($scheduleDB->getPlaceid() != $schedule->getPlaceid())
-                throw new PlaceInvalidRequestException("Invalid Schedule Change request for the Place");  
-        }
-        else{
-            $scheduleDB =  $this->placeScheduleRepository->findOneBy(array(
-                                                                    "placeid"=>$schedule->getPlaceid() ,
-                                                                    "day"=> $schedule->getDay(),
-                                                                    "shift"=>$schedule->getShift()
-                                                                ));   
-        }
-        
-        if(!$scheduleDB){
-            $scheduleDB = new PlaceSchedule();
-            $scheduleDB->setPlaceId($schedule->getPlaceId());
-            
-        }
-        $scheduleDB->setDay($schedule->getDay());
-        $scheduleDB->setOpenTime($schedule->getOpenTime());
-        $scheduleDB->setCloseTime($schedule->getCloseTime());
-        $scheduleDB->setShift($schedule->getShift());
-
-        $this->placeScheduleRepository->save($scheduleDB, true);
-    }
     /**
      * Undocumented function
      *
      * @param Place $place
      * @return Place
      */
-    public function createUpdatePlace(Place $place, PlaceOwner $placeOwner = null): Place {
+    public function createUpdatePlace(Place $place, ?PlaceOwner $placeOwner): Place {
 
         $placeDB = $this->findPlace($place->getSlug(),false);
 
@@ -359,30 +366,26 @@ class PlaceService extends BaseService
             $place = $this->findPlace($placeSlug, true);
             
             if(!$place){
-                throw new InvalidRequestException("Place not found or you are not authorized to manage it");
+                throw new InvalidRequestException("Place not found or you are not authorized to manage it", 9310, [], null);
             }
             switch ($reqType) {
                 case "holidays":
                     return $this->placeHolidaysRepository->findByPlaceid($place->getPlaceid());
-                    break;
+
                 case "users":
                     return $this->placeUserRepository->findByPlaceid($place->getPlaceid());
-                    break;
+
                 case "queues":
                     return $this->placeQueueRepository->findByPlaceid($place->getPlaceid());
-                    break;
+
                 case "schedule":
-                    $count = ($place->getPlaceSchedules() ? count($place->getPlaceSchedules()): 0);
-                    if($count<7){
-                        $this->createDefaultPlaceSchedule($place);
-                    }
                     return $this->placeScheduleRepository->findByPlaceid($place->getPlaceid());
-                    break;
+
                 case "meta":
                     //$this->responseDetails->addDetail("place", $place);
                     break;
                 default:
-                    throw new InvalidRequestException("Invalid Place request.");
+                    throw new InvalidRequestException("Invalid Place request.", 9500, [], null);
                     break;
             }
             return null;

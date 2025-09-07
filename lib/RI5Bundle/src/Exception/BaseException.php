@@ -15,13 +15,15 @@ class BaseException extends Exception implements JsonSerializable
     protected string $exceptioName = __CLASS__;
     protected array $exceptionData = [];
     // Redefine the exception so message isn't optional
-    public function __construct(string $message="", $code = 1, Throwable $previous = null) {
+   
+
+    public function __construct(string $message, int $code = 1, Throwable $previous) {
         // make sure everything is assigned properly
-        parent::__construct($message, $code, $previous);
+        parent::__construct(message: $message, code: $code, previous: $previous);
     }
 
     // custom string representation of object
-    public function __toString() {
+    public function __toString(): string {
         //return __CLASS__ . ":[{$this->code}]:{$this->message}\n";
         return __CLASS__ . ";CODE:{$this->code};MESSAGE:{$this->getMessage()};DATA:" . json_encode($this->exceptionData);
     }

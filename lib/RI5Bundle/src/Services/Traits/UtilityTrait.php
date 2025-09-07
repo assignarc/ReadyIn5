@@ -93,7 +93,7 @@ trait UtilityTrait {
      * @param string $indent
      * @return void
      */
-    public static function VarExport($var, $indent="") {
+    public static function VarExport($var, $indent=""): string {
         //https://stackoverflow.com/questions/24316347/how-to-format-var-export-to-php5-4-array-syntax
         switch (gettype($var)) {
             case "string":

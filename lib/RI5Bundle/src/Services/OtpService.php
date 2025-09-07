@@ -39,7 +39,7 @@ class OtpService extends BaseService
         return $otp;
     }
 
-    public function createOtp(string $phoneNumber,array $notes = null, string $type="sms", bool $includeDeepLink=true) : string {
+    public function createOtp(string $phoneNumber,array $notes = [], string $type="sms", bool $includeDeepLink=true) : string {
         
         if($phoneNumber==null || $phoneNumber =="")
             throw new OtpException("Invalid phone number.");
@@ -67,7 +67,7 @@ class OtpService extends BaseService
         }
         else{
             $this->objectRepository->remove($otpDB,true);
-            throw new OtpException("One Time Password (OTP) already existed for this phone, request a new one.");
+            throw new OtpException("One Time Password (OTP) already existed for this phone, request a new one.", 9401, []);
         }
      }
 

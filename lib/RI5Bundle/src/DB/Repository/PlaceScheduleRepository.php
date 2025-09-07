@@ -5,6 +5,7 @@ namespace RI5\DB\Repository;
 use RI5\DB\Entity\PlaceSchedule;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use RI5\Services\Traits\LoggerAwareTrait;
 
 /**
  * @extends ServiceEntityRepository<PlaceSchedule>
@@ -16,6 +17,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class PlaceScheduleRepository  extends ServiceEntityRepository
 {
+    
+    use LoggerAwareTrait;
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, PlaceSchedule::class);
@@ -23,11 +26,13 @@ class PlaceScheduleRepository  extends ServiceEntityRepository
 
     public function save(PlaceSchedule $entity, bool $flush = false): void
     {
+        
         $this->getEntityManager()->persist($entity);
 
         if ($flush) {
             $this->getEntityManager()->flush();
         }
+        
     }
 
     public function remove(PlaceSchedule $entity, bool $flush = false): void

@@ -138,7 +138,7 @@ class ServicePlaceController extends BaseController
             $place = $placeService->findPlace($placeSlug,false);
             $customer = $customerService->findCustomer($this->getSessionParm(WLConstants::S_CUST_PHONE, WLConstants::NONE));
             if(!$customer || !$place)
-                throw new InvalidRequestException("Incorrect User or Place.");
+                throw new InvalidRequestException("Incorrect User or Place.", 9503 ,  [],null);
 
             $reservation = new Reservation();
             $reservation->setAdults($this->postParm("adults",1));
@@ -185,7 +185,7 @@ class ServicePlaceController extends BaseController
             $place = $placeService->findPlace($placeSlug, true);
             
             if(!$place){
-                throw new InvalidRequestException("Place not found or you are not authorized to manage it");
+                throw new InvalidRequestException("Place not found or you are not authorized to manage it",9311, [], null);
             }
             switch ($reqType) {
                 case "holidays":
@@ -198,8 +198,10 @@ class ServicePlaceController extends BaseController
                     $this->responseDetails->addDetail("queues", $place->getPlaceQueues());
                     break;
                 case "schedule":
-                    $count = ($place->getPlaceSchedules() ? count($place->getPlaceSchedules()): 0);
-                    if($count<7){
+                    //Create default schedule if not found
+                    $schedules = $placeService->getPlaceMeta($placeSlug,$reqType);
+                    $count = $schedules ? count($schedules): 0;
+                    if($count!=7){
                         $placeService->createDefaultPlaceSchedule($place);
                         $place = $placeService->findPlace($this->getSessionParm($placeSlug,WLConstants::NONE));
                     }
@@ -209,8 +211,8 @@ class ServicePlaceController extends BaseController
                     $this->responseDetails->addDetail("place", $place);
                     break;
                 default:
-                    throw new InvalidRequestException("Invalid Place request.");
-                    break;
+                    throw new InvalidRequestException("Invalid Place request.", 9321, [], null);
+
             }
             $response->setStatusCode(Response::HTTP_OK);
         }
@@ -304,10 +306,12 @@ class ServicePlaceController extends BaseController
 
             $place = $placeService->findPlace($placeSlug);
            
+            $this->logMessageArray(["Place",json_encode($place->getPlaceid())]);
             switch ($reqType) {
                 case 'holidays':
                     if ($this->request->isMethod('post')) {
                         $placeHoliday = new PlaceHolidays();
+                        $placeHoliday->setPlace($place);
                         $placeHoliday->setPlaceId($place->getPlaceId());
                         $placeHoliday->setHolidayDate(new DateTime($this->postParm("holidayDate","")));
                         $placeHoliday->setHolidayName($this->postParm("holidayName",""));
@@ -334,20 +338,19 @@ class ServicePlaceController extends BaseController
                     break;
                 case 'schedule':
                     if ($this->request->isMethod('post')) {
-                        $json = json_decode($this->request->getContent());
-                        
+                       // $json = json_decode($this->request->getContent());
+                       
                         $placeSchedule = new PlaceSchedule();
-                        $placeSchedule->setPlaceid($place->getPlaceid());
                         $placeSchedule->setPlaceid($this->postParm("placeid",""));
-                        $placeSchedule->setOpenTime($json->openTime);
-                        $placeSchedule->setCloseTime($json->closeTime);
-                        $placeSchedule->setShift($this->postParm("shift",""));
+                        $placeSchedule->setOpenTime($this->postParm("openTime",""));
+                        $placeSchedule->setCloseTime($this->postParm("closeTime",""));
+                        $placeSchedule->setShift($this->postParm("shift","default"));
                         $placeSchedule->setDay($this->postParm("day",""));
-                        $placeService->createUpdatePlaceSchedule($placeSchedule,$this->postParm("scheduleid",null));
-
+                        $placeService->createUpdatePlaceSchedule($placeSchedule,scheduleid: $this->postParm("scheduleid",null));
+                        $this->responseDetails->addDetail("schedule",$place->getPlaceSchedules());
+                        $this->responseDetails->setMessage("Schedule change request completed.");
                     }
-                    $this->responseDetails->addDetail("schedule",$place->getPlaceSchedules());
-                    $this->responseDetails->setMessage("Schedule change request completed.");
+                    
                     break;
                 case 'owner':
                    
@@ -399,14 +402,13 @@ class ServicePlaceController extends BaseController
                     $place->setPostalcode($json->postalcode);
                     $place->setPhone($json->phone);
                     
-                    $place = $placeService->createUpdatePlace($place);
+                    $place = $placeService->createUpdatePlace($place,null);
 
                     $this->responseDetails->addDetail("place",$place);
                     $this->responseDetails->setMessage("Place update request completed.");
                     break;
                 default:
-                    throw new InvalidRequestException("Invalid Request");
-                    break;
+                    throw new InvalidRequestException("Invalid Request", 9321, [], null);
             }
             $response->setStatusCode(Response::HTTP_OK);
         }

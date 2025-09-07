@@ -25,14 +25,14 @@ class ReservationId{
     * @param integer|null $reservationid
     * @param integer|null $tableCapacity
     */
-    public function __construct(?int $day=0, ?int $placeId=0, ?int $queueId=0, ?int $reservationid=0, ?int $tableCapacity=0)
+    public function __construct(?int $day=0, ?int $placeId=0, ?int $queueId=0, ?int $reservationid=0, ?int $tableCapacity=0) 
     {
         switch($day){
             case 0:
                 $this->day = 0;
                 break;
             case (($day < 10 && $day >1) ? true :false):
-                $this->day = str_pad($day, 5, '9', STR_PAD_LEFT);
+                $this->day = (int)str_pad(string: $day, length: 5, pad_string: '9', pad_type: STR_PAD_LEFT);
                 break;
             default:
                 $this->day =(intval(date("y") . "" . str_pad(date("z")+1, 3, '0', STR_PAD_LEFT)));
@@ -44,8 +44,6 @@ class ReservationId{
         $this->reservationId = $reservationid;
         $this->tableCapacity = $tableCapacity;
         $this->value = $this->calculateId();
-      
-        return $this;
     }
     /**
      * Get Min Value for the day of reservation. 

@@ -8,7 +8,7 @@ use Throwable;
 class OtpException extends BaseException  {
     
     // Redefine the exception so message isn't optional
-    public function __construct($message ="Invalid One Time Password (OTP).", $code = 9400, array $exceptionData=[], Throwable $previous = null) {
+    public function __construct(string $message ="Invalid One Time Password (OTP).",int $code = 9400, array $exceptionData=[], ?Throwable $previous = null) {
         // make sure everything is assigned properly
         parent::__construct($message, $code, $previous);
         $this->__REDIRECTION_ROUTE__ = "CUST_Login";
@@ -18,7 +18,7 @@ class OtpException extends BaseException  {
     }
 
     // custom string representation of object
-    public function __toString() {
+    public function __toString(): string {
         return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
     }
 }

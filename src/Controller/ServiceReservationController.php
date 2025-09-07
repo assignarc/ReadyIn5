@@ -22,7 +22,7 @@ class ServiceReservationController extends BaseController
         $response = new Response();
         $response->headers->set('Content-Type', 'application/json');
         try{
-            $this->checkCustomerPermissions([WLConstants::AUTHROLE_CUSTOMER], null,null);
+            $this->checkCustomerPermissions([WLConstants::AUTHROLE_CUSTOMER], "","");
 
             $status = $reservationService->getReservationStatus($reservationId);
             $this->responseDetails->setMessage("Success! Reservation found - " . $status->value);
@@ -51,7 +51,7 @@ class ServiceReservationController extends BaseController
         $response = new Response();
         $response->headers->set('Content-Type', 'application/json');
         try{
-            $this->checkCustomerPermissions([WLConstants::AUTHROLE_CUSTOMER], null,null);
+            $this->checkCustomerPermissions([WLConstants::AUTHROLE_CUSTOMER], "","");
             
             if($this->postParm("loginType","")!="customer"){
                 throw new ReservationStatusException("Reservation can not be cancelled at this time, incorrect status found!");

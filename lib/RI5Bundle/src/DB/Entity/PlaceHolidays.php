@@ -4,15 +4,16 @@ namespace RI5\DB\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
-
+use RI5\DB\Entity\Place;
 /**
  * PlaceHolidays
  *
- * @ORM\Table(name="place_holidays", indexes={@ORM\Index(name="IX_Place_Holiday", columns={"placeId", "holiday_date"}), @ORM\Index(name="IDX_103D468FA68B9EA2", columns={"placeId"})})
+ * @ORM\Table(name="place_holidays", indexes={@ORM\Index(name="IX_Place_Holiday", columns={"placeid", "holiday_date"}), @ORM\Index(name="IDX_103D468FA68B9EA2", columns={"holidayid"})})
  * @ORM\Entity
  */
 class PlaceHolidays extends BaseEntity implements JsonSerializable 
 {
+  
     /**
      * @var int
      *
@@ -44,7 +45,15 @@ class PlaceHolidays extends BaseEntity implements JsonSerializable
     private $specialNote;
 
   
-    
+   
+
+    /**
+     * Many PlaceHolidays has One Place.
+     * @ORM\ManyToOne(targetEntity="Place", inversedBy="placeHolidays" , cascade={"persist","refresh"})
+     * @ORM\JoinColumn(name="placeid", referencedColumnName="placeid")
+    */
+    private Place $place;
+
 
     /**
      * @var int
@@ -95,7 +104,19 @@ class PlaceHolidays extends BaseEntity implements JsonSerializable
     }
 
     
-   
+    public function getPlace(): Place
+    {
+        return $this->place;
+    }
+
+    public function setPlace(Place $place): self
+    {
+        $this->place = $place;
+        if($place->getPlaceid())
+            $this->setPlaceid($place->getPlaceid());
+
+        return $this;
+    }
    
    
     public function getPlaceid(): int
@@ -106,7 +127,6 @@ class PlaceHolidays extends BaseEntity implements JsonSerializable
     public function setPlaceid(int $placeid): self
     {
         $this->placeid = $placeid;
-
         return $this;
     }
     public function jsonSerialize() : mixed

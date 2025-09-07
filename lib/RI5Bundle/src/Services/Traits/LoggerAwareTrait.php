@@ -59,6 +59,39 @@ trait LoggerAwareTrait{
         $this->logMessage($message,LogLevel::NOTICE);
     }
 
+    public function logMessageArray(array $message, ?string $level=null){   
+        switch($level){
+            case LogLevel::CRITICAL:
+                foreach($message as $msg)
+                    $this->logger->critical($msg);
+                break;
+            case LogLevel::DEBUG:
+                foreach($message as $msg)
+                    $this->logger->critical($msg);
+                break;
+            case LogLevel::ALERT:
+                foreach($message as $msg)
+                    $this->logger->critical($msg);
+                break;
+            case LogLevel::ERROR:
+                foreach($message as $msg)
+                    $this->logger->critical($msg);
+                break;
+            case LogLevel::WARNING:
+                foreach($message as $msg)
+                    $this->logger->critical($msg);
+                break;
+            case LogLevel::NOTICE:
+                foreach($message as $msg)
+                    $this->logger->critical($msg);
+                break;
+            case LogLevel::INFO:
+            default:
+                foreach($message as $msg)
+                    $this->logger->critical($msg);
+                break;
+        }
+    } 
     private function logMessage(string $message, ?string $level=null){   
         switch($level){
             case LogLevel::CRITICAL:

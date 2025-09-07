@@ -24,10 +24,10 @@ trait MessengerTrait{
         $this->router = $router;
     }
 
-    function sendMessage(string $phoneNumber,string $message = null, string $type="sms"){
+    function sendMessage(string $phoneNumber,string $message = "", string $type="sms"){
         if(boolval($this->getConfigItem("RI5.MESSAGE.send")))
             $this->messenger->sendMessage($phoneNumber,$message,$type);
         else
-            $this->logWarning("Message : To=>{$type}:{$phoneNumber};Text=>{$message}", LogLevel::CRITICAL);
+            $this->logWarning("Message : To=>{$type}:{$phoneNumber};Text=>{$message}");
     }
 }
