@@ -21,6 +21,7 @@ use DateTime;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Exception;
+use RI5\DB\Entity\PlaceQueue;
 use RI5\Exception\PlaceOwnerNotFoundException;
 
 //https://ourcodeworld.com/articles/read/1386/how-to-generate-the-entities-from-a-database-and-create-the-crud-automatically-in-symfony-5
@@ -148,7 +149,7 @@ class ServicePlaceController extends BaseController
             $reservation->setPlace($place);
             $reservation->setStatus(ReservationStatus::STATUS_WAIT->value);
             $reservation->setReservationDt(new DateTime());
-            $reservation->setQueueid(1);
+            $reservation->setQueueid(1);  
  
             $reservation = $reservationService->createReservation($reservation,false);
             $this->responseDetails->setMessage("Success! Table reserved at " . $place->getName() );
@@ -182,20 +183,30 @@ class ServicePlaceController extends BaseController
 
             //$this->checkPlacePermissions([WLConstants::AUTHROLE_PLACE_OWNER, WLConstants::AUTHROLE_PLACE_MANAGER],$placeSlug);
 
-            $place = $placeService->findPlace($placeSlug, true);
+            $place = $placeService->findPlace($placeSlug, false);
             
             if(!$place){
                 throw new InvalidRequestException("Place not found or you are not authorized to manage it",9311, [], null);
             }
             switch ($reqType) {
                 case "holidays":
-                    $this->responseDetails->addDetail("holidays", $placeService->getPlaceMeta($placeSlug,$reqType));
-                    break;
                 case "users":
-                    $this->responseDetails->addDetail("users", $place->getPlaceUsers());
-                    break;
                 case "queues":
-                    $this->responseDetails->addDetail("queues", $place->getPlaceQueues());
+                    $queues = $placeService->getPlaceMeta($placeSlug,$reqType);
+                    //Create default queue if not found
+                    $count = $queues ? count($queues): 0;
+                    if($count<1){
+                        $placeService->createUpdateQueue(queue: new PlaceQueue()
+                                                            ->setPlaceid($place->getPlaceid())
+                                                            ->setCapacityAdults(1)
+                                                            ->setCapacityChildren(0)
+                                                            ->setCapcityTotal(1)
+                                                            ->setQueuename("default"));
+
+                        $this->responseDetails->addDetail($reqType,$placeService->getPlaceMeta($placeSlug,$reqType));
+                    }
+                    else
+                        $this->responseDetails->addDetail($reqType, $queues);
                     break;
                 case "schedule":
                     //Create default schedule if not found
@@ -306,16 +317,17 @@ class ServicePlaceController extends BaseController
 
             $place = $placeService->findPlace($placeSlug);
            
-            $this->logMessageArray(["Place",json_encode($place->getPlaceid())]);
+           // $this->logMessageArray(["Place",json_encode($place->getPlaceid())]);
             switch ($reqType) {
                 case 'holidays':
                     if ($this->request->isMethod('post')) {
-                        $placeHoliday = new PlaceHolidays();
-                        $placeHoliday->setPlace($place);
-                        $placeHoliday->setPlaceId($place->getPlaceId());
-                        $placeHoliday->setHolidayDate(new DateTime($this->postParm("holidayDate","")));
-                        $placeHoliday->setHolidayName($this->postParm("holidayName",""));
-                        $placeHoliday->setSpecialNote($this->postParm("specialNote",""));
+                        $placeHoliday = new PlaceHolidays()
+                            ->setPlace($place)
+                            ->setPlaceId($place->getPlaceId())
+                            ->setHolidayDate(new DateTime($this->postParm("holidayDate","")))
+                            ->setHolidayName($this->postParm("holidayName",""))
+                            ->setSpecialNote($this->postParm("specialNote",""));
+
                         $placeService->createUpdatePlaceHolidays($placeHoliday, $this->postParm("holidayid",null));
                         $this->responseDetails->addDetail("holidays",$place->getPlaceHolidays());
                         $this->responseDetails->setMessage("Holiday change request completed.");
@@ -332,20 +344,39 @@ class ServicePlaceController extends BaseController
                     $this->responseDetails->addDetail("users",$place->getPlaceUsers());
                     $this->responseDetails->setMessage("User change request received, not completed.");
                     break;
-                case 'Queues':
+                case 'queues':
+                    //Create default qname if not provided in request. 
+                    $defaultQName = $this->postParm("queuename","") =="" ?
+                                        $placeService->generateDefaultQueueName($this->postParm("capcityTotal",1),
+                                                                        $this->postParm("capacityAdults",1),
+                                                                        $this->postParm("capacityChildren",0),
+                                                                        $place->getPlaceid()):
+                                        $this->postParm("queuename","");
+                        
+                   
+                    $queue = new PlaceQueue()
+                                ->setPlaceid($place->getPlaceid())
+                                ->setCapacityAdults($this->postParm("capacityAdults",1))
+                                ->setCapacityChildren($this->postParm("capacityChildren",0))
+                                ->setCapcityTotal($this->postParm("capcityTotal",1))
+                                ->setQueuename($defaultQName);
+                                
+                    $placeService->createUpdateQueue($queue,$this->postParm("queueid",null));
+
                     $this->responseDetails->addDetail("queues",$place->getPlaceQueues());
-                    $this->responseDetails->setMessage("Queue change request received, not completed.");
+                    $this->responseDetails->setMessage("Queue change request completed!");
                     break;
                 case 'schedule':
                     if ($this->request->isMethod('post')) {
                        // $json = json_decode($this->request->getContent());
                        
-                        $placeSchedule = new PlaceSchedule();
-                        $placeSchedule->setPlaceid($this->postParm("placeid",""));
-                        $placeSchedule->setOpenTime($this->postParm("openTime",""));
-                        $placeSchedule->setCloseTime($this->postParm("closeTime",""));
-                        $placeSchedule->setShift($this->postParm("shift","default"));
-                        $placeSchedule->setDay($this->postParm("day",""));
+                        $placeSchedule = new PlaceSchedule()
+                            ->setPlaceid($this->postParm("placeid",""))
+                            ->setOpenTime($this->postParm("openTime",""))
+                            ->setCloseTime($this->postParm("closeTime",""))
+                            ->setShift($this->postParm("shift","default"))
+                            ->setDay($this->postParm("day",""));
+
                         $placeService->createUpdatePlaceSchedule($placeSchedule,scheduleid: $this->postParm("scheduleid",null));
                         $this->responseDetails->addDetail("schedule",$place->getPlaceSchedules());
                         $this->responseDetails->setMessage("Schedule change request completed.");

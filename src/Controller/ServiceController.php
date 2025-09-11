@@ -65,7 +65,7 @@ class ServiceController extends BaseController
                         $this->responseDetails->setMessage("Passcode validated, " .  $this->getSessionParm(WLConstants::S_CUST_PHONE," ") . " verified." );
                     }
                     else 
-                        throw new SecurityException("Access denied!");
+                        throw new SecurityException(message: "Access denied!");
                     break;
                 default:
                     $this->setSessionParm(WLConstants::S_CUST_AUTHORIZED,WLConstants::AUTH_UNAUTHORIZED);

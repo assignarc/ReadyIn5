@@ -17,6 +17,7 @@ use RI5\DB\Repository\PlaceUserRepository;
 use DateTime;
 use Exception;
 use RI5\DB\Entity\Data\WLConstants;
+use RI5\DB\Entity\PlaceQueue;
 use RI5\DB\Events\PlaceUpdated;
 use RI5\Exception\BaseException;
 use RI5\Exception\InvalidRequestException;
@@ -100,7 +101,6 @@ class PlaceService extends BaseService
         if(!$fromCache)
             $this->cache->invalidateTags(["PLACE.INFO." . $placeSlug]);
         
-        
         return $this->cache->get("PLACE.INFO." . $placeSlug ,  
                                 function (ItemInterface $item) use  ($placeSlug): mixed {
                                     $place = $this->objectRepository->findOneBySlug($placeSlug);  
@@ -109,6 +109,13 @@ class PlaceService extends BaseService
                                     return $place;
                                 });
       
+    }
+    /**
+     * Generate a default queue name based on capacity and place id.
+     */
+    public function generateDefaultQueueName($capacityTotal, $capacityAdults, $capacityChildren, $placeId): string
+    {
+        return "Q-{$placeId}-{$capacityTotal}-{$capacityAdults}-{$capacityChildren}";
     }
     /**
      * Return Place from cache or DB
@@ -138,7 +145,7 @@ class PlaceService extends BaseService
       * @param string|null $holidayid
       * @return void
       */
-    public function createUpdatePlaceHolidays(PlaceHolidays $holiday, string $holidayid="")  {
+    public function createUpdatePlaceHolidays(PlaceHolidays $holiday, ?string $holidayid="")  {
         if($holidayid){
             $holidayDB =  $this->placeHolidaysRepository->findOneByHolidayid($holidayid);   
             if($holidayDB->getPlaceid() != $holiday->getPlaceid())
@@ -157,17 +164,15 @@ class PlaceService extends BaseService
             $holidayDB->setHolidayName($holiday->getHolidayName());
             $holidayDB->setSpecialNote($holiday->getSpecialNote());
             $this->placeHolidaysRepository->persistHoliday($holidayDB);
-            $this->logInfo("Holiday updated for placeid: " . $holiday->getPlaceid() . " on date: " . $holiday->getHolidayDate()->format('Y-m-d'));
+           // $this->logInfo("Holiday updated for placeid: " . $holiday->getPlaceid() . " on date: " . $holiday->getHolidayDate()->format('Y-m-d'));
         }
        
     }
 
-     public function createUpdatePlaceSchedule(PlaceSchedule $schedule, string $scheduleid="")  {
+     public function createUpdatePlaceSchedule(PlaceSchedule $schedule, ?string $scheduleid="")  {
          
         if($scheduleid){
-            $scheduleDB =  $this->placeScheduleRepository->findOneByScheduleid($scheduleid); 
-            $this->logMessageArray(["scheduleid" , $scheduleid]);
-           
+            $scheduleDB =  $this->placeScheduleRepository->findOneByScheduleid($scheduleid);            
             if($scheduleDB->getPlaceid() != $schedule->getPlaceid())
                 throw new PlaceInvalidRequestException("Invalid Schedule Change request for the Place");  
         }
@@ -189,9 +194,27 @@ class PlaceService extends BaseService
         $scheduleDB->setOpenTime($schedule->getOpenTime());
         $scheduleDB->setCloseTime($schedule->getCloseTime());
         $scheduleDB->setShift($schedule->getShift());
-        // $this->logMessageArray(["schedule" , json_encode(value: $schedule)]);
-        $this->logMessageArray(["scheduleDB" , json_encode($scheduleDB)]);
         $this->placeScheduleRepository->save($scheduleDB, true);
+    }
+
+     public function createUpdateQueue(PlaceQueue $queue, ?string $queueid=null)  {
+        $queueDB = null;
+       
+        if($queueid){
+            $queueDB =  $this->placeQueueRepository->findOneByQueueid($queueid); 
+            if($queueDB->getPlaceid() != $queue->getPlaceid())
+                throw new PlaceInvalidRequestException("Invalid Queue Change request for the Place"); 
+
+            $queueDB->setQueuename ($queue->getQueuename());
+            $queueDB->setCapacityAdults ($queue->getCapacityAdults());
+            $queueDB->setCapacityChildren ($queue->getCapacityChildren());  
+            $queueDB->setCapcityTotal ($queue->getCapcityTotal()); 
+            //$this->logMessageArray(["Queue Request",json_encode($queueDB),"QId",$queueid]);
+            $this->placeQueueRepository->updateQueue($queueDB,$queueid);
+        }
+        else{
+            $this->placeQueueRepository->insertQueue($queue);
+        }
     }
     /**
      * Get Place Owner
@@ -298,6 +321,7 @@ class PlaceService extends BaseService
                 $this->createUpdatePlaceSchedule($schedule);
         }
      }
+    
    
     /**
      * Undocumented function
@@ -363,32 +387,27 @@ class PlaceService extends BaseService
             // if($placeSlug!=$this->getSessionParm("REST-ADMIN-Hash", "EMPTY-PLACE"))
             //     throw new SecurityException("User unauthorized");
 
+            //The place is checked upstream, so do we need this call to check again?
             $place = $this->findPlace($placeSlug, true);
-            
             if(!$place){
                 throw new InvalidRequestException("Place not found or you are not authorized to manage it", 9310, [], null);
             }
+            
             switch ($reqType) {
                 case "holidays":
                     return $this->placeHolidaysRepository->findByPlaceid($place->getPlaceid());
-
                 case "users":
                     return $this->placeUserRepository->findByPlaceid($place->getPlaceid());
-
                 case "queues":
                     return $this->placeQueueRepository->findByPlaceid($place->getPlaceid());
-
                 case "schedule":
                     return $this->placeScheduleRepository->findByPlaceid($place->getPlaceid());
-
                 case "meta":
-                    //$this->responseDetails->addDetail("place", $place);
-                    break;
+                    return $place;
                 default:
                     throw new InvalidRequestException("Invalid Place request.", 9500, [], null);
-                    break;
             }
-            return null;
+         
         }
         catch(Exception $ex){
             $this->logException($ex);

@@ -5,6 +5,7 @@ namespace RI5\DB\Repository;
 use RI5\DB\Entity\PlaceQueue;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use RI5\Exception\DatabaseException;
 
 /**
  * @extends ServiceEntityRepository<PlaceQueue>
@@ -38,7 +39,93 @@ class PlaceQueueRepository  extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+ public function insertQueue(PlaceQueue $queue): void
+    {
+        // INSERT INTO `waitlist`.`place_queue`
+        //     (`queueid`,
+        //     `queuename`,
+        //     `placeid`,
+        //     `capacity_adults`,
+        //     `capacity_children`,
+        //     `capcity_total`)
+        //     VALUES
+        // (<{queueid: }>,
+        // <{queuename: }>,
+        // <{placeid: }>,
+        // <{capacity_adults: }>,
+        // <{capacity_children: }>,
+        // <{capcity_total: }>);
 
+
+        $sql = "INSERT INTO `waitlist`.`place_queue`
+                    (`queuename`,
+                    `placeid`,
+                    `capacity_adults`,
+                    `capacity_children`,
+                    `capcity_total`)
+                    VALUES
+                    (:queuename,:placeid,:capacity_adults,:capacity_children,:capcity_total);";
+        try{
+            $conn = $this->getEntityManager()->getConnection();
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue(':queuename', $queue->getQueuename());
+            $stmt->bindValue(':placeid', $queue->getPlaceid());
+            $stmt->bindValue(':capacity_adults', $queue->getCapacityAdults());
+            $stmt->bindValue(':capacity_children', $queue->getCapacityChildren());
+            $stmt->bindValue(':capcity_total', $queue->getCapcityTotal());
+            $resultSet = $stmt->executeQuery();
+        }
+        catch (\Exception $e){
+            throw new DatabaseException(
+                "Error saving Queue for placeid: " . $queue->getPlaceid() . " Error: " . $e->getMessage(),
+                0,
+                [],
+                $e
+            );
+        }
+    }
+     public function updateQueue(PlaceQueue $queue, $queueid): void
+    {
+        // UPDATE `waitlist`.`place_queue`
+        //     SET
+        //     `queueid` = <{queueid: }>,
+        //     `queuename` = <{queuename: }>,
+        //     `placeid` = <{placeid: }>,
+        //     `capacity_adults` = <{capacity_adults: }>,
+        //     `capacity_children` = <{capacity_children: }>,
+        //     `capcity_total` = <{capcity_total: }>
+        //     WHERE `queueid` = <{expr}>;
+
+        
+
+        $sql = "UPDATE `waitlist`.`place_queue` 
+                    SET
+                    `queuename` = :queuename,
+                    `placeid` = :placeid,
+                    `capacity_adults` = :capacity_adults,
+                    `capacity_children` = :capacity_children,
+                    `capcity_total` = :capcity_total
+                    WHERE `queueid` = :queueid";
+        try{
+            $conn = $this->getEntityManager()->getConnection();
+            $stmt = $conn->prepare($sql);
+            $stmt->bindValue(':queuename', $queue->getQueuename());
+            $stmt->bindValue(':placeid', $queue->getPlaceid());
+            $stmt->bindValue(':capacity_adults', $queue->getCapacityAdults());
+            $stmt->bindValue(':capacity_children', $queue->getCapacityChildren());
+            $stmt->bindValue(':capcity_total', $queue->getCapcityTotal());
+            $stmt->bindValue(':queueid', $queueid);
+            $resultSet = $stmt->executeQuery();
+        }
+        catch (\Exception $e){
+            throw new DatabaseException(
+                "Error saving Queue for placeid: " . $queue->getPlaceid() . " Error: " . $e->getMessage(),
+                0,
+                [],
+                $e
+            );
+        }
+    }
 //    /**
 //     * @return PlaceQueue[] Returns an array of PlaceQueue objects
 //     */

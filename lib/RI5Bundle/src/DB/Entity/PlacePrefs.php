@@ -44,7 +44,7 @@ class PlacePrefs
     private $placeid;
 
     /**
-     * @var \Place
+     * @var Place
      * Many PlaceQueues have One Place.
      * @ORM\ManyToOne(targetEntity="Place", inversedBy="placePrefs")
      * @ORM\JoinColumn(name="placeid", referencedColumnName="placeid")

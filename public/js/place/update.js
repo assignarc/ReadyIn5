@@ -150,7 +150,7 @@
         autoload: true,
 
         deleteConfirm: function(holiday) {
-            return "The client \"" + holiday.Name + "\" will be removed. Are you sure?";
+            return "The Holiday \"" + holiday.Name + "\" will be removed. Are you sure?";
         },
         deleteItem: function(holiday){
 
@@ -168,9 +168,8 @@
             return false;
         },
         rowClick: function(args) {
-            showDetailsDialog("Edit", args.item);
+            showHolidayDetailsDialog("Edit", args.item);
         },
-
         controller: {
             loadData: function() {
                 var d = $.Deferred();
@@ -199,6 +198,87 @@
             }
         ]
     });
+/* Queues */
+    $("#jsQueues").jsGrid({
+        width: "100%",
+        inserting: false,
+        editing: true,
+        sorting: false,
+        paging: true,
+        pageSize: 5,
+        pageIndex: 1,
+        autoload: true,
+
+        deleteConfirm: function(queue) {
+            return "The Queue: \"" + queue.queuename + "\" will be removed. Are you sure?";
+        },
+        deleteItem: function(queue){
+            $.ajax({
+                url: "/svc/place/"+wlPlaceSlug+"/profile/queue" ,
+                contentType: 'json',
+                method:"DELETE",
+                data: JSON.stringify(queue),
+            }).done(function(response) {
+                showNotification("info","Place queues removed");
+                $("#jsQueues").jsGrid("loadData");
+            }).fail(function(jqXHR,textStatus, errorThrow){
+                showNotification("error",textStatus);
+            });
+            return false;
+        },
+        onItemUpdating: function(args) { 
+            args.item.capcityTotal = args.item.capacityAdults  + args.item.capacityChildren;
+            console.log(args.item);
+            var d = $.Deferred();
+            $.ajax({
+                url: "/svc/place/"+wlPlaceSlug+"/profile/queues",
+                method:"POST",
+                dataType: "json",
+                data: JSON.stringify(args.item),
+            }).done(function(response) {
+                showNotification("info","Queues updated!");
+                $("#jsQueues").jsGrid("loadData");
+                d.resolve(response);
+            }).fail(function(jqXHR,textStatus, errorThrow){
+                showNotification("error",JSON.parse(jqXHR.responseText).text);
+            });
+            return d.promise();
+        },
+        // rowClick: function(args) {
+        //     showQueueDetailsDialog("Edit", args.item);
+        // },
+
+        controller: {
+            loadData: function() {
+                var d = $.Deferred();
+            // console.log(wlPlaceSlug);
+                $.ajax({
+                    url: "/svc/place/"+wlPlaceSlug+"/profile/queues",
+                    method:"GET",
+                    contentType: "json",
+                }).done(function(response) {
+                    d.resolve(response.details.queues);
+                    showNotification("info","Queues loaded!");
+                }).fail(function(jqXHR,textStatus, errorThrow){
+                    showNotification("error",textStatus);
+                });
+                return d.promise();
+            }
+        },
+
+        fields: [
+            { name: "queuename", title:"Queue", required:"true", type: "text",headercss: "wLRestScheduleHeader" },
+            { name: "capacityAdults", title:"Adults" ,type: "number", headercss: "wLRestScheduleHeader"},
+            { name: "capacityChildren", title:"Children", type: "number", align:"right", wlDateDisplayFormat:"default",headercss: "wLRestScheduleHeader"},
+            { name: "capcityTotal", title:"Total", type: "number", readOnly:"true", align:"right", wlDateDisplayFormat:"default",headercss: "wLRestScheduleHeader"},
+            { type: "control" , headercss: "wLRestScheduleHeader",
+                    modeSwitchButton: false,
+                    editButton: true,
+            }
+        ]
+    });
+
+
 
     $("#detailsDialog").dialog({
         autoOpen: false,
@@ -225,7 +305,7 @@
     }
     });
     var formSubmitHandler = $.noop;
-    var showDetailsDialog = function(dialogType, holiday) {
+    var showHolidayDetailsDialog = function(dialogType, holiday) {
         if(dialogType=="Add"){
             $("#holidayid").val("");
             $("#holidayName").val("");

@@ -345,6 +345,7 @@ class PlaceController extends BaseController
 
       
     }
+    
     #[Route('/{placeSlug}/login', name: 'PLACE_Specific_Login')]
     #[Route('/login', name: 'PLACE_Login')]
     public function placeLogin(PlaceService $placeService, string $placeSlug=""): Response

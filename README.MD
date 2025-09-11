@@ -8,3 +8,8 @@
 1. Customer profile, 
 1. Reservation Archives
 1. Mobile browser compatible. 
+
+## Configure
+1. Update .Env file with parameters. 
+1. Create database
+1. Run. 
