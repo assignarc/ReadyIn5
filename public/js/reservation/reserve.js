@@ -18,6 +18,7 @@ $("#reservationForm").on("submit", function(event){
         "children":$("#children").val(),
         "specialnotes" : $("#specialNotes").val(),
         "placeslug": wlPlaceSlug,
+        "queueid": $("#queue").val(),
         "phone":$("#custphone").val(),
     };
     $.ajax({

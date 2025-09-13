@@ -2,21 +2,19 @@
 
 namespace RI5\Services;
 
-use RI5\DB\Repository\CustomerRepository;
-use RI5\DB\Repository\OtpRepository;
-use RI5\DB\Repository\ReservationArchiveRepository;
-use RI5\DB\Repository\ReservationRepository;
-use RI5\Services\Traits\LoggerAwareTrait;
+use RI5\Services\Traits\CacheAwareTrait;
+
 
 abstract class BaseService 
 {
     protected $objectRepository;
     protected $container;
-    use LoggerAwareTrait;
-    
+
+    use CacheAwareTrait;
     public function __construct() 
     {
       
     }
+    
 
 }

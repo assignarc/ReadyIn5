@@ -129,6 +129,7 @@ class PlaceController extends BaseController
                 'phone' => $this->getSessionParm(WLConstants::S_CUST_PHONE, WLConstants::NONE),
                 'customer' => $customerService->findCustomer($this->getSessionParm(WLConstants::S_CUST_PHONE,WLConstants::NONE)),
                 'placeSlug'=> $placeSlug,
+                'queues' => $place->getPlaceQueues(),
                 'place'=> $place,
                 'menucontext'=>"place"
             ]);

@@ -115,7 +115,15 @@ class ServiceCustomerController extends BaseController
             // }
             $this->checkCustomerPermissions([WLConstants::AUTHROLE_CUSTOMER], "", );
 
-            $inResStatuses=[ReservationStatus::STATUS_CALL,ReservationStatus::STATUS_WAIT,ReservationStatus::STATUS_CANCEL];
+            $inResStatuses=[
+                    ReservationStatus::STATUS_CALL,
+                    ReservationStatus::STATUS_WAIT,
+                    ReservationStatus::STATUS_CANCEL,
+                    ReservationStatus::STATUS_SERVE,
+                    ReservationStatus::STATUS_EXPIRED,
+                    ReservationStatus::STATUS_NOSHOW,
+                    ReservationStatus::STATUS_COMPLETE
+                ];
             $customer = $customerService->findCustomer($this->getSessionParm(WLConstants::S_CUST_PHONE,""));
             $reservations = $reservationService->findAllByCustomerId($customer->getUserid(), null,0,100, $inResStatuses,[]);
             

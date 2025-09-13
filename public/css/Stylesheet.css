@@ -89,7 +89,7 @@ form button {
 
 }
 
-form input,
+form input, form select,
 textarea {
   min-width: 194px;
 }

@@ -1,4 +1,5 @@
 
+$("#tabs").tabs();
 
 $("#jsGridPast").jsGrid({
     width: "96%",

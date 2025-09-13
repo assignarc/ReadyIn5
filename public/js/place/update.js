@@ -90,12 +90,12 @@
             loadData: function() {
                 var d = $.Deferred();
                 $.ajax({
-                    url: "/svc/place/"+wlPlaceSlug+"/profile/schedule",
+                    url: "/svc/place/"+wlPlaceSlug+"/profile/schedules",
                     method:"GET",
                     dataType: "json"
                 }).done(function(response) {
                     showNotification("info","Schedules loaded!");
-                    d.resolve(response.details.schedule);
+                    d.resolve(response.details.schedules);
                 }).fail(function(jqXHR,textStatus, errorThrow){
                     showNotification("error",JSON.parse(jqXHR.responseText).text);
                 });
@@ -110,7 +110,7 @@
                 }
                 var d = $.Deferred();
                 $.ajax({
-                    url: "/svc/place/"+wlPlaceSlug+"/profile/schedule",
+                    url: "/svc/place/"+wlPlaceSlug+"/profile/schedules",
                     method:"POST",
                     dataType: "json",
                     data: JSON.stringify(args.item),
@@ -214,7 +214,7 @@
         },
         deleteItem: function(queue){
             $.ajax({
-                url: "/svc/place/"+wlPlaceSlug+"/profile/queue" ,
+                url: "/svc/place/"+wlPlaceSlug+"/profile/queues" ,
                 contentType: 'json',
                 method:"DELETE",
                 data: JSON.stringify(queue),

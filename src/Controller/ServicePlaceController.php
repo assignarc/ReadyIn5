@@ -149,7 +149,7 @@ class ServicePlaceController extends BaseController
             $reservation->setPlace($place);
             $reservation->setStatus(ReservationStatus::STATUS_WAIT->value);
             $reservation->setReservationDt(new DateTime());
-            $reservation->setQueueid(1);  
+            $reservation->setQueueid($this->postParm("queueid",$placeService->getDefaultQueueId($place)));  
  
             $reservation = $reservationService->createReservation($reservation,false);
             $this->responseDetails->setMessage("Success! Table reserved at " . $place->getName() );
@@ -189,35 +189,14 @@ class ServicePlaceController extends BaseController
                 throw new InvalidRequestException("Place not found or you are not authorized to manage it",9311, [], null);
             }
             switch ($reqType) {
+                case "queues":
+                     $this->responseDetails->addDetail($reqType,$place->getPlaceQueues());
                 case "holidays":
                 case "users":
-                case "queues":
-                    $queues = $placeService->getPlaceMeta($placeSlug,$reqType);
-                    //Create default queue if not found
-                    $count = $queues ? count($queues): 0;
-                    if($count<1){
-                        $placeService->createUpdateQueue(queue: new PlaceQueue()
-                                                            ->setPlaceid($place->getPlaceid())
-                                                            ->setCapacityAdults(1)
-                                                            ->setCapacityChildren(0)
-                                                            ->setCapcityTotal(1)
-                                                            ->setQueuename("default"));
-
-                        $this->responseDetails->addDetail($reqType,$placeService->getPlaceMeta($placeSlug,$reqType));
-                    }
-                    else
-                        $this->responseDetails->addDetail($reqType, $queues);
-                    break;
-                case "schedule":
-                    //Create default schedule if not found
-                    $schedules = $placeService->getPlaceMeta($placeSlug,$reqType);
-                    $count = $schedules ? count($schedules): 0;
-                    if($count!=7){
-                        $placeService->createDefaultPlaceSchedule($place);
-                        $place = $placeService->findPlace($this->getSessionParm($placeSlug,WLConstants::NONE));
-                    }
-                    $this->responseDetails->addDetail("schedule", $placeService->getPlaceMeta($placeSlug,$reqType));
-                    break;
+                case "schedules":
+                case "images":
+                     $this->responseDetails->addDetail($reqType,$placeService->getPlaceMeta($placeSlug,$reqType));
+                     break;
                 case "meta":
                     $this->responseDetails->addDetail("place", $place);
                     break;
@@ -316,131 +295,146 @@ class ServicePlaceController extends BaseController
             $this->checkPlacePermissions([WLConstants::AUTHROLE_PLACE_OWNER, WLConstants::AUTHROLE_PLACE_MANAGER], $placeSlug);
 
             $place = $placeService->findPlace($placeSlug);
-           
-           // $this->logMessageArray(["Place",json_encode($place->getPlaceid())]);
-            switch ($reqType) {
-                case 'holidays':
-                    if ($this->request->isMethod('post')) {
-                        $placeHoliday = new PlaceHolidays()
+            if($place->getPlaceid() != $this->postParm("placeid","")){
+                                throw new PlaceInvalidRequestException("Invalid place for deleting holiday");
+                            }
+            switch($this->request->isMethod('post')) {
+                case 'post':
+                    switch ($reqType) {
+                        case 'schedules':
+                             // $json = json_decode($this->request->getContent());
+                            $placeSchedule = new PlaceSchedule()
+                                ->setPlaceid($this->postParm("placeid",""))
+                                ->setOpenTime($this->postParm("openTime",""))
+                                ->setCloseTime($this->postParm("closeTime",""))
+                                ->setShift($this->postParm("shift","default"))
+                                ->setDay($this->postParm("day",""));
+
+                            $placeService->createUpdatePlaceSchedule($placeSchedule,scheduleid: $this->postParm("scheduleid",null));
+                            $this->responseDetails->addDetail("schedule",$place->getPlaceSchedules());
+                            $this->responseDetails->setMessage("Schedule change request completed.");
+                            break;
+                        
+                        case 'holidays':
+                            $placeHoliday = new PlaceHolidays()
                             ->setPlace($place)
                             ->setPlaceId($place->getPlaceId())
                             ->setHolidayDate(new DateTime($this->postParm("holidayDate","")))
                             ->setHolidayName($this->postParm("holidayName",""))
                             ->setSpecialNote($this->postParm("specialNote",""));
 
-                        $placeService->createUpdatePlaceHolidays($placeHoliday, $this->postParm("holidayid",null));
-                        $this->responseDetails->addDetail("holidays",$place->getPlaceHolidays());
-                        $this->responseDetails->setMessage("Holiday change request completed.");
-                    }
-                    if ($this->request->isMethod('delete')) {
-                        if($place->getPlaceid() != $this->postParm("placeid","")){
-                            throw new PlaceInvalidRequestException("Invalid place for deleting holiday");
-                        }
-                        $placeService->removeMetaEntity("holidays",$this->postParm("holidayid",""));
-                        $this->responseDetails->setMessage("Holiday removed! ");
-                    }
-                    break;
-                case 'users':
-                    $this->responseDetails->addDetail("users",$place->getPlaceUsers());
-                    $this->responseDetails->setMessage("User change request received, not completed.");
-                    break;
-                case 'queues':
-                    //Create default qname if not provided in request. 
-                    $defaultQName = $this->postParm("queuename","") =="" ?
-                                        $placeService->generateDefaultQueueName($this->postParm("capcityTotal",1),
-                                                                        $this->postParm("capacityAdults",1),
-                                                                        $this->postParm("capacityChildren",0),
-                                                                        $place->getPlaceid()):
-                                        $this->postParm("queuename","");
+                            $placeService->createUpdatePlaceHolidays($placeHoliday, $this->postParm("holidayid",null));
+                            $this->responseDetails->addDetail("holidays",$place->getPlaceHolidays());
+                            $this->responseDetails->setMessage("Holiday change request completed.");
+                            break;
+
+                        case 'users':
+                            $this->responseDetails->addDetail("users",$place->getPlaceUsers());
+                            $this->responseDetails->setMessage("User change request received, not completed.");
+                            break;
+
+                        case 'owner':
+                            //$json = $this->postJson();
+                            $placeOwner = new PlaceOwner();
+
+                            $placeOwner->setPlaces([$place]);
+                            $placeOwner->setName($this->postParm("name",""));
+                            $placeOwner->setAddressline1($this->postParm("addressline1",""));
+                            $placeOwner->setAddressline2($this->postParm("addressline2",""));
+                            $placeOwner->setAddressline3($this->postParm("addressline3",""));
+                            $placeOwner->setCity($this->postParm("city",""));
+                            $placeOwner->setState($this->postParm("state",""));
+                            $placeOwner->setCountry($this->postParm("country",""));
+                            $placeOwner->setPostalcode($this->postParm("postalcode",""));
+
+                            $placeOwner->setPhone($this->postParm("phone",""));
+                            $placeOwner->setEmail($this->postParm("email",""));
+
+                            $placeOwner->setPhonevalidated(true);
+                            $placeOwner->setEmailvalidated(false);
                         
-                   
-                    $queue = new PlaceQueue()
-                                ->setPlaceid($place->getPlaceid())
-                                ->setCapacityAdults($this->postParm("capacityAdults",1))
-                                ->setCapacityChildren($this->postParm("capacityChildren",0))
-                                ->setCapcityTotal($this->postParm("capcityTotal",1))
-                                ->setQueuename($defaultQName);
-                                
-                    $placeService->createUpdateQueue($queue,$this->postParm("queueid",null));
+                            $placeOwner= $placeService->createUpdatePlaceOwner($placeOwner);
+                            
+                            //TO-DO
+                            //Remove PlaceData from Response. 
+                            //$placeOwner->setPlace(null);
+                            //$response->setContent(json_encode($placeOwner));
+                            $this->responseDetails->addDetail("owner",$placeOwner);
+                            $this->responseDetails->setMessage("Owner change request completed.");
+                            break;
 
-                    $this->responseDetails->addDetail("queues",$place->getPlaceQueues());
-                    $this->responseDetails->setMessage("Queue change request completed!");
-                    break;
-                case 'schedule':
-                    if ($this->request->isMethod('post')) {
-                       // $json = json_decode($this->request->getContent());
-                       
-                        $placeSchedule = new PlaceSchedule()
-                            ->setPlaceid($this->postParm("placeid",""))
-                            ->setOpenTime($this->postParm("openTime",""))
-                            ->setCloseTime($this->postParm("closeTime",""))
-                            ->setShift($this->postParm("shift","default"))
-                            ->setDay($this->postParm("day",""));
-
-                        $placeService->createUpdatePlaceSchedule($placeSchedule,scheduleid: $this->postParm("scheduleid",null));
-                        $this->responseDetails->addDetail("schedule",$place->getPlaceSchedules());
-                        $this->responseDetails->setMessage("Schedule change request completed.");
-                    }
+                        case 'queues':
+                           $qname = $this->postParm("queuename","") ;
+                           $qname = $qname == "" ? $placeService->generateDefaultQueueName($this->postParm("capcityTotal",1),
+                                                                                            $this->postParm("capacityAdults",1),
+                                                                                            $this->postParm("capacityChildren",0),
+                                                                                            $place->getPlaceid())
+                                                : $qname;
                     
-                    break;
-                case 'owner':
-                   
-                    if ($this->request->isMethod('post')) {
-                        //$json = $this->postJson();
-                        $placeOwner = new PlaceOwner();
+                            $queue = new PlaceQueue()
+                                        ->setPlaceid($place->getPlaceid())
+                                        ->setCapacityAdults($this->postParm("capacityAdults",1))
+                                        ->setCapacityChildren($this->postParm("capacityChildren",0))
+                                        ->setCapcityTotal($this->postParm("capcityTotal",1))
+                                        ->setQueuename($qname);
+                                        
+                            $placeService->createUpdateQueue($queue,$this->postParm("queueid",null));
+                            $this->responseDetails->addDetail("queues",$place->getPlaceQueues());
+                            $this->responseDetails->setMessage("Queue change request completed!");
+                            break;
 
-                        $placeOwner->setPlaces([$place]);
-                        $placeOwner->setName($this->postParm("name",""));
-                        $placeOwner->setAddressline1($this->postParm("addressline1",""));
-                        $placeOwner->setAddressline2($this->postParm("addressline2",""));
-                        $placeOwner->setAddressline3($this->postParm("addressline3",""));
-                        $placeOwner->setCity($this->postParm("city",""));
-                        $placeOwner->setState($this->postParm("state",""));
-                        $placeOwner->setCountry($this->postParm("country",""));
-                        $placeOwner->setPostalcode($this->postParm("postalcode",""));
+                        case 'meta':
+                           $json = json_decode($this->request->getContent());
+                            if(!$place){
+                                $place=new Place(); 
+                                    $place->setSlug($json->slug);
+                            }
+                            $place->setName($json->name);
+                            $place->setAddressline1($json->addressline1);
+                            $place->setAddressline2($json->addressline2);
+                            $place->setAddressline3($json->addressline3);
+                            $place->setCity($json->city);
+                            $place->setState($json->state);
+                            $place->setCountry($json->country);
+                            $place->setPostalcode($json->postalcode);
+                            $place->setPhone($json->phone);
+                            
+                            $place = $placeService->createUpdatePlace($place,null);
 
-                        $placeOwner->setPhone($this->postParm("phone",""));
-                        $placeOwner->setEmail($this->postParm("email",""));
+                            $this->responseDetails->addDetail("place",$place);
+                            $this->responseDetails->setMessage("Place update request completed.");
+                            break;
 
-                        $placeOwner->setPhonevalidated(true);
-                        $placeOwner->setEmailvalidated(false);
-                      
-                        $placeOwner= $placeService->createUpdatePlaceOwner($placeOwner);
-                        
-                        //TO-DO
-                        //Remove PlaceData from Response. 
-                        //$placeOwner->setPlace(null);
-                        //$response->setContent(json_encode($placeOwner));
-                        $this->responseDetails->addDetail("owner",$placeOwner);
-                        $this->responseDetails->setMessage("Owner change request completed.");
-
+                        default:
+                            throw new InvalidRequestException("Invalid Request", 9321, [], null);
                     }
-                  
                     break;
-                case 'meta':
-                    $json = json_decode($this->request->getContent());
-                    if(!$place){
-                        $place=new Place(); 
-                        $place->setSlug($json->slug);
+
+                case 'delete':
+                    switch ($reqType) {
+                        case 'holidays':
+                            $placeService->removeMetaEntity("holidays",$this->postParm("holidayid",""));
+                              $this->responseDetails->addDetail("holidays",$place->getPlaceHolidays());
+                              $this->responseDetails->setMessage("Holiday removed! ");
+                            break;
+
+                        case 'queues':
+                            $placeService->removeMetaEntity($reqType,$this->postParm("queueid",""));
+                            $this->responseDetails->addDetail("queues",$place->getPlaceQueues());
+                            $this->responseDetails->setMessage("Queue removed! ");
+                            break;
+
+                        default:
+                            throw new InvalidRequestException("Invalid Request", 9321, [], null);
                     }
-                    $place->setName($json->name);
-                    $place->setAddressline1($json->addressline1);
-                    $place->setAddressline2($json->addressline2);
-                    $place->setAddressline3($json->addressline3);
-                    $place->setCity($json->city);
-                    $place->setState($json->state);
-                    $place->setCountry($json->country);
-                    $place->setPostalcode($json->postalcode);
-                    $place->setPhone($json->phone);
+                    break;
                     
-                    $place = $placeService->createUpdatePlace($place,null);
-
-                    $this->responseDetails->addDetail("place",$place);
-                    $this->responseDetails->setMessage("Place update request completed.");
-                    break;
                 default:
                     throw new InvalidRequestException("Invalid Request", 9321, [], null);
             }
+                        
+           // $this->logMessageArray(["Place",json_encode($place->getPlaceid())]);
+          
             $response->setStatusCode(Response::HTTP_OK);
         }
         catch(Exception $ex){

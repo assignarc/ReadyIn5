@@ -60,7 +60,7 @@ class PlaceQueue extends BaseEntity implements JsonSerializable
 
     /**
      * Many PlaceQueues have One Place.
-     * @ORM\ManyToOne(targetEntity="Place", inversedBy="placeQueues")
+     * @ORM\ManyToOne(targetEntity="Place", inversedBy="placeQueues" , fetch="LAZY" )
      * @ORM\JoinColumn(name="placeid", referencedColumnName="placeid")
      */
     private Place $place;
