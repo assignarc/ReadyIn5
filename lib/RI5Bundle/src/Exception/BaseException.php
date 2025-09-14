@@ -17,7 +17,7 @@ class BaseException extends Exception implements JsonSerializable
     // Redefine the exception so message isn't optional
    
 
-    public function __construct(string $message, int $code = 1, Throwable $previous) {
+    public function __construct(string $message, int $code = 1, ?Throwable $previous) {
         // make sure everything is assigned properly
         parent::__construct(message: $message, code: $code, previous: $previous);
     }

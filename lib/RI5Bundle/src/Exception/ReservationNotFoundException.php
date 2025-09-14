@@ -9,7 +9,7 @@ class ReservationNotFoundException extends BaseException
 {
     
     // Redefine the exception so message isn't optional
-    public function __construct(string $message ="Reservation not found!", int $code = 9110, array $exceptionData=[], ?Throwable $previous = null) {
+    public function __construct(string $message ="Reservation not found!", int $code = 9330, array $exceptionData=[], ?Throwable $previous = null) {
         // make sure everything is assigned properly
         parent::__construct($message, $code, $previous);
         $this->__REDIRECTION_PAGE__ = "/";

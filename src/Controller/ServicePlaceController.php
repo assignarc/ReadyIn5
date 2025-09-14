@@ -295,11 +295,9 @@ class ServicePlaceController extends BaseController
             $this->checkPlacePermissions([WLConstants::AUTHROLE_PLACE_OWNER, WLConstants::AUTHROLE_PLACE_MANAGER], $placeSlug);
 
             $place = $placeService->findPlace($placeSlug);
-            if($place->getPlaceid() != $this->postParm("placeid","")){
-                                throw new PlaceInvalidRequestException("Invalid place for deleting holiday");
-                            }
-            switch($this->request->isMethod('post')) {
-                case 'post':
+           $this->logAlert("Method" . $this->request->getMethod());
+            switch($this->request->getMethod()) {
+                case 'POST':
                     switch ($reqType) {
                         case 'schedules':
                              // $json = json_decode($this->request->getContent());
@@ -406,16 +404,16 @@ class ServicePlaceController extends BaseController
                             break;
 
                         default:
-                            throw new InvalidRequestException("Invalid Request", 9321, [], null);
+                            throw new InvalidRequestException("Invalid Request", 9321, []);
                     }
                     break;
 
-                case 'delete':
+                case 'DELETE':
                     switch ($reqType) {
                         case 'holidays':
                             $placeService->removeMetaEntity("holidays",$this->postParm("holidayid",""));
-                              $this->responseDetails->addDetail("holidays",$place->getPlaceHolidays());
-                              $this->responseDetails->setMessage("Holiday removed! ");
+                            $this->responseDetails->addDetail("holidays",$place->getPlaceHolidays());
+                            $this->responseDetails->setMessage("Holiday removed! ");
                             break;
 
                         case 'queues':
@@ -428,13 +426,10 @@ class ServicePlaceController extends BaseController
                             throw new InvalidRequestException("Invalid Request", 9321, [], null);
                     }
                     break;
-                    
+
                 default:
-                    throw new InvalidRequestException("Invalid Request", 9321, [], null);
-            }
-                        
-           // $this->logMessageArray(["Place",json_encode($place->getPlaceid())]);
-          
+                    throw new InvalidRequestException("Invalid Request", 9323, [], null);
+            }  
             $response->setStatusCode(Response::HTTP_OK);
         }
         catch(Exception $ex){

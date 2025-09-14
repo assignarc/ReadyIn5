@@ -30,7 +30,7 @@ class CustomerService extends BaseService
         $customerDB = $this->findCustomer($phone);
 
         if(!$customerDB)
-           throw new CustomerNotFoundException();
+           throw new CustomerNotFoundException("Customer with phone {$phone} not found!",9351,[],null   );
            
         $customerDB->setContactMethod($contactMethod);
         $this->objectRepository->save($customerDB,true);

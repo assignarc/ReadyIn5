@@ -8,7 +8,7 @@ use Throwable;
 class InvalidRequestException extends BaseException  {
     
     // Redefine the exception so message isn't optional
-    public function __construct(string $message ="Invalid request!", int $code = 9500,  ?array $exceptionData=[],?Throwable $previous) {
+    public function __construct(string $message ="Invalid request!", int $code = 9500,  ?array $exceptionData=[], ?Throwable $previous=null) {
         // make sure everything is assigned properly
         parent::__construct($message, $code, $previous);
         $this->__REDIRECTION_ROUTE__ = "CUST_Login";

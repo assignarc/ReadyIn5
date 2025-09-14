@@ -8,7 +8,7 @@ use Throwable;
 class CustomerNotFoundException extends BaseException  {
     
     // Redefine the exception so message isn't optional
-    public function __construct(string $message ="Customer not found!", int $code = 9900, array $exceptionData=[], ?Throwable $previous) {
+    public function __construct(string $message ="Customer not found!", int $code = 9350, array $exceptionData=[], ?Throwable $previous) {
         // make sure everything is assigned properly
         parent::__construct(message: $message, code: $code, previous: $previous);
         $this->__REDIRECTION_ROUTE__ = "CUST_Login";
