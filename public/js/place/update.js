@@ -278,8 +278,88 @@
         ]
     });
 
+/* Users */
+    $("#jsUsers").jsGrid({
+        width: "100%",
+        inserting: false,
+        editing: true,
+        sorting: false,
+        paging: true,
+        pageSize: 5,
+        pageIndex: 1,
+        autoload: true,
+
+        deleteConfirm: function(queue) {
+            return "The Users: \"" + queue.queuename + "\" will be removed. Are you sure?";
+        },
+        deleteItem: function(queue){
+            $.ajax({
+                url: "/svc/place/"+wlPlaceSlug+"/profile/users" ,
+                contentType: 'json',
+                method:"DELETE",
+                data: JSON.stringify(queue),
+            }).done(function(response) {
+                showNotification("info","Place Users removed");
+                $("#jsUsers").jsGrid("loadData");
+            }).fail(function(jqXHR,textStatus, errorThrow){
+                showNotification("error",textStatus);
+            });
+            return false;
+        },
+        onItemUpdating: function(args) { 
+            args.item.capcityTotal = args.item.capacityAdults  + args.item.capacityChildren;
+            console.log(args.item);
+            var d = $.Deferred();
+            $.ajax({
+                url: "/svc/place/"+wlPlaceSlug+"/profile/users",
+                method:"POST",
+                dataType: "json",
+                data: JSON.stringify(args.item),
+            }).done(function(response) {
+                showNotification("info","Users updated!");
+                $("#jsUsers").jsGrid("loadData");
+                d.resolve(response);
+            }).fail(function(jqXHR,textStatus, errorThrow){
+                showNotification("error",JSON.parse(jqXHR.responseText).text);
+            });
+            return d.promise();
+        },
+        // rowClick: function(args) {
+        //     showQueueDetailsDialog("Edit", args.item);
+        // },
+
+        controller: {
+            loadData: function() {
+                var d = $.Deferred();
+            // console.log(wlPlaceSlug);
+                $.ajax({
+                    url: "/svc/place/"+wlPlaceSlug+"/profile/users",
+                    method:"GET",
+                    contentType: "json",
+                }).done(function(response) {
+                    d.resolve(response.details.queues);
+                    showNotification("info","Users loaded!");
+                }).fail(function(jqXHR,textStatus, errorThrow){
+                    showNotification("error",textStatus);
+                });
+                return d.promise();
+            }
+        },
+
+        fields: [
+            { name: "phone", title:"Phone", required:"true", type: "text",headercss: "wLRestScheduleHeader" },
+            { name: "username", title:"Name" ,type: "number", headercss: "wLRestScheduleHeader"},
+            { name: "accessadmin", title:"Children", type: "number", align:"right", wlDateDisplayFormat:"default",headercss: "wLRestScheduleHeader"},
+            { name: "accessreservation", title:"Total", type: "number", readOnly:"true", align:"right", wlDateDisplayFormat:"default",headercss: "wLRestScheduleHeader"},
+            { type: "control" , headercss: "wLRestScheduleHeader",
+                    modeSwitchButton: false,
+                    editButton: true,
+            }
+        ]
+    });
 
 
+/* Holiday Details Dialog */
     $("#detailsDialog").dialog({
         autoOpen: false,
         width: 400,
@@ -305,7 +385,7 @@
     }
     });
     var formSubmitHandler = $.noop;
-    var showHolidayDetailsDialog = function(dialogType, holiday) {
+    var showDetailsDialog = function(dialogType, holiday) {
         if(dialogType=="Add"){
             $("#holidayid").val("");
             $("#holidayName").val("");
@@ -356,6 +436,83 @@
 
         
     };
+
+
+/* User Details Dialog */
+    $("#detailsUsersDialog").dialog({
+        autoOpen: false,
+        width: 400,
+        Close: function() {
+            $("#detailsUsersForm").validate().resetForm();
+            $("#detailsUsersForm").find(".error").removeClass("error");
+        }
+    });
+
+    $("#detailsUsersForm").validate({
+        rules: {
+            phone: "required",
+            username: "required",
+            accessadmin: "required",
+            accessreservation: "required"
+        },
+        messages: {
+            phone: "Please enter phone of User",
+            username: "Please enter username for the User",
+            accessadmin: "Please decide to give admin access",
+            accessreservation: "Please decide to give reservation access"
+        },
+        submitHandler: function(event) {
+            formUsersSubmitHandler();     
+    }
+    });
+    var formUsersSubmitHandler = $.noop;
+    var showUsersDetailsDialog = function(dialogType, user) {
+        if(dialogType=="Add"){
+            $("placeuserid").val("");
+            $("#phone").val("");
+            $("#username").val("");
+            $("#accessadmin").val("");
+            $("#accessreservation").val("");
+        }
+        if(dialogType=="Edit"){
+            $("placeuserid").val("");
+            $("#phone").val(user.phone);
+            $("#username").val(user.username);
+            $("#accessadmin").val(user.accessadmin);
+            $("#accessreservation").val(user.accessreservation);
+        }
+        formUsersSubmitHandler = function(event) {
+            saveUserClient(user, dialogType === "Add");
+        };
+        
+        $("#detailsUsersDialog").dialog("option", "title", dialogType + " User")
+                .dialog("open");
+    };
+    var saveUserClient = function(user, isNew) {
+        formData = {
+            "placeuserid":$("#placeuserid").val(),
+            "phone":$("#phone").val(),
+            "username":$("#username").val(),
+            "accessadmin":$("#accessadmin").val(),
+            "accessreservation":$("#accessreservation").val()
+        };
+        $("#detailsDialog").dialog("close");
+        $.ajax({
+            url: "/svc/place/"+wlPlaceSlug+"/profile/users" ,
+            contentType: "json",
+            method:'POST',
+            data: JSON.stringify(formData),
+        }).done(function(response) {
+            showNotification("info","Users Updated!");
+            $("#jsHolidays").jsGrid("loadData");
+        }).fail(function(jqXHR,textStatus, errorThrow){
+            showNotification("error",textStatus);
+        });
+
+        
+    };
+
+
 /* Image controls */
     $( function() {
         $("#wlImgControl")

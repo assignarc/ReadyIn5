@@ -55,14 +55,16 @@ class ServiceController extends BaseController
                     $otpService->validateOtp($this->postParm("phone", WLConstants::NONE),$this->postParm("otp", WLConstants::NONE));
                     $customer = $customerService->findCustomer($this->getSessionParm(WLConstants::S_CUST_PHONE,""));
                     if($customer){
-                        $this->responseDetails->addDetail("customer", $customer);
                         $this->setSessionParm(WLConstants::S_CUST_AUTHORIZED,WLConstants::AUTH_AUTHORIZED);
                         $this->setSessionParm(WLConstants::S_CUST_PHONE,$this->postParm("phone", WLConstants::NONE));
                         $this->setSessionParm(WLConstants::S_CUST_ROLE, WLConstants::AUTHROLE_CUSTOMER);
                         $this->setSessionParm(WLConstants::S_AUTH_TYPE,WLConstants::AUTHTYPE_CUSTOMER);
 
                         $response->headers->set("token",$this->createSecurityToken());
-                        $this->responseDetails->setMessage("Passcode validated, " .  $this->getSessionParm(WLConstants::S_CUST_PHONE," ") . " verified." );
+                        $this->setSuccessResponse("Passcode validated, " .  $this->getSessionParm(WLConstants::S_CUST_PHONE," ") . " verified.",0,
+                            ['customer' => $customer]
+                        );
+                       
                     }
                     else 
                         throw new SecurityException(message: "Access denied!");
@@ -76,11 +78,8 @@ class ServiceController extends BaseController
                 $response->setStatusCode(Response::HTTP_OK);
         }
         catch(Exception $ex){
-            $this->logException($ex);
             $ex = BaseException::CREATE($ex);
-            $this->responseDetails->setCode($ex->getCode());
-            $this->responseDetails->setMessage($ex->getMessage());
-            $this->responseDetails->addDetail("exception", $ex);
+            $this->setExceptionResponse($ex);
             $response->setStatusCode($ex->getResponseCode());
         }
         
@@ -154,11 +153,8 @@ class ServiceController extends BaseController
                 $response->setStatusCode(Response::HTTP_OK);
         }
         catch(Exception $ex){
-            $this->logException($ex);
             $ex = BaseException::CREATE($ex);
-            $this->responseDetails->setCode($ex->getCode());
-            $this->responseDetails->setMessage($ex->getMessage());
-            $this->responseDetails->addDetail("exception", $ex);
+            $this->setExceptionResponse($ex);
             $response->setStatusCode($ex->getResponseCode());
         }
         

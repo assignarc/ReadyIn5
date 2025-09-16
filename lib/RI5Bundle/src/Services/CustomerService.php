@@ -43,35 +43,34 @@ class CustomerService extends BaseService
             $customerDB->setPhone($customer->getPhone());
          }
 
-        $customerDB->setFirstname($customer->getFirstname() ?? $customerDB->getFirstname());
-        $customerDB->setLastname($customer->getLastname() ?? $customerDB->getLastname());
-
-        $customerDB->setAddressline1($customer->getAddressline1() ?? $customerDB->getAddressline1());
-        $customerDB->setAddressline2($customer->getAddressline2() ?? $customerDB->getAddressline2());
-        $customerDB->setAddressline3($customer->getAddressline3() ?? $customerDB->getAddressline3());
-        $customerDB->setCity($customer->getCity() ?? $customerDB->getCity());
-        $customerDB->setState($customer->getState() ?? $customerDB->getState());
-        $customerDB->setCountry($customer->getCountry() ?? $customerDB->getCountry());
+        $customerDB->setFirstname($customer->getFirstname() ?? $customerDB->getFirstname())
+                ->setLastname($customer->getLastname() ?? $customerDB->getLastname())
+                ->setAddressline1($customer->getAddressline1() ?? $customerDB->getAddressline1())
+                ->setAddressline2($customer->getAddressline2() ?? $customerDB->getAddressline2())
+                ->setAddressline3($customer->getAddressline3() ?? $customerDB->getAddressline3())
+                ->setCity($customer->getCity() ?? $customerDB->getCity())
+                ->setState($customer->getState() ?? $customerDB->getState())
+                ->setCountry($customer->getCountry() ?? $customerDB->getCountry());
         
         $this->objectRepository->save($customerDB,true);
         
         return $this->findCustomer($customerDB->getPhone());
     }
     public function buildCustomerJSON($cJson):Customer{
-        $customer=new Customer();
-        $customer->setUserid($cJson->userid ?? 0);
-        $customer->setPhone($cJson->phone ?? null);
-        $customer->setFirstname($cJson->firstname ?? null);
-        $customer->setLastname($cJson->lastname ?? null);
+        $customer=new Customer()
+                ->setUserid($cJson->userid ?? 0)
+                ->setPhone($cJson->phone ?? null)
+                ->setFirstname($cJson->firstname ?? null)
+                ->setLastname($cJson->lastname ?? null);
 
         return $customer;
     }
 
     public function buildCustomer(string $userid, string $phone, string $firstname, string $lastname): Customer{
-        $customer=new Customer();
-        $customer->setPhone($phone ?? null);
-        $customer->setFirstname($firstname ?? null);
-        $customer->setLastname($lastname ?? null);
+        $customer=new Customer()
+                ->setPhone($phone ?? null)
+                ->setFirstname($firstname ?? null)
+                ->setLastname($lastname ?? null);
         return $customer;
     }
     /**

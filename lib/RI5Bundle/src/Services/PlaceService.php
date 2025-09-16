@@ -189,10 +189,11 @@ class PlaceService extends BaseService
         if (!$holidayDB)
             $this->placeHolidaysRepository->save($holiday, true);
         else {
-            $holidayDB->setPlaceId($holiday->getPlaceId());
-            $holidayDB->setHolidayDate($holiday->getHolidayDate());
-            $holidayDB->setHolidayName($holiday->getHolidayName());
-            $holidayDB->setSpecialNote($holiday->getSpecialNote());
+            $holidayDB->setPlaceId($holiday->getPlaceId())
+                    ->setHolidayDate($holiday->getHolidayDate())
+                    ->setHolidayName($holiday->getHolidayName())
+                    ->setSpecialNote($holiday->getSpecialNote());
+
             $this->placeHolidaysRepository->persistHoliday($holidayDB);
         }
 
@@ -219,10 +220,10 @@ class PlaceService extends BaseService
 
         }
 
-        $scheduleDB->setDay($schedule->getDay());
-        $scheduleDB->setOpenTime($schedule->getOpenTime());
-        $scheduleDB->setCloseTime($schedule->getCloseTime());
-        $scheduleDB->setShift($schedule->getShift());
+        $scheduleDB->setDay($schedule->getDay())
+                ->setOpenTime($schedule->getOpenTime())
+                ->setCloseTime($schedule->getCloseTime())
+                ->setShift($schedule->getShift());
         $this->placeScheduleRepository->save($scheduleDB, true);
     }
 
@@ -235,10 +236,10 @@ class PlaceService extends BaseService
             if ($queueDB->getPlaceid() != $queue->getPlaceid())
                 throw new PlaceInvalidRequestException("Invalid Queue Change request for the Place");
 
-            $queueDB->setQueuename($queue->getQueuename());
-            $queueDB->setCapacityAdults($queue->getCapacityAdults());
-            $queueDB->setCapacityChildren($queue->getCapacityChildren());
-            $queueDB->setCapcityTotal($queue->getCapcityTotal());
+            $queueDB->setQueuename($queue->getQueuename())
+                    ->setCapacityAdults($queue->getCapacityAdults())
+                    ->setCapacityChildren($queue->getCapacityChildren())
+                    ->setCapcityTotal($queue->getCapcityTotal());
             $this->placeQueueRepository->updateQueue($queueDB, $queueid);
 
         } else {
@@ -288,20 +289,18 @@ class PlaceService extends BaseService
         }
 
 
-        $ownerDB->setName($owner->getName());
-        $ownerDB->setAddressline1($owner->getAddressline1());
-        $ownerDB->setAddressline2($owner->getAddressline2());
-        $ownerDB->setAddressline3($owner->getAddressline3());
-        $ownerDB->setCity($owner->getCity());
-        $ownerDB->setState($owner->getState());
-        $ownerDB->setCountry($owner->getCountry());
-        $ownerDB->setPostalcode($owner->getPostalcode());
-
-        $ownerDB->setPhone($owner->getPhone());
-        $ownerDB->setEmail($owner->getEmail());
-
-        $ownerDB->setPhonevalidated($owner->isPhonevalidated());
-        $ownerDB->setEmailvalidated($owner->isEmailvalidated());
+        $ownerDB->setName($owner->getName())
+                ->setAddressline1($owner->getAddressline1())
+                ->setAddressline2($owner->getAddressline2())
+                ->setAddressline3($owner->getAddressline3())
+                ->setCity($owner->getCity())
+                ->setState($owner->getState())
+                ->setCountry($owner->getCountry())
+                ->setPostalcode($owner->getPostalcode())
+                ->setPhone($owner->getPhone())
+                ->setEmail($owner->getEmail())
+                ->setPhonevalidated($owner->isPhonevalidated())
+                ->setEmailvalidated($owner->isEmailvalidated());
 
         $this->placeOwnerRepository->save($ownerDB, true);
 
@@ -347,14 +346,15 @@ class PlaceService extends BaseService
     public function createDefaultPlaceSchedule(Place $place)
     {
         foreach (array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday') as &$day) {
-            $schedule = new PlaceSchedule();
-            $schedule->setPlace($place);
-            $schedule->setDay($day);
             $now = new DateTime();
             $now->setTime(0, 0, 0, 0);
-            $schedule->setOpenTime($now->format("H:i:s"));
-            $schedule->setCloseTime($now->format("H:i:s"));
-            $schedule->setShift("default");
+
+            $schedule = new PlaceSchedule()
+                    ->setPlace($place)
+                    ->setDay($day)
+                    ->setOpenTime($now->format("H:i:s"))
+                    ->setCloseTime($now->format("H:i:s"))
+                    ->setShift("default");
 
             $this->createUpdatePlaceSchedule($schedule);
         }

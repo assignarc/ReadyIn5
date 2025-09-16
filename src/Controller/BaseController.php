@@ -5,6 +5,7 @@ namespace App\Controller;
 use RI5\DB\Entity\Data\ResponseDetails;
 use RI5\DB\Entity\Data\WLConstants;
 use DateTimeInterface;
+use Exception;
 use RI5\DB\Entity\Data\AuthToken;
 use RI5\Exception\SecurityException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,7 +13,6 @@ use RI5\Services\Traits\LoggerAwareTrait;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-
 //https://ourcodeworld.com/articles/read/1386/how-to-generate-the-entities-from-a-database-and-create-the-crud-automatically-in-symfony-5
 
 
@@ -35,6 +35,31 @@ class BaseController extends AbstractController
         $this->session = $this->request->getSession();
         $this->cookies = $this->request->cookies;
         $this->responseDetails = new ResponseDetails();
+    }
+    /* Custom Response Details Functions */
+    /**
+     * Set the response details needed by UI to consume
+     * @param string $message
+     * @param int $code
+     * @param mixed $details
+     * @return void
+     */
+    public function setSuccessResponse(string $message = "Success", int $code = 0, mixed $details =[]){
+        $this->responseDetails->set($message, $code, $details);  
+    }
+    public function setExceptionResponse(Exception $exception){
+        $this->logException($exception);
+        $this->responseDetails->set($exception->getMessage(),$exception->getCode(),$exception->getMessage());
+        $this->responseDetails->addDetail("exception", $exception->__toString());
+    }
+    /**
+     * Add  a detail to the response details needed by UI to consume
+     * @param string $key
+     * @param mixed $detail
+     * @return void
+     */
+    public function addResponseDetail(string $key, mixed $detail){
+        $this->responseDetails->addDetail($key, $detail);
     }
 
     /*SYMFONY Specifics */

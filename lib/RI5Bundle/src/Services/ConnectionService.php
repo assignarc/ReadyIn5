@@ -17,9 +17,7 @@ class ConnectionService {
     private $DATABASE_URL = "";
 
     public function __construct() {
-        
-       //"mysql:host=" . $this->DB_HOST_NAME . ";dbname=" . $this->DB_NAME; 
-        $this->DATABASE_URL = getenv('DATABASE_URL');
+       $this->DATABASE_URL = getenv('DATABASE_URL');
     }
 
     public function getConnection() : ?PDO {

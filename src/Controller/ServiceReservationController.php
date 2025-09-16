@@ -25,21 +25,20 @@ class ServiceReservationController extends BaseController
             $this->checkCustomerPermissions([WLConstants::AUTHROLE_CUSTOMER], "","");
 
             $status = $reservationService->getReservationStatus($reservationId);
-            $this->responseDetails->setMessage("Success! Reservation found - " . $status->value);
-            $this->responseDetails->addDetail("status", $status->value);
+            
+            $this->setSuccessResponse("Success! Reservation found - " . $status->value,0,
+                        ['status' => $status->value]
+            );   
 
             $placeStatus = $reservationService->getReservationWaitPlan($reservationId);
             foreach($placeStatus as $key=>$value){
-                $this->responseDetails->addDetail($key,$value);
+                $this->addResponseDetail($key,$value);
             }
             $response->setStatusCode(Response::HTTP_OK);
         }
         catch(Exception $ex){
-            $this->logException($ex);
             $ex = BaseException::CREATE($ex);
-            $this->responseDetails->setCode($ex->getCode());
-            $this->responseDetails->setMessage($ex->getMessage());
-            $this->responseDetails->addDetail("exception", $ex->__toString());
+            $this->setExceptionResponse($ex);
             $response->setStatusCode($ex->getResponseCode());
         } 
         $response->setContent(json_encode($this->responseDetails));
@@ -62,11 +61,8 @@ class ServiceReservationController extends BaseController
             $response->setStatusCode(Response::HTTP_OK);
         }
         catch(Exception $ex){
-            $this->logException($ex);
             $ex = BaseException::CREATE($ex);
-            $this->responseDetails->setCode($ex->getCode());
-            $this->responseDetails->setMessage($ex->getMessage());
-            $this->responseDetails->addDetail("exception", $ex->__toString());
+            $this->setExceptionResponse($ex);
             $response->setStatusCode($ex->getResponseCode());
         } 
         $response->setContent(json_encode($this->responseDetails));

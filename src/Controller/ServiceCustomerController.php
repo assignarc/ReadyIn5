@@ -56,15 +56,13 @@ class ServiceCustomerController extends BaseController
             }
             
             $customerService->createUpdateCustomer($customerDB);
-            $this->responseDetails->setMessage("Customer updated");
-            $this->responseDetails->addDetail("customer", $customerDB);
+            $this->setSuccessResponse("Customer updated",0,
+                ['customer' => $customerDB]
+            );
        }
         catch(Exception $ex){
-            $this->logException($ex);
             $ex = BaseException::CREATE($ex);
-            $this->responseDetails->setCode($ex->getCode());
-            $this->responseDetails->setMessage($ex->getMessage());
-            $this->responseDetails->addDetail("exception", $ex);
+            $this->setExceptionResponse($ex);
             $response->setStatusCode($ex->getResponseCode());
         } 
         $response->setContent(json_encode($this->responseDetails));
@@ -86,16 +84,13 @@ class ServiceCustomerController extends BaseController
 
             $this->checkCustomerPermissions([WLConstants::AUTHROLE_CUSTOMER], "", "");
             $customerDB = $customerService->findCustomer($this->getSessionParm(WLConstants::S_CUST_PHONE,"0"));
-        
-            $this->responseDetails->setMessage("Customer found!");
-            $this->responseDetails->addDetail("customer", $customerDB);
+            $this->setSuccessResponse("Customer found",0,
+                ['customer' => $customerDB]
+            );
        }
         catch(Exception $ex){
-            $this->logException($ex);
             $ex = BaseException::CREATE($ex);
-            $this->responseDetails->setCode($ex->getCode());
-            $this->responseDetails->setMessage($ex->getMessage());
-            $this->responseDetails->addDetail("exception", $ex);
+            $this->setExceptionResponse($ex);
             $response->setStatusCode($ex->getResponseCode());
         } 
         $response->setContent(json_encode($this->responseDetails));
@@ -126,20 +121,18 @@ class ServiceCustomerController extends BaseController
                 ];
             $customer = $customerService->findCustomer($this->getSessionParm(WLConstants::S_CUST_PHONE,""));
             $reservations = $reservationService->findAllByCustomerId($customer->getUserid(), null,0,100, $inResStatuses,[]);
-            
-            $this->responseDetails->setMessage("Current reservations loaded.");
-            $this->responseDetails->addDetail('reservations',$reservations);
+            $this->setSuccessResponse("Current reservations loaded.",0,
+                ['reservations' => $reservations]
+            );
+          
 
             //TO-DO send a cleanup event. Remove when the Code is implemented for Cron or Scheduler. 
             $this->dispatchEvent(new TimeUp(),TimeUp::NAME);
             $this->dispatchEvent(new DataNormalizationNeeded("RESERVATION_NORMALIZATION"), DataNormalizationNeeded::NAME);
         }
         catch(Exception $ex){
-            $this->logException($ex);
             $ex = BaseException::CREATE($ex);
-            $this->responseDetails->setCode($ex->getCode());
-            $this->responseDetails->setMessage($ex->getMessage());
-            $this->responseDetails->addDetail("exception", $ex);
+            $this->setExceptionResponse($ex);
             $response->setStatusCode($ex->getResponseCode());
         } 
         $response->setContent(json_encode($this->responseDetails));
@@ -160,17 +153,15 @@ class ServiceCustomerController extends BaseController
             $reservations = $reservationService->findAllByCustomerId($customer->getUserid(), 
                             (new \DateTime())->modify('-1 day'));//new DateTime());
 
-            $this->responseDetails->setMessage("Past reservations loaded.");
-            $this->responseDetails->addDetail('reservations',$reservations);
-           
+            $this->setSuccessResponse("Past reservations loaded.",0,
+                ['reservations' => $reservations]
+            );
+            
             $response->setStatusCode(Response::HTTP_OK);
         }
         catch(Exception $ex){
-            $this->logException($ex);
             $ex = BaseException::CREATE($ex);
-            $this->responseDetails->setCode($ex->getCode());
-            $this->responseDetails->setMessage($ex->getMessage());
-            $this->responseDetails->addDetail("exception", $ex);
+            $this->setExceptionResponse($ex);
             $response->setStatusCode($ex->getResponseCode());
         }
         $response->setContent(json_encode($this->responseDetails));

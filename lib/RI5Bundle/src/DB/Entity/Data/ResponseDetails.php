@@ -16,6 +16,12 @@ class ResponseDetails extends BaseObject implements JsonSerializable
         $this->details =$details;
     }
 
+    public function set(string $message = "Success", int $code = 0, mixed $details =[]){
+        $this->text=$message;
+        $this->code=$code;
+        $this->details =$details;
+    }
+
     public function addDetail(string $key, mixed $detail){
         $this->details[$key] = $detail;
     }

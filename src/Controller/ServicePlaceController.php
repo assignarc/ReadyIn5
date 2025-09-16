@@ -42,16 +42,13 @@ class ServicePlaceController extends BaseController
             $place = $placeService->findPlace($placeSlug);
             if(!$place)
                 throw new PlaceNotFoundException("Place not found.");
-          
-            $this->responseDetails->setMessage("Place found");
-            $this->responseDetails->addDetail("place",$place);  
+            $this->setSuccessResponse("Place found",0,
+                        ['place' => $place]
+            );
         }
         catch(Exception $ex){
-            $this->logException($ex);
             $ex = BaseException::CREATE($ex);
-            $this->responseDetails->setCode($ex->getCode());
-            $this->responseDetails->setMessage($ex->getMessage());
-            $this->responseDetails->addDetail("exception", $ex);
+            $this->setExceptionResponse($ex);
             $response->setStatusCode($ex->getResponseCode());
         }
         $response->setContent(json_encode($this->responseDetails));
@@ -67,15 +64,14 @@ class ServicePlaceController extends BaseController
 
             $place = $placeService->findPlace($placeSlug);
             $reservations = $reservationService->findAllByPlaceSlug($place->getSlug(), $status,new DateTime('now'));
-            $this->responseDetails->addDetail("reservations", $reservations);
+            $this->setSuccessResponse("Current reservations loaded.",0,
+                ['reservations' => $reservations]
+            );
             $response->setStatusCode(Response::HTTP_OK);
         }
         catch(Exception $ex){
-            $this->logException($ex);
             $ex = BaseException::CREATE($ex);
-            $this->responseDetails->setCode($ex->getCode());
-            $this->responseDetails->setMessage($ex->getMessage());
-            $this->responseDetails->addDetail("exception", $ex->__toString());
+            $this->setExceptionResponse($ex);
             $response->setStatusCode($ex->getResponseCode());
         } 
         $response->setContent(json_encode($this->responseDetails));
@@ -99,16 +95,14 @@ class ServicePlaceController extends BaseController
             $reservationId = $this->postParm("reservationId",null);
 
             $reservation = $reservationService->updateReservationStatus($reservationId, ReservationStatus::from($status));
-            
-            $this->responseDetails->setMessage("Success! Reservation set to " .  $status);
+            $this->setSuccessResponse("Success! Reservation set to " .  $status,0,
+                ['reservation' => $reservation]
+            );
             $response->setStatusCode(Response::HTTP_OK);
         }
         catch(Exception $ex){
-            $this->logException($ex);
             $ex = BaseException::CREATE($ex);
-            $this->responseDetails->setCode($ex->getCode());
-            $this->responseDetails->setMessage($ex->getMessage());
-            $this->responseDetails->addDetail("exception", $ex->__toString());
+            $this->setExceptionResponse($ex);
             $response->setStatusCode($ex->getResponseCode());
         } 
 
@@ -138,31 +132,31 @@ class ServicePlaceController extends BaseController
 
             $place = $placeService->findPlace($placeSlug,false);
             $customer = $customerService->findCustomer($this->getSessionParm(WLConstants::S_CUST_PHONE, WLConstants::NONE));
+            
             if(!$customer || !$place)
                 throw new InvalidRequestException("Incorrect User or Place.", 9503 ,  [],null);
 
-            $reservation = new Reservation();
-            $reservation->setAdults($this->postParm("adults",1));
-            $reservation->setChildren($this->postParm("children",0));
-            $reservation->setInstructions($this->postParm("specialnotes",null));
-            $reservation->setCustomer($customer);
-            $reservation->setPlace($place);
-            $reservation->setStatus(ReservationStatus::STATUS_WAIT->value);
-            $reservation->setReservationDt(new DateTime());
-            $reservation->setQueueid($this->postParm("queueid",$placeService->getDefaultQueueId($place)));  
- 
-            $reservation = $reservationService->createReservation($reservation,false);
-            $this->responseDetails->setMessage("Success! Table reserved at " . $place->getName() );
-            $this->responseDetails->addDetail('reservation', $reservation);
+            //The Qid is AUTO INCREMENT, that will take it beyond 2 digits, so commenting it out. 
+            //$reservation->setQueueid($this->postParm("queueid",$placeService->getDefaultQueueId($place)));  
+            $reservation = new Reservation()
+                ->setAdults($this->postParm("adults",1))
+                ->setChildren($this->postParm("children",0))
+                ->setInstructions($this->postParm("specialnotes",null))
+                ->setCustomer($customer)
+                ->setPlace($place)
+                ->setStatus(ReservationStatus::STATUS_WAIT->value)
+                ->setReservationDt(new DateTime())
+                ->setQueueid(1);
             
+ 
+            $this->setSuccessResponse("Success! Place reserved at " . $place->getName(),0,
+                        ['reservation' => $reservationService->createReservation($reservation,false)]
+            );   
             $response->setStatusCode(Response::HTTP_OK);
         }
         catch(Exception $ex){
-            $this->logException($ex);
             $ex = BaseException::CREATE($ex);
-            $this->responseDetails->setCode($ex->getCode());
-            $this->responseDetails->setMessage($ex->getMessage());
-            $this->responseDetails->addDetail("exception", $ex);
+            $this->setExceptionResponse($ex);
             $response->setStatusCode($ex->getResponseCode());
         } 
 
@@ -190,15 +184,18 @@ class ServicePlaceController extends BaseController
             }
             switch ($reqType) {
                 case "queues":
-                     $this->responseDetails->addDetail($reqType,$place->getPlaceQueues());
+                    $this->setSuccessResponse("Place queues found.",0,
+                        [$reqType => $place->getPlaceQueues()]);
                 case "holidays":
                 case "users":
                 case "schedules":
                 case "images":
-                     $this->responseDetails->addDetail($reqType,$placeService->getPlaceMeta($placeSlug,$reqType));
-                     break;
+                    $this->setSuccessResponse($reqType . " found.",0,
+                        [$reqType => $placeService->getPlaceMeta($placeSlug,$reqType)]);
+                    break;
                 case "meta":
-                    $this->responseDetails->addDetail("place", $place);
+                    $this->setSuccessResponse("Place found.",0,
+                        ['place' => $place]);
                     break;
                 default:
                     throw new InvalidRequestException("Invalid Place request.", 9321, [], null);
@@ -207,11 +204,8 @@ class ServicePlaceController extends BaseController
             $response->setStatusCode(Response::HTTP_OK);
         }
         catch(Exception $ex){
-            $this->logException($ex);
             $ex = BaseException::CREATE($ex);
-            $this->responseDetails->setCode($ex->getCode());
-            $this->responseDetails->setMessage($ex->getMessage());
-            $this->responseDetails->addDetail("exception", $ex->__toString());
+            $this->setExceptionResponse($ex);
             $response->setStatusCode($ex->getResponseCode());
         } 
         $response->setContent(json_encode($this->responseDetails));
@@ -237,16 +231,14 @@ class ServicePlaceController extends BaseController
             $placeOwner = $placeService->getPlaceOwner($this->postParm("ownerPhoneNumber",""));
             if(!$placeOwner)
                 throw new PlaceOwnerNotFoundException("Place not found.");
-          
-            $this->responseDetails->setMessage("Place owner profile found");
-            $this->responseDetails->addDetail("placeOwner",$placeOwner);  
+
+            $this->setSuccessResponse("Place owner profile found",0,
+                        ['placeOwner' => $placeOwner]
+            );  
         }
         catch(Exception $ex){
-            $this->logException($ex);
             $ex = BaseException::CREATE($ex);
-            $this->responseDetails->setCode($ex->getCode());
-            $this->responseDetails->setMessage($ex->getMessage());
-            $this->responseDetails->addDetail("exception", $ex);
+            $this->setExceptionResponse($ex);
             $response->setStatusCode($ex->getResponseCode());
         }
         $response->setContent(json_encode($this->responseDetails));
@@ -267,18 +259,15 @@ class ServicePlaceController extends BaseController
                 throw new SecurityException("Access denied.");
             $places = $placeService->findPlacesByOwner($owner);
           
-            $this->responseDetails->addDetail("places", $places);
-            $this->responseDetails->addDetail("slugString",$this->getSessionParm(WLConstants::S_PLACE_PLACESLUGS,WLConstants::NONE));
-          
-            $this->responseDetails->setMessage("Place owner profile found");
-         
+            $this->setSuccessResponse("Place owner profile found",0,
+                ['places' => $places,
+                    'slugString' => $this->getSessionParm(WLConstants::S_PLACE_PLACESLUGS,WLConstants::NONE)
+                ]
+            ); 
         }
         catch(Exception $ex){
-            $this->logException($ex);
             $ex = BaseException::CREATE($ex);
-            $this->responseDetails->setCode($ex->getCode());
-            $this->responseDetails->setMessage($ex->getMessage());
-            $this->responseDetails->addDetail("exception", $ex);
+            $this->setExceptionResponse($ex);
             $response->setStatusCode($ex->getResponseCode());
         }
         $response->setContent(json_encode($this->responseDetails));
@@ -295,7 +284,7 @@ class ServicePlaceController extends BaseController
             $this->checkPlacePermissions([WLConstants::AUTHROLE_PLACE_OWNER, WLConstants::AUTHROLE_PLACE_MANAGER], $placeSlug);
 
             $place = $placeService->findPlace($placeSlug);
-           $this->logAlert("Method" . $this->request->getMethod());
+           
             switch($this->request->getMethod()) {
                 case 'POST':
                     switch ($reqType) {
@@ -309,8 +298,9 @@ class ServicePlaceController extends BaseController
                                 ->setDay($this->postParm("day",""));
 
                             $placeService->createUpdatePlaceSchedule($placeSchedule,scheduleid: $this->postParm("scheduleid",null));
-                            $this->responseDetails->addDetail("schedule",$place->getPlaceSchedules());
-                            $this->responseDetails->setMessage("Schedule change request completed.");
+                            $this->setSuccessResponse("Schedule change request completed.",0,
+                                ['schedule' => $place->getPlaceSchedules()]
+                            );
                             break;
                         
                         case 'holidays':
@@ -322,13 +312,15 @@ class ServicePlaceController extends BaseController
                             ->setSpecialNote($this->postParm("specialNote",""));
 
                             $placeService->createUpdatePlaceHolidays($placeHoliday, $this->postParm("holidayid",null));
-                            $this->responseDetails->addDetail("holidays",$place->getPlaceHolidays());
-                            $this->responseDetails->setMessage("Holiday change request completed.");
+                            $this->setSuccessResponse("Holiday change request completed.",0,
+                                ['holidays' => $place->getPlaceHolidays()]
+                            );
                             break;
 
                         case 'users':
-                            $this->responseDetails->addDetail("users",$place->getPlaceUsers());
-                            $this->responseDetails->setMessage("User change request received, not completed.");
+                            $this->setSuccessResponse("User change request received, not completed.",0,
+                                ['users' => $place->getPlaceUsers()]
+                            );
                             break;
 
                         case 'owner':
@@ -357,8 +349,9 @@ class ServicePlaceController extends BaseController
                             //Remove PlaceData from Response. 
                             //$placeOwner->setPlace(null);
                             //$response->setContent(json_encode($placeOwner));
-                            $this->responseDetails->addDetail("owner",$placeOwner);
-                            $this->responseDetails->setMessage("Owner change request completed.");
+                            $this->setSuccessResponse("Owner change request completed.",0,
+                                ['owner' => $placeOwner]
+                            );
                             break;
 
                         case 'queues':
@@ -377,8 +370,9 @@ class ServicePlaceController extends BaseController
                                         ->setQueuename($qname);
                                         
                             $placeService->createUpdateQueue($queue,$this->postParm("queueid",null));
-                            $this->responseDetails->addDetail("queues",$place->getPlaceQueues());
-                            $this->responseDetails->setMessage("Queue change request completed!");
+                            $this->setSuccessResponse("Queue change request completed!",0,
+                                ['queues' => $place->getPlaceQueues()]
+                            );
                             break;
 
                         case 'meta':
@@ -398,9 +392,9 @@ class ServicePlaceController extends BaseController
                             $place->setPhone($json->phone);
                             
                             $place = $placeService->createUpdatePlace($place,null);
-
-                            $this->responseDetails->addDetail("place",$place);
-                            $this->responseDetails->setMessage("Place update request completed.");
+                            $this->setSuccessResponse("Place update request completed.",0,
+                                ['place' => $place]
+                            );
                             break;
 
                         default:
@@ -412,16 +406,16 @@ class ServicePlaceController extends BaseController
                     switch ($reqType) {
                         case 'holidays':
                             $placeService->removeMetaEntity("holidays",$this->postParm("holidayid",""));
-                            $this->responseDetails->addDetail("holidays",$place->getPlaceHolidays());
-                            $this->responseDetails->setMessage("Holiday removed! ");
+                            $this->setSuccessResponse("Holiday removed!",0,
+                                ['holidays' => $place->getPlaceHolidays()]
+                            );
                             break;
-
                         case 'queues':
                             $placeService->removeMetaEntity($reqType,$this->postParm("queueid",""));
-                            $this->responseDetails->addDetail("queues",$place->getPlaceQueues());
-                            $this->responseDetails->setMessage("Queue removed! ");
+                            $this->setSuccessResponse("Queue removed! ",0,
+                                ['queues' => $place->getPlaceQueues()]
+                            );
                             break;
-
                         default:
                             throw new InvalidRequestException("Invalid Request", 9321, [], null);
                     }
@@ -433,11 +427,8 @@ class ServicePlaceController extends BaseController
             $response->setStatusCode(Response::HTTP_OK);
         }
         catch(Exception $ex){
-            $this->logException($ex);
             $ex = BaseException::CREATE($ex);
-            $this->responseDetails->setCode($ex->getCode());
-            $this->responseDetails->setMessage($ex->getMessage());
-            $this->responseDetails->addDetail("exception", $ex->__toString());
+            $this->setExceptionResponse($ex);
             $response->setStatusCode($ex->getResponseCode());
         } 
 
@@ -503,18 +494,17 @@ class ServicePlaceController extends BaseController
             //$placeService->createUpdatePlaceOwner($placeOwner);
 
             $this->setSessionParm(WLConstants::S_PLACE_SLUG, $place->getSlug());
-
-            $this->responseDetails->setMessage("Place " . $place->getName() . " created!");
-            $this->responseDetails->addDetail("placeSlug",$place->getSlug());
-           
+            $this->setSuccessResponse("Place " . $place->getName() . " created!",0,
+                        ['place' => $place,
+                         'placeSlug' => $place->getSlug()
+                        ]
+            );
+       
             $response->setStatusCode(Response::HTTP_OK);
         }
         catch(Exception $ex){
-            $this->logException($ex);
             $ex = BaseException::CREATE($ex);
-            $this->responseDetails->setCode($ex->getCode());
-            $this->responseDetails->setMessage($ex->getMessage());
-            $this->responseDetails->addDetail("exception", $ex->__toString());
+            $this->setExceptionResponse($ex);
             $response->setStatusCode($ex->getResponseCode());
         } 
         $response->setContent(json_encode($this->responseDetails));
