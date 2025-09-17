@@ -7,6 +7,7 @@ use RI5\DB\Entity\Data\WLConstants;
 use DateTimeInterface;
 use Exception;
 use RI5\DB\Entity\Data\AuthToken;
+use RI5\Exception\BaseException;
 use RI5\Exception\SecurityException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use RI5\Services\Traits\LoggerAwareTrait;
@@ -47,9 +48,9 @@ class BaseController extends AbstractController
     public function setSuccessResponse(string $message = "Success", int $code = 0, mixed $details =[]){
         $this->responseDetails->set($message, $code, $details);  
     }
-    public function setExceptionResponse(Exception $exception){
-        $this->logException($exception);
-        $this->responseDetails->set($exception->getMessage(),$exception->getCode(),$exception->getMessage());
+    public function setExceptionResponse(BaseException $exception){
+        $this->logException($exception->getInnerException());
+        $this->responseDetails->set($exception->getMessage(),$exception->getCode(),["exception"=>$exception->getMessage()]);
         $this->responseDetails->addDetail("exception", $exception->__toString());
     }
     /**

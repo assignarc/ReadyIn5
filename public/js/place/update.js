@@ -45,7 +45,7 @@
             data: JSON.stringify(formData),
         }).done(function(response) {
             showNotification("info","Restautant profile updated!");
-            initializePhoneField();
+            initializePhoneField("phone","phoneInput","save");
         }).fail(function(jqXHR,textStatus, errorThrow){
             showNotification("error","Error loading Place Profile");
         });
@@ -67,12 +67,19 @@
             $("#postalcode").val(response.details.place.postalcode);
             $("#phone").val(response.details.place.phone);
             showNotification("info","Restautant profile loaded!");
+            initializePhoneField("phone","phoneInput", "save");
         }).fail(function(jqXHR,textStatus, errorThrow){
             showNotification("error","Error updating Place Profile");
         });
     }
+
+    /*Phone Field */
+    //Needs a variable for storing phone with country code
+    var phoneInput; 
+    initializePhoneField("phone","phoneInput", "save");
     
     loadPlaceProfile();
+
 
 /*Schedules*/
 
@@ -289,15 +296,15 @@
         pageIndex: 1,
         autoload: true,
 
-        deleteConfirm: function(queue) {
-            return "The Users: \"" + queue.queuename + "\" will be removed. Are you sure?";
+        deleteConfirm: function(user) {
+            return "The Users: \"" + user.username + "\" will be removed. Are you sure?";
         },
-        deleteItem: function(queue){
+        deleteItem: function(user){
             $.ajax({
                 url: "/svc/place/"+wlPlaceSlug+"/profile/users" ,
                 contentType: 'json',
                 method:"DELETE",
-                data: JSON.stringify(queue),
+                data: JSON.stringify(user),
             }).done(function(response) {
                 showNotification("info","Place Users removed");
                 $("#jsUsers").jsGrid("loadData");
@@ -307,8 +314,6 @@
             return false;
         },
         onItemUpdating: function(args) { 
-            args.item.capcityTotal = args.item.capacityAdults  + args.item.capacityChildren;
-            console.log(args.item);
             var d = $.Deferred();
             $.ajax({
                 url: "/svc/place/"+wlPlaceSlug+"/profile/users",
@@ -324,20 +329,21 @@
             });
             return d.promise();
         },
-        // rowClick: function(args) {
-        //     showQueueDetailsDialog("Edit", args.item);
-        // },
+        rowClick: function(args) {
+            showUsersDetailsDialog("Edit", args.item);
+        },
 
         controller: {
             loadData: function() {
                 var d = $.Deferred();
-            // console.log(wlPlaceSlug);
+           
                 $.ajax({
                     url: "/svc/place/"+wlPlaceSlug+"/profile/users",
                     method:"GET",
                     contentType: "json",
                 }).done(function(response) {
-                    d.resolve(response.details.queues);
+                    d.resolve(response.details.users);
+                    initializePhoneField("userphone","userPhoneInput","usersave");
                     showNotification("info","Users loaded!");
                 }).fail(function(jqXHR,textStatus, errorThrow){
                     showNotification("error",textStatus);
@@ -348,12 +354,12 @@
 
         fields: [
             { name: "phone", title:"Phone", required:"true", type: "text",headercss: "wLRestScheduleHeader" },
-            { name: "username", title:"Name" ,type: "number", headercss: "wLRestScheduleHeader"},
-            { name: "accessadmin", title:"Children", type: "number", align:"right", wlDateDisplayFormat:"default",headercss: "wLRestScheduleHeader"},
-            { name: "accessreservation", title:"Total", type: "number", readOnly:"true", align:"right", wlDateDisplayFormat:"default",headercss: "wLRestScheduleHeader"},
+            { name: "username", title:"User name" ,type: "text", headercss: "wLRestScheduleHeader"},
+            { name: "accessadmin", title:"Access Admin", type: "checkbox", align:"right", wlDateDisplayFormat:"default",headercss: "wLRestScheduleHeader"},
+            { name: "accessreservation", title:"Access Reservation", type: "checkbox", readOnly:"false", align:"right", wlDateDisplayFormat:"default",headercss: "wLRestScheduleHeader"},
             { type: "control" , headercss: "wLRestScheduleHeader",
                     modeSwitchButton: false,
-                    editButton: true,
+                    editButton: false,
             }
         ]
     });
@@ -410,8 +416,7 @@
             saveClient(holiday, dialogType === "Add");
         };
         
-        $("#detailsDialog").dialog("option", "title", dialogType + " Holiday")
-                .dialog("open");
+        $("#detailsDialog").dialog("option","title", "Holiday").dialog("open");
     };
     var saveClient = function(holiday, isNew) {
         
@@ -437,7 +442,7 @@
         
     };
 
-
+  
 /* User Details Dialog */
     $("#detailsUsersDialog").dialog({
         autoOpen: false,
@@ -450,13 +455,11 @@
 
     $("#detailsUsersForm").validate({
         rules: {
-            phone: "required",
+            userphone: "required",
             username: "required",
-            accessadmin: "required",
-            accessreservation: "required"
         },
         messages: {
-            phone: "Please enter phone of User",
+            userphone: "Please enter phone of User",
             username: "Please enter username for the User",
             accessadmin: "Please decide to give admin access",
             accessreservation: "Please decide to give reservation access"
@@ -468,35 +471,37 @@
     var formUsersSubmitHandler = $.noop;
     var showUsersDetailsDialog = function(dialogType, user) {
         if(dialogType=="Add"){
-            $("placeuserid").val("");
-            $("#phone").val("");
+            $("#placeuserid").val("");
+            $("#userphone").val("");
             $("#username").val("");
-            $("#accessadmin").val("");
-            $("#accessreservation").val("");
+            $("#accessadmin").prop("checked", false);
+            $("#accessreservation").prop("checked", false);
+            initializePhoneField("userphone","userPhoneInput","usersave");
         }
         if(dialogType=="Edit"){
-            $("placeuserid").val("");
-            $("#phone").val(user.phone);
+            $("#placeuserid").val(user.placeuserid);
+            $("#userphone").val(user.phone);
             $("#username").val(user.username);
-            $("#accessadmin").val(user.accessadmin);
-            $("#accessreservation").val(user.accessreservation);
+            $("#accessadmin").prop("checked",user.accessadmin);
+            $("#accessreservation").prop("checked",user.accessreservation);
+            initializePhoneField("userphone","userPhoneInput","usersave");
         }
         formUsersSubmitHandler = function(event) {
             saveUserClient(user, dialogType === "Add");
         };
         
-        $("#detailsUsersDialog").dialog("option", "title", dialogType + " User")
+        $("#detailsUsersDialog").dialog("option", "modal","title", dialogType + " User")
                 .dialog("open");
     };
     var saveUserClient = function(user, isNew) {
         formData = {
             "placeuserid":$("#placeuserid").val(),
-            "phone":$("#phone").val(),
+            "phone":$("#userphone").val(),
             "username":$("#username").val(),
-            "accessadmin":$("#accessadmin").val(),
-            "accessreservation":$("#accessreservation").val()
+            "accessadmin":$("#accessadmin").is(":checked"),
+            "accessreservation":$("#accessreservation").is(":checked")
         };
-        $("#detailsDialog").dialog("close");
+        $("#detailsUsersDialog").dialog("close");
         $.ajax({
             url: "/svc/place/"+wlPlaceSlug+"/profile/users" ,
             contentType: "json",
@@ -504,13 +509,20 @@
             data: JSON.stringify(formData),
         }).done(function(response) {
             showNotification("info","Users Updated!");
-            $("#jsHolidays").jsGrid("loadData");
+            $("#jsUsers").jsGrid("loadData");
         }).fail(function(jqXHR,textStatus, errorThrow){
             showNotification("error",textStatus);
         });
 
         
     };
+
+
+    /*Phone Field */
+   
+    //Needs a variable for storing phone with country code
+    var userPhoneInput;
+    initializePhoneField("userphone","userPhoneInput","usersave");
 
 
 /* Image controls */
@@ -533,23 +545,6 @@
             });
     } );
 
-/* Miscellaneous  */
-    $("#tabs").tabs();
 
-/*Phone Field */
-    
-    function process(event) {
-        $("#phone").val(phoneInput.getNumber());
-    }
-    $(document).ready(function(){
-        initializePhoneField();
-    });
-    var phoneInputField ="phone"; 
-    var phoneInput; 
-    function initializePhoneField(){
-            phoneInput = window.intlTelInput(document.querySelector("#phone"), {
-                preferredCountries: ["us", "in",],
-                initialCountry: "auto",
-                utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
-            });
-    }
+
+   

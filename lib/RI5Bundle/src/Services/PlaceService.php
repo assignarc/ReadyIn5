@@ -18,6 +18,7 @@ use DateTime;
 use Exception;
 use RI5\DB\Entity\Data\WLConstants;
 use RI5\DB\Entity\PlaceQueue;
+use RI5\DB\Entity\PlaceUser;
 use RI5\DB\Events\PlaceUpdated;
 use RI5\Exception\BaseException;
 use RI5\Exception\InvalidRequestException;
@@ -195,6 +196,30 @@ class PlaceService extends BaseService
                     ->setSpecialNote($holiday->getSpecialNote());
 
             $this->placeHolidaysRepository->persistHoliday($holidayDB);
+        }
+
+    }
+    public function createUpdatePlaceUser(PlaceUser $user, ?string $placeUserid = "")
+    {
+        if ($placeUserid) {
+            $userDB = $this->placeUserRepository->findOneByPlaceuserid($placeUserid);
+            if ($userDB->getPlaceid() != $user->getPlaceid())
+                throw new PlaceInvalidRequestException("Invalid User Change request for the Place");
+        } else
+            $userDB = $this->placeUserRepository->findOneBy(array(
+                        "placeid" => $user->getPlaceid(),
+                        "username" => $user->getUsername(),
+                    ));
+        if (!$userDB)
+            $this->placeUserRepository->save($user, true);
+        else {
+            $userDB->setPlaceId($user->getPlaceId())
+                    ->setPhone($user->getPhone())
+                    ->setAccessadmin($user->getAccessadmin())
+                    ->setUsername($user->getUsername())
+                    ->setAccessreservation($user->getAccessreservation());
+
+            $this->placeUserRepository->save($userDB,true);
         }
 
     }

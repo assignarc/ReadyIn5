@@ -43,7 +43,7 @@
                         <p><label for="country" class="required">Country :</label><input type="text" name="country" id="country"  required="required" value=""></p>
                         <p><label for="postalcode" class="required">Postal Code :</label><input type="text" name="postalcode" id="postalcode" required="required" value=""></p>
                         <p><label for="phone" class="required">Phone :</label><input type="tel" id="phone" name="phone" required="required" value=""></p>
-                        <p><button type="submit" id="save" name="form[save]" onmousedown="process(event)">
+                        <p><button type="submit" id="save" name="form[save]">
                                 <span class="material-symbols-outlined">save</span>&nbsp;Save
                             </button></p>
                     </form>
@@ -162,13 +162,55 @@
                 <div id="jsQueues"></div>
             </div>
             <div id="tabs-6">
-           
-                <div id="jsUsers"></div>          
+                    <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-draggable ui-resizable" tabindex="-1" role="dialog" style="position: absolute; height: auto; width: 400px; top: 209.5px; left: 312px; display: none;">
+                    <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix ui-draggable-handle">
+                        <span id="ui-id-1" class="ui-dialog-title">Edit User</span>
+                        <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-dialog-titlebar-close" role="button" title="Close">
+                            <span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span>
+                            <span class="ui-button-text">Close</span>
+                        </button>
+                    </div>
+                    <div id="detailsUsersDialog" class="ui-dialog-content ui-widget-content" style="width: auto; min-height: 93px; max-height: none; height: auto;">
+                        <form id="detailsUsersForm" novalidate="novalidate">
+                            <input id="placeuserid" name="placeuserid" type="hidden" autocomplete="off">
+                            <p class="details-form-field">
+                                <label for="userphone">Phone:</label>
+                                <input id="userphone" name="userphone" type="text" autocomplete="off" class="valid">
+                            </p>
+                            <p class="details-form-field">
+                                <label for="username">Username:</label>
+                                <input id="username" name="username" type="text">
+                            </p>
+                            <p class="details-form-field">
+                                <label for="accessadmin">Admin:</label>
+                                <input id="accessadmin" name="accessadmin" type="checkbox">
+                            </p>
+                             <p class="details-form-field">
+                                <label for="accessreservation">Reservation:</label>
+                                <input id="accessreservation" name="accessreservation" type="checkbox">
+                            </p>
+                            <p class="details-form-field">
+                                <button type="submit" id="usersave">Save</button>
+                            </p>
+                        </form>
+                    </div>
+                    <div class="ui-resizable-handle ui-resizable-n" style="z-index: 90;"></div>
+                    <div class="ui-resizable-handle ui-resizable-e" style="z-index: 90;"></div>
+                    <div class="ui-resizable-handle ui-resizable-s" style="z-index: 90;"></div>
+                    <div class="ui-resizable-handle ui-resizable-w" style="z-index: 90;"></div>
+                    <div class="ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se" style="z-index: 90;"></div>
+                    <div class="ui-resizable-handle ui-resizable-sw" style="z-index: 90;"></div>
+                    <div class="ui-resizable-handle ui-resizable-ne" style="z-index: 90;"></div>
+                    <div class="ui-resizable-handle ui-resizable-nw" style="z-index: 90;"></div>
+                </div>
+                
+                <div id="jsUsers"></div>   
+                <button type="button" id="addNewUser" onclick="javascript:showUsersDetailsDialog('Add',{});"><span class="material-symbols-outlined">group</span>&nbsp;Add a User</button>   
             </div>
         </div>
     </div>
     
-    <script type="text/javascript" src="/js/place/update.js"></script>   
+   
     
     <!--JCrop Image Cropping-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-jcrop/0.9.15/css/jquery.Jcrop.min.css" integrity="sha512-bbAsdySYlqC/kxg7Id5vEUVWy3nOfYKzVHCKDFgiT+GsHG/3MD7ywtJnJNSgw++HBc+w4j71MLiaeVm1XY5KDQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -177,6 +219,7 @@
     <!-- Image edits and File Uploads -->
     <script src="/js/load-image/load-image-WL.js"></script>
     <script type="text/javascript" src="/js/load-image/load-image.all.min.js"></script>
-    <script type="text/javascript" src="/js/phonefield.js"></script>
+    <!--<script type="text/javascript" src="/js/phonefield.js"></script>-->
+    <script type="text/javascript" src="/js/place/update.js"></script>   
 
 {% endblock %}

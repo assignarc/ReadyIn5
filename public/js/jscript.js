@@ -79,6 +79,7 @@ $(document).ready(function () {
             $(".hamburger").show();
         });
     });
+    $("#tabs").tabs();
 });
 
 $(document).on("ajaxStart", function() {
@@ -131,7 +132,24 @@ function getStatusIcon(wlToStatus){
     }
     return wlToStatusIcon;
 }
+/* Phone Field functions */
 
+function initializePhoneField(field,variable,button){
+    window[variable] = window.intlTelInput(document.querySelector("#"+field), {
+                    initialCountry: "auto",
+                    autoPlaceholder: "aggressive",
+                    preferredCountries: ["us", "in"],
+                    initialCountry: "auto",
+                    loadUtils: () => import("https://cdn.jsdelivr.net/npm/intl-tel-input@25.10.7/build/js/utils.js"),
+        });
+    //If button is passed, use it to set up event. 
+    if(!button || button!=''){
+        $('#'+button).on("mousedown", function() {
+            $('#'+field).val(window[variable].getNumber());
+        });
+    }
+    
+}
 
 
 /*wlStatus Codes */ 

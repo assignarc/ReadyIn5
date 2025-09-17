@@ -4,6 +4,7 @@ namespace RI5\Exception;
 
 use Exception;
 use JsonSerializable;
+use Symfony\Component\DependencyInjection\Attribute\Exclude;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
@@ -14,6 +15,7 @@ class BaseException extends Exception implements JsonSerializable
     protected int $__RESPONSE_CODE__ = Response::HTTP_INTERNAL_SERVER_ERROR;
     protected string $exceptioName = __CLASS__;
     protected array $exceptionData = [];
+    protected Exception $innerException;
     // Redefine the exception so message isn't optional
    
 
@@ -46,12 +48,26 @@ class BaseException extends Exception implements JsonSerializable
     {
         return $this->__RESPONSE_CODE__;
     }
+    public function setInnerException(?Exception $e): self
+    {
+        $this->innerException = $e;
+        return $this;
+    }
+     public function getInnerException(): Exception
+    {
+        return $this->innerException;
+    }
+
 
     public static function CREATE(Exception $ex) : BaseException {
         if($ex instanceof BaseException)
             return $ex;
         else 
-            return new BaseException($ex->getMessage(),1,$ex);
+        {
+            
+            return new BaseException($ex->getMessage(),1,$ex)
+                            ->setInnerException($ex);
+        }
     }
    
     public function jsonSerialize() :mixed

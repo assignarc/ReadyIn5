@@ -17,7 +17,7 @@ use RI5\Services\Traits\ConfigAwareTrait;
 use RI5\Services\Traits\EntityAwareTrait;
 use RI5\Services\Traits\EventDispatcherTrait;
 use RI5\Services\Traits\LoggerAwareTrait;
-use RI5\DB\Entity\Data\ReservationId ;
+use RI5\DB\Entity\Data\ReservationId;
 use Symfony\Contracts\Cache\ItemInterface;
 use RI5\DB\Repository\ReservationArchiveRepository;
 use RI5\Services\Traits\UtilityTrait;

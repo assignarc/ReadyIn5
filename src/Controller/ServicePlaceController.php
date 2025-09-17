@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use RI5\DB\Entity\Data\ReservationStatus;
 use RI5\DB\Entity\Data\WLConstants;
+use RI5\DB\Entity\PlaceUser;
 use RI5\DB\Entity\Reservation;
 use RI5\DB\Entity\Place;
 use RI5\DB\Entity\PlaceHolidays;
@@ -305,11 +306,11 @@ class ServicePlaceController extends BaseController
                         
                         case 'holidays':
                             $placeHoliday = new PlaceHolidays()
-                            ->setPlace($place)
-                            ->setPlaceId($place->getPlaceId())
-                            ->setHolidayDate(new DateTime($this->postParm("holidayDate","")))
-                            ->setHolidayName($this->postParm("holidayName",""))
-                            ->setSpecialNote($this->postParm("specialNote",""));
+                                ->setPlace($place)
+                                ->setPlaceId($place->getPlaceId())
+                                ->setHolidayDate(new DateTime($this->postParm("holidayDate","")))
+                                ->setHolidayName($this->postParm("holidayName",""))
+                                ->setSpecialNote($this->postParm("specialNote",""));
 
                             $placeService->createUpdatePlaceHolidays($placeHoliday, $this->postParm("holidayid",null));
                             $this->setSuccessResponse("Holiday change request completed.",0,
@@ -318,7 +319,18 @@ class ServicePlaceController extends BaseController
                             break;
 
                         case 'users':
-                            $this->setSuccessResponse("User change request received, not completed.",0,
+                            $this->logMessageArray(["accessreservation",$this->postParm("accessreservation","false")]);
+                            $placeUser = new PlaceUser()
+                                ->setPlace($place)
+                                ->setPlaceid($place->getPlaceid())
+                                ->setUsername($this->postParm("username",""))
+                                ->setAccessreservation($this->postParm("accessreservation","false"))
+                                ->setPhone($this->postParm("phone",""))
+                                ->setAccessadmin($this->postParm("accessadmin","false"));
+
+                            $placeService->createUpdatePlaceUser($placeUser, $this->postParm("placeuserid",null));
+                                
+                            $this->setSuccessResponse("User change request completed.",0,
                                 ['users' => $place->getPlaceUsers()]
                             );
                             break;

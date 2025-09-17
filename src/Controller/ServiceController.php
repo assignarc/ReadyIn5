@@ -39,16 +39,14 @@ class ServiceController extends BaseController
 
                     $key = $otpService->createOtp(
                                     $this->getSessionParm(WLConstants::S_CUST_PHONE,WLConstants::NONE), 
-                                    array_merge([], 
-                                    $this->getSessionAllParms()), 
+                                    array_merge([], $this->getSessionAllParms()), 
                                     $this->getSessionParm(WLConstants::S_CUST_CONTACT_METHOD,"sms"),
                                     true);
 
                     $this->setSessionParm(WLConstants::S_CUST_AUTHORIZED,WLConstants::AUTH_UNAUTHORIZED);
 
                     $this->logDebug("OTP Key Added: Phone - {$this->postParm("phone", "")}; Key - {$key} ");
-
-                    $this->responseDetails->setMessage("OTP Sent successfully!");
+                    $this->setSuccessResponse("OTP Sent successfully!",0,[]);
 
                     break;
                 case 'verify':
@@ -64,7 +62,6 @@ class ServiceController extends BaseController
                         $this->setSuccessResponse("Passcode validated, " .  $this->getSessionParm(WLConstants::S_CUST_PHONE," ") . " verified.",0,
                             ['customer' => $customer]
                         );
-                       
                     }
                     else 
                         throw new SecurityException(message: "Access denied!");
@@ -104,15 +101,13 @@ class ServiceController extends BaseController
 
                     $key = $otpService->createOtp(
                                         $this->getSessionParm(WLConstants::S_PLACE_PHONE,WLConstants::NONE), 
-                                        array_merge([], 
-                                        $this->getSessionAllParms()), 
+                                        array_merge([], $this->getSessionAllParms()), 
                                         $this->getSessionParm(WLConstants::S_CUST_CONTACT_METHOD,"sms"),
                                         true);
                     $this->setSessionParm(WLConstants::S_PLACE_AUTHORIZED,WLConstants::AUTH_UNAUTHORIZED);
                    
                     $this->logDebug("OTP Key Added: Phone - {$this->postParm("phone", "")}; Key - {$key} ");
-                   
-                    $this->responseDetails->setMessage("OTP Sent successfully!");
+                    $this->setSuccessResponse("OTP Sent successfully!",0,[]);
 
                     break;
                 case 'verify':
@@ -137,8 +132,8 @@ class ServiceController extends BaseController
                         }
                         $this->setSessionParm(WLConstants::S_PLACE_PLACESLUGS,$slugString);
                         $response->headers->set("token",$this->createSecurityToken());
-                        $this->responseDetails->setMessage("Passcode validated, " .  $this->getSessionParm(WLConstants::S_PLACE_PHONE," ") . " verified." );
-                    }
+                        $this->setSuccessResponse("passcode validated" .  $this->getSessionParm(WLConstants::S_PLACE_PHONE," ") . " verified." ,0,[]);
+                     }
                     else
                         throw new SecurityException("Access denied!");     
                         

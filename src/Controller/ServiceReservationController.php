@@ -5,7 +5,6 @@ namespace App\Controller;
 use RI5\DB\Entity\Data\ReservationStatus;
 use RI5\DB\Entity\Data\WLConstants;
 use RI5\Exception\BaseException;
-use RI5\Exception\SecurityException;
 use RI5\Services\ReservationService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -57,7 +56,7 @@ class ServiceReservationController extends BaseController
             }
             $reservationId = $this->postParm("reservationId",null);
             $reservation = $reservationService->updateReservationStatus($reservationId, ReservationStatus::from("CANCEL"));
-            $this->responseDetails->setMessage("Success! Reservation set to " .  "CANCEL");
+            $this->setSuccessResponse("Success! Reservation set to " .  "CANCEL",0,[]);
             $response->setStatusCode(Response::HTTP_OK);
         }
         catch(Exception $ex){
