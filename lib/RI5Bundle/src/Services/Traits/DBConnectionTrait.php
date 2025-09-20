@@ -3,10 +3,7 @@ namespace RI5\Services\Traits;
 
 use Exception;
 use RI5\Services\ConnectionService;
-use Symfony\Contracts\Cache\ItemInterface;
-use Symfony\Contracts\Cache\TagAwareCacheInterface;
 use Symfony\Contracts\Service\Attribute\Required;
-use Symfony\Component\Lock\LockFactory;
 
 trait DBConnectionTrait{
     use LoggerAwareTrait;

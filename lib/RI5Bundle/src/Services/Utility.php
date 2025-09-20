@@ -2,7 +2,6 @@
 
 namespace RI5\Services;
 
-use Psr\Log\LoggerInterface;
 
 class Utility extends BaseService 
 {

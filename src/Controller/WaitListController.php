@@ -2,8 +2,6 @@
 
 namespace App\Controller;
 
-use RI5\DB\Entity\Customer;
-use RI5\DB\Entity\Data\WLConstants;
 use RI5\Services\CustomerService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;

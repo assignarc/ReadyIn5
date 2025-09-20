@@ -12,7 +12,6 @@ use RI5\DB\Entity\PlaceOwner;
 use RI5\DB\Entity\PlaceSchedule;
 use RI5\Exception\BaseException;
 use RI5\Exception\InvalidRequestException;
-use RI5\Exception\PlaceInvalidRequestException;
 use RI5\Exception\PlaceNotFoundException;
 use RI5\Exception\SecurityException;
 use RI5\Services\CustomerService;

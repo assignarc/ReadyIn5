@@ -4,10 +4,8 @@ namespace RI5\Exception;
 
 use Exception;
 use JsonSerializable;
-use Symfony\Component\DependencyInjection\Attribute\Exclude;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
-
 class BaseException extends Exception implements JsonSerializable
 {
     protected string $__REDIRECTION_ROUTE__ = "CUST_Login";
@@ -18,7 +16,7 @@ class BaseException extends Exception implements JsonSerializable
     protected Exception $innerException;
     // Redefine the exception so message isn't optional
    
-
+    
     public function __construct(string $message, int $code = 1, ?Throwable $previous) {
         // make sure everything is assigned properly
         parent::__construct(message: $message, code: $code, previous: $previous);
@@ -53,7 +51,7 @@ class BaseException extends Exception implements JsonSerializable
         $this->innerException = $e;
         return $this;
     }
-     public function getInnerException(): Exception
+     public function getInnerException(): ?Exception
     {
         return $this->innerException;
     }

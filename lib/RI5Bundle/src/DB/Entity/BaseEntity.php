@@ -2,8 +2,6 @@
 
 namespace RI5\DB\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
-use JsonSerializable;
 use RI5\Services\Traits\UtilityTrait;
 
 class BaseEntity 

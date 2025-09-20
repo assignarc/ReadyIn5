@@ -2,17 +2,24 @@
 
 namespace RI5\Services;
 
-use Psr\Log\LogLevel;
 use RI5\Services\IMessengerService;
 use RI5\Services\Traits\ConfigAwareTrait;
 use RI5\Services\Traits\LoggerAwareTrait;
-use Twilio\Rest;
 
-
+/**
+ * Summary of TwilioMessageService
+ */
 class TwilioMessageService extends BaseService implements IMessengerService
 {
     use ConfigAwareTrait;
     use LoggerAwareTrait;
+    /**
+     * Summary of sendMessage
+     * @param string $phoneNumber
+     * @param string $message
+     * @param string $type
+     * @return void
+     */
     public function sendMessage(string $phoneNumber,string $message = null, string $type="sms")  { 
 
         $send = boolval($this->getConfigItem("RI5.MESSAGE.send"));

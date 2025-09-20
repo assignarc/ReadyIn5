@@ -136,10 +136,11 @@ function getStatusIcon(wlToStatus){
 
 function initializePhoneField(field,variable,button){
     window[variable] = window.intlTelInput(document.querySelector("#"+field), {
-                    initialCountry: "auto",
                     autoPlaceholder: "aggressive",
-                    preferredCountries: ["us", "in"],
+                    onlyCountries: ["us", "in"],
                     initialCountry: "auto",
+                    autoHideDialCode: true,
+                    autoPlaceholder: "ON",
                     loadUtils: () => import("https://cdn.jsdelivr.net/npm/intl-tel-input@25.10.7/build/js/utils.js"),
         });
     //If button is passed, use it to set up event. 

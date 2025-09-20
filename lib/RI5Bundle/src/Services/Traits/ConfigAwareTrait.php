@@ -11,7 +11,11 @@ trait ConfigAwareTrait{
     public function setParameterBag(ParameterBagInterface $parameterBag){
         $this->parameters = $parameterBag->get("RI5");
     }
-
+    /**
+     * Summary of getConfigItem
+     * @param string $key
+     * @param mixed $default
+     */
     public function getConfigItem(string $key, $default = null) {
         if (isset($this->parameters[$key])) {
             return $this->parameters[$key];

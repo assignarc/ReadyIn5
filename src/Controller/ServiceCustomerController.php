@@ -3,20 +3,17 @@
 namespace App\Controller;
 
 use RI5\Exception\BaseException;
-use RI5\Exception\SecurityException;
 use RI5\Services\CustomerService;
 use RI5\Services\ReservationService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Exception;
 use RI5\DB\Entity\Customer;
-use RI5\DB\Entity\Data\AuthToken;
 use RI5\DB\Entity\Data\ReservationStatus;
 use RI5\DB\Entity\Data\WLConstants;
 use RI5\DB\Events\DataNormalizationNeeded;
 use RI5\DB\Events\TimeUp;
 use RI5\Services\Traits\EventDispatcherTrait;
-use Twig\Node\Expression\Test\NullTest;
 
 #[Route('/svc')]
 class ServiceCustomerController extends BaseController

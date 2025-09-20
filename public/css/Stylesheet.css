@@ -418,12 +418,15 @@ input[type="file" i].wlFileInput {
 .wlImgControls {
   float: left;
   overflow: hidden;
+  width:95%;
 }
 
 .wlImgResults {
   overflow: hidden;
 }
-
+.wlImgResultNode{
+  width:60px;
+}
 .wlChild {
   display: inline-block;
   border: 1px dotted gray;

@@ -1,7 +1,6 @@
 <?php
 namespace RI5\Services\Traits;
 
-use Exception;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Symfony\Contracts\Service\Attribute\Required;
@@ -11,11 +10,20 @@ trait LoggerAwareTrait{
     private LoggerInterface $logger;
    
     #[Required]
+    /**
+     * Summary of setLogger
+     * @param \Psr\Log\LoggerInterface $logger
+     * @return void
+     */
     public function setLogger(LoggerInterface $logger)
     {
         $this->logger = $logger;
     }
-
+    /**
+     * Summary of logException
+     * @param \Throwable $ex
+     * @return void
+     */
     protected function logException(Throwable $ex){
         $exceptionClass = get_class($ex);
         switch($exceptionClass){
@@ -36,7 +44,11 @@ trait LoggerAwareTrait{
         }
        
     }
-     
+    /**
+     * Summary of logDebug
+     * @param string $message
+     * @return void
+     */
     public function logDebug(string $message){
         $this->logMessage($message,LogLevel::DEBUG);
     }
@@ -58,7 +70,12 @@ trait LoggerAwareTrait{
     public function logNotice(string $message){
         $this->logMessage($message,LogLevel::NOTICE);
     }
-
+    /**
+     * Summary of logMessageArray
+     * @param array $message
+     * @param mixed $level
+     * @return void
+     */
     public function logMessageArray(array $message, ?string $level=null){   
         switch($level){
             case LogLevel::CRITICAL:
@@ -92,7 +109,13 @@ trait LoggerAwareTrait{
                 break;
         }
     } 
-    private function logMessage(string $message, ?string $level=null){   
+    /**
+     * Summary of logMessage
+     * @param string $message
+     * @param mixed $level
+     * @return void
+     */
+    private function logMessage(string $message, $level=LogLevel::DEBUG){   
         switch($level){
             case LogLevel::CRITICAL:
                 $this->logger->critical($message);

@@ -3,7 +3,6 @@
 namespace RI5\Services\Traits;
 
 use Exception;
-use Psr\Log\LoggerTrait;
 
 trait UtilityTrait {
     /**

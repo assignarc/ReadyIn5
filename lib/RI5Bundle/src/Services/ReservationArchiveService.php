@@ -3,29 +3,17 @@
 namespace RI5\Services;
 
 use RI5\DB\Entity\Data\ReservationStatus;
-use RI5\DB\Entity\Reservation;
-use RI5\Exception\InvalidRequestException;
-use RI5\Exception\ReservationNotFoundException;
-use RI5\Exception\ReservationStatusException;
 use DateTime;
-use DateTimeInterface;
-use Doctrine\Common\Collections\Criteria;
 use Exception;
-use Psr\Log\LoggerTrait;
-use RI5\DB\Events\ReservationStatusChanged;
 use RI5\DB\Repository\ReservationRepository;
 use RI5\Services\Traits\CacheAwareTrait;
 use RI5\Services\Traits\ConfigAwareTrait;
 use RI5\Services\Traits\EntityAwareTrait;
 use RI5\Services\Traits\EventDispatcherTrait;
 use RI5\Services\Traits\LoggerAwareTrait;
-use RI5\DB\Entity\Data\ReservationId ;
-use RI5\DB\Entity\Data\WLConstants;
 use RI5\DB\Entity\ReservationArchive;
-use Symfony\Contracts\Cache\ItemInterface;
 use RI5\DB\Repository\ReservationArchiveRepository;
 use RI5\Services\Traits\UtilityTrait;
-use Symfony\Component\DependencyInjection\Loader\Configurator\Traits\ConfiguratorTrait;
 
 class ReservationArchiveService extends BaseService 
 {

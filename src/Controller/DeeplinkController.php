@@ -6,8 +6,6 @@ use RI5\DB\Entity\Data\WLConstants;
 use RI5\Exception\OtpException;
 use RI5\Services\OtpService;
 use Exception;
-use Psr\Log\LogLevel;
-use RI5\Services\Traits\LoggerAwareTrait;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 

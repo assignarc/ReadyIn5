@@ -27,7 +27,11 @@ class BackOfficeSubscriber extends BaseSubscriber implements EventSubscriberInte
             DataNormalizationNeeded::NAME => 'onDataNormalizationNeeded',
         ];
     }
-   
+    /**
+     * Summary of onTimeUp
+     * @param \RI5\DB\Events\TimeUp $event
+     * @return void
+     */
     public function onTimeUp(TimeUp $event){
        
         try{
@@ -40,6 +44,11 @@ class BackOfficeSubscriber extends BaseSubscriber implements EventSubscriberInte
             $this->logException($ex);
         }
     }
+    /**
+     * Summary of onDataNormalizationNeeded
+     * @param \RI5\DB\Events\DataNormalizationNeeded $event
+     * @return void
+     */
     public function onDataNormalizationNeeded(DataNormalizationNeeded $event){
        
         try{

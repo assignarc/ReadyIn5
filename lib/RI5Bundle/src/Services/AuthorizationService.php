@@ -25,7 +25,13 @@ class AuthorizationService extends BaseService
         $token->setAuthorized($auth);
         return $token;
     }
-
+    /**
+     * Summary of isCustomerAuthorized
+     * @param string $tokenString
+     * @param \RI5\DB\Entity\Data\AuthToken $token
+     * @param \RI5\DB\Entity\Customer $customer
+     * @return bool
+     */
     public function isCustomerAuthorized(string $tokenString ="", AuthToken $token, Customer $customer ):bool{
         if($token)
             return ($token->userId == $customer->getUserid()) && $token->isAuthorized();

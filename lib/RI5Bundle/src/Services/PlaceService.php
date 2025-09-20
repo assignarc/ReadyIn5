@@ -196,6 +196,7 @@ class PlaceService extends BaseService
                     ->setSpecialNote($holiday->getSpecialNote());
 
             $this->placeHolidaysRepository->persistHoliday($holidayDB);
+             $this->dispatchEvent(new PlaceUpdated($$holidayDB->getPlace()), PlaceUpdated::NAME);
         }
 
     }
@@ -220,10 +221,17 @@ class PlaceService extends BaseService
                     ->setAccessreservation($user->getAccessreservation());
 
             $this->placeUserRepository->save($userDB,true);
+             $this->dispatchEvent(new PlaceUpdated($userDB->getPlace()), PlaceUpdated::NAME);
         }
 
     }
-
+    /**
+     * Summary of createUpdatePlaceSchedule
+     * @param \RI5\DB\Entity\PlaceSchedule $schedule
+     * @param mixed $scheduleid
+     * @throws \RI5\Exception\PlaceInvalidRequestException
+     * @return void
+     */
     public function createUpdatePlaceSchedule(PlaceSchedule $schedule, ?string $scheduleid = "")
     {
 
@@ -250,8 +258,15 @@ class PlaceService extends BaseService
                 ->setCloseTime($schedule->getCloseTime())
                 ->setShift($schedule->getShift());
         $this->placeScheduleRepository->save($scheduleDB, true);
+         $this->dispatchEvent(new PlaceUpdated($scheduleDB->getPlace()), PlaceUpdated::NAME);
     }
-
+    /**
+     * Summary of createUpdateQueue
+     * @param \RI5\DB\Entity\PlaceQueue $queue
+     * @param mixed $queueid
+     * @throws \RI5\Exception\PlaceInvalidRequestException
+     * @return void
+     */
     public function createUpdateQueue(PlaceQueue $queue, ?string $queueid = null)
     {
         $queueDB = null;
@@ -440,7 +455,7 @@ class PlaceService extends BaseService
             if ($placeOwner) {
                 // $placeOwner->setPlaces([$this->objectRepository->findOneBySlug($placeDB->getSlug())]);
                 $placeOwner = $this->createUpdatePlaceOwner($placeOwner);
-                $placeDB->setPlaceOwners($placeOwner);
+                $placeDB->setPlaceOwner($placeOwner);
             }
             $this->objectRepository->save($placeDB, true);
             $this->entityManager->getConnection()->commit();
@@ -462,7 +477,13 @@ class PlaceService extends BaseService
         $data = $this->objectRepository->findAll();
         return $data;
     }
-
+    /**
+     * Summary of getPlaceMeta
+     * @param string $placeSlug
+     * @param string $reqType
+     * @throws \RI5\Exception\InvalidRequestException
+     * @return mixed
+     */
     public function getPlaceMeta(string $placeSlug, string $reqType): mixed
     {
 

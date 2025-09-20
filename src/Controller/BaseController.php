@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 //https://ourcodeworld.com/articles/read/1386/how-to-generate-the-entities-from-a-database-and-create-the-crud-automatically-in-symfony-5
 
 
-class BaseController extends AbstractController
+abstract class BaseController extends AbstractController
 {
   
     protected $session;

@@ -8,6 +8,11 @@ trait LockerTrait{
     private LockFactory $lockFactory;
    
     #[Required]
+    /**
+     * Summary of setLocker
+     * @param \Symfony\Component\Lock\LockFactory $lockFactory
+     * @return void
+     */
     public function setLocker(LockFactory $lockFactory){
         $this->lockFactory = $lockFactory;
     }

@@ -5,8 +5,14 @@ namespace RI5\Services\Traits;
 trait EncryptionTrait{
 
    
-
-    //https://gist.github.com/adalenv/4d89c0ae3f6a1b08261ae64ef213942d
+ 
+   
+    /**
+     * Summary of Encode  //https://gist.github.com/adalenv/4d89c0ae3f6a1b08261ae64ef213942d
+     * @param mixed $string
+     * @param mixed $key
+     * @return string
+     */
     public static function Encode($string,$key = "KEY4d89c0ae") : string {
         $key = sha1($key);
         $strLen = strlen($string);
@@ -22,7 +28,13 @@ trait EncryptionTrait{
         }
         return base64_encode($hash);
     }
-    //https://gist.github.com/adalenv/4d89c0ae3f6a1b08261ae64ef213942d
+   
+    /**
+     * Summary of Decode  //https://gist.github.com/adalenv/4d89c0ae3f6a1b08261ae64ef213942d
+     * @param mixed $inString
+     * @param mixed $key
+     * @return string
+     */
     public static function Decode($inString,$key = "KEY4d89c0ae") :string {
         $string = base64_decode($inString);
         $key = sha1($key);

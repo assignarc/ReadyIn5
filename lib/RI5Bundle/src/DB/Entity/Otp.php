@@ -2,7 +2,6 @@
 
 namespace RI5\DB\Entity;
 
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use JsonSerializable;
 

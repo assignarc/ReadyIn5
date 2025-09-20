@@ -60,7 +60,7 @@ class PlaceSchedule extends BaseEntity implements JsonSerializable
     
     /**
      * Many Schedules has One Place.
-     * @ORM\ManyToOne(targetEntity="Place", inversedBy="schedules" , cascade={"persist","refresh"})
+     * @ORM\ManyToOne(targetEntity="Place", inversedBy="placeSchedules" , cascade={"persist","refresh"})
      * @ORM\JoinColumn(name="placeid", referencedColumnName="placeid")
     */
     private Place $place;

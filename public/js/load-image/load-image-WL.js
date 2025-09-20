@@ -27,6 +27,17 @@ $(function () {
     var cancelNode = $('#cancel')
     var coordinates
     var jcropAPI
+
+    var wLImgOptions = {
+        maxWidth: 60,//resultNode.width(),
+        maxHeight: 60,
+        canvas: true,
+        pixelRatio: window.devicePixelRatio,
+        downsamplingRatio: 0.5,
+        orientation: Number(orientationNode.val()) || true,
+        imageSmoothingEnabled: imageSmoothingNode.is(':checked'),
+        meta: false
+      }
   
     /**
      * Displays tag data
@@ -168,13 +179,14 @@ $(function () {
      */
     function displayImage(file) {
       var options = {
-        maxWidth: resultNode.width(),
-        canvas: true,
-        pixelRatio: window.devicePixelRatio,
-        downsamplingRatio: 0.5,
-        orientation: Number(orientationNode.val()) || true,
-        imageSmoothingEnabled: imageSmoothingNode.is(':checked'),
-        meta: true
+        maxWidth: wLImgOptions.maxWidth,
+        maxHeight: wLImgOptions.maxHeight,
+        canvas: wLImgOptions.canvas,
+        pixelRatio: wLImgOptions.pixelRatio,
+        downsamplingRatio: wLImgOptions.downsamplingRatio,
+        orientation: wLImgOptions.orientation,
+        imageSmoothingEnabled: wLImgOptions.imageSmoothingEnabled,
+        meta: wLImgOptions.meta,
       }
       if (!loadImage(file, updateResults, options)) {
         removeMetaData()

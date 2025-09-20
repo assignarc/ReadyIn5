@@ -4,7 +4,7 @@
 /*Schedules*/
 
     $("#jsSchedule").jsGrid({
-        width: "96%",
+        width: "auto",
         inserting: false,
         editing: false,
         sorting: false,
@@ -17,12 +17,12 @@
             loadData: function() {
                 var d = $.Deferred();
                 $.ajax({
-                    url: "/svc/place/"+wlPlaceSlug+"/profile/schedule",
+                    url: "/svc/place/"+wlPlaceSlug+"/profile/schedules",
                     method:"GET",
                     dataType: "json"
                 }).done(function(response) {
                     showNotification("info","Schedules loaded!");
-                    d.resolve(response.details.schedule);
+                    d.resolve(response.details.schedules);
                 }).fail(function(jqXHR,textStatus, errorThrow){
                     showNotification("error",JSON.parse(jqXHR.responseText).text);
                 });
@@ -32,21 +32,21 @@
         },
        
         fields: [
-            { name: "day", title:"Day",readOnly:true, width: 10, headercss: "wLRestScheduleHeader"},
-            { name: "openTime", title:"Open" ,readOnly:true, type: "time",width:10, align:"right", headercss: "wLRestScheduleHeader"},
-            { name: "closeTime", title:"Close", readOnly:true, type: "time", width:10, align:"right", headercss: "wLRestScheduleHeader"},
+            { name: "day", title:"Day",readOnly:true, width: "auto", headercss: "wLRestScheduleHeader"},
+            { name: "openTime", title:"Open" ,readOnly:true, type: "time", align:"right", headercss: "wLRestScheduleHeader"},
+            { name: "closeTime", title:"Close", readOnly:true, type: "time", align:"right", headercss: "wLRestScheduleHeader"},
         ]
     });
 
 /* Holidays */
 
     $("#jsHolidays").jsGrid({
-        width: "96%",
+        width: "100%",
         inserting: false,
         editing: false,
         sorting: false,
         paging: true,
-        pageSize: 5,
+        pageSize: 50,
         pageIndex: 1,
         autoload: true,
       
@@ -54,7 +54,6 @@
         controller: {
             loadData: function() {
                 var d = $.Deferred();
-            // console.log(wlPlaceSlug);
                 $.ajax({
                     url: "/svc/place/"+wlPlaceSlug+"/profile/holidays",
                     method:"GET",
@@ -70,12 +69,7 @@
         },
   
         fields: [
-            { name: "holidayName", title:"Holiday", type: "text",  validate: "required",headercss: "wLRestScheduleHeader" ,
-                itemTemplate: function(value, item) {  
-                         return "<b>" + item.holidayName + "</b><br>" + item.specialNote;
-                }
-            },
-            { name: "holidayDate", title:"Date", type: "date", align:"right", wlDateDisplayFormat:"default",headercss: "wLRestScheduleHeader",
+           { name: "holidayDate", title:"Date", type: "date", width:"auto", align:"right", wlDateDisplayFormat:"default",headercss: "wLRestScheduleHeader",
                 itemTemplate: function(value, item) {  
                     return new Date(value.date +" " + value.timezone).toLocaleString('default',{
                                                                                             weekday: "long",
@@ -85,13 +79,15 @@
                                                                                         }
                       );
                 },
-             },
+            },
+            { name: "holidayName", title:"Holiday", type: "text", width:"auto", validate: "required",headercss: "wLRestScheduleHeader" ,
+                itemTemplate: function(value, item) {  
+                         return "<b>" + item.holidayName + "</b><br>" + item.specialNote;
+                }
+            },
+            
            
         ]
     });
 
-/* Image controls */
-    
 
-/* Miscellaneous  */
-    $("#tabs").tabs();

@@ -2,23 +2,6 @@
 
 namespace App\Controller;
 
-use RI5\DB\Entity\Customer;
-use RI5\DB\Entity\Data\WLConstants;
-use RI5\DB\Entity\Reservation;
-use RI5\DB\Entity\Place;
-use RI5\Exception\BaseException;
-use RI5\Exception\CustomerNotFoundException;
-use RI5\Exception\PlaceNotFoundException;
-use RI5\Exception\SecurityException;
-use RI5\Services\CustomerService;
-use RI5\Services\ReservationService;
-use RI5\Services\PlaceService;
-use DateTime;
-use Exception;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/reservation')]

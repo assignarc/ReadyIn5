@@ -27,10 +27,11 @@ class EventSubscriber extends BaseSubscriber implements EventSubscriberInterface
    
     public function onPlaceUpdated(PlaceUpdated $event){
         try{
-            $this->logEvent($event,"Received");
+            $this->logEvent($event,"RECEIVE");
             //Invalidate Place Cache
             $this->cache->invalidateTags(["PLACE.INFO." . strval($event->PlaceId)]);
-            $this->logEvent($event,"Processed");
+            $this->cache->invalidateTags(["PLACE.INFO." . strval($event->PlaceSlug)]);
+            $this->logEvent($event,"PROCESS");
         }
         catch(Exception $ex){
             $this->logException($ex);
@@ -41,7 +42,7 @@ class EventSubscriber extends BaseSubscriber implements EventSubscriberInterface
     {
         try{
            
-            $this->logEvent($event,"Received");
+            $this->logEvent($event,"RECEIVE");
             //Send message to customer
             switch($event->Status){
                 case ReservationStatus::STATUS_WAIT:
@@ -60,7 +61,7 @@ class EventSubscriber extends BaseSubscriber implements EventSubscriberInterface
             //Remove from cache with Tag
             //Invalidate the cache status for reservation
             $this->cache->invalidateTags(["RES.STAT.".$event->ReservationId]);
-            $this->logEvent($event,"Processed");
+            $this->logEvent($event,"PROCESS");
         }
         catch(Exception $ex){
             $this->logException($ex);

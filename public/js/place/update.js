@@ -45,7 +45,7 @@
             data: JSON.stringify(formData),
         }).done(function(response) {
             showNotification("info","Restautant profile updated!");
-            initializePhoneField("phone","phoneInput","save");
+            //initializePhoneField("phone","phoneInput","save");
         }).fail(function(jqXHR,textStatus, errorThrow){
             showNotification("error","Error loading Place Profile");
         });
@@ -67,7 +67,7 @@
             $("#postalcode").val(response.details.place.postalcode);
             $("#phone").val(response.details.place.phone);
             showNotification("info","Restautant profile loaded!");
-            initializePhoneField("phone","phoneInput", "save");
+            //initializePhoneField("phone","phoneInput", "save");
         }).fail(function(jqXHR,textStatus, errorThrow){
             showNotification("error","Error updating Place Profile");
         });
@@ -196,9 +196,9 @@
         },
 
         fields: [
-            { name: "holidayName", title:"Holiday", type: "text",  validate: "required",headercss: "wLRestScheduleHeader" },
-            { name: "specialNote", title:"Notes" ,type: "text", headercss: "wLRestScheduleHeader"},
-            { name: "holidayDate.date", title:"Date Time", type: "date", align:"right", wlDateDisplayFormat:"default",headercss: "wLRestScheduleHeader"},
+            { name: "holidayName", title:"Holiday", type: "text", width:"auto",  validate: "required",headercss: "wLRestScheduleHeader" },
+            { name: "specialNote", title:"Notes" ,type: "text", width:"auto",headercss: "wLRestScheduleHeader"},
+            { name: "holidayDate.date", title:"Date Time", type: "date", width:"auto", align:"right", wlDateDisplayFormat:"default",headercss: "wLRestScheduleHeader"},
             { type: "control" , headercss: "wLRestScheduleHeader",
                     modeSwitchButton: false,
                     editButton: false,
@@ -530,7 +530,9 @@
         $("#wlImgControl")
             .accordion({
                 collapsible: true,
-                heightStyle: "content"
+                heightStyle: "content",
+                width: "100%"
+
             })
             .sortable({
                 axis: "y",

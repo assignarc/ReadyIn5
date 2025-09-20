@@ -46,7 +46,7 @@ class MessengerEventSubscriber extends BaseSubscriber implements EventSubscriber
             if($send)
                 $this->sendMessage($event->PhoneNumber, $message ,$event->MessageType);
             
-            $this->logEvent($event,"Processed");
+            $this->logEvent($event,"PROCESS");
         }
         catch(Exception $ex){
             $this->logException($ex);

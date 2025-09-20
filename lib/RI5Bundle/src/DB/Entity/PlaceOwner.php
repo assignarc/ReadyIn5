@@ -111,6 +111,7 @@ class PlaceOwner extends BaseEntity implements JsonSerializable
 
    
     /**
+     * @var Collection
      * One Place has Many PlaceOwners.
      * @ORM\JoinColumn(name="ownerid", referencedColumnName="ownerid")
      * @ORM\OneToMany(targetEntity="Place", mappedBy="placeOwner") ]
@@ -277,7 +278,7 @@ class PlaceOwner extends BaseEntity implements JsonSerializable
         return $this->places->toArray();
     }
 
-    public function setPlaces(?Array $places): self
+    public function setPlaces( $places): self
     {
         $this->places = new ArrayCollection($places);
         return $this;

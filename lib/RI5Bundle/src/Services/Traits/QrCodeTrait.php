@@ -1,9 +1,7 @@
 <?php
 namespace RI5\Services\Traits;
 use Endroid\QrCode\Color\Color;
-use Endroid\QrCode\Color\ColorInterface;
 use Endroid\QrCode\Encoding\Encoding;
-use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelLow;
 use Endroid\QrCode\QrCode;
 use Endroid\QrCode\Label\Label;
 use Endroid\QrCode\Label\Font\Font;
@@ -16,7 +14,13 @@ trait QrCodeTrait{
     private int $IMAGE_SIZE = 300;
     private int $IMAGE_MARGIN = 0;
     private $LABEL_SIZE = 20;
-    
+    /**
+     * Summary of gnerateQrCode
+     * @param string $url
+     * @param string $labelText
+     * @param bool $includeLogo
+     * @return string
+     */
     function gnerateQrCode(string $url, string $labelText, bool $includeLogo=true) : string {
         $writer = new \Endroid\QrCode\Writer\SvgWriter();
        $qrCode = new QrCode(

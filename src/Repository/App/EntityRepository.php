@@ -2,8 +2,8 @@
 
 namespace App\Repository\App;
 
-use App\Entity\App\Entity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Mapping\Entity;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
