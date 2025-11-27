@@ -173,14 +173,14 @@ class Place extends BaseEntity implements JsonSerializable
      */
     private PlaceOwner $placeOwner;
 
-     /**
-     * @var int|null
-     *
-     * @ORM\ManyToOne(targetEntity="PlaceOwner")
-     * @ORM\JoinColumns(name="ownerid", referencedColumnName="ownerid")
-     * 
-     */
-    private $ownerid;
+    //  /**
+    //  * @var int|null
+    //  *
+    //  * @ORM\ManyToOne(targetEntity="PlaceOwner",inversedBy="ownerid")
+    //  * @ORM\JoinColumns(name="ownerid", referencedColumnName="ownerid")
+    //  * 
+    //  */
+    // private $ownerid;
 
     public mixed $data;
 
@@ -440,12 +440,12 @@ class Place extends BaseEntity implements JsonSerializable
 
         return $this;
     }
-    public function getOwnerId() :?int
+    public function getOwnerd() :?int
     {
         return $this->ownerid;
     }
 
-    public function setOwnerId(int $ownerid): self
+    public function setOwnerid(int $ownerid): self
     {
         $this->ownerid =$ownerid;
         return $this;

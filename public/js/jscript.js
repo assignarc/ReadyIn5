@@ -79,7 +79,9 @@ $(document).ready(function () {
             $(".hamburger").show();
         });
     });
-    $("#tabs").tabs();
+    try{
+        $("#tabs").tabs();
+    }catch{}
 });
 
 $(document).on("ajaxStart", function() {

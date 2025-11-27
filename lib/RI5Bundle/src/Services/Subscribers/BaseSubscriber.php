@@ -5,12 +5,12 @@ use Psr\Log\LogLevel;
 use RI5\DB\Events\BaseEvent;
 use RI5\Services\Traits\LoggerAwareTrait;
 
-abstract class BaseSubscriber 
+class BaseSubscriber 
 {
     use LoggerAwareTrait;
-    private string $LOG_LEVEL = LogLevel::DEBUG;
+    private string $LOG_LEVEL = LogLevel::INFO;
     public function logEvent(BaseEvent $event, string $status)
     {
-       $this->logMessage(message:"Event{$status}: " . $event->__toString(),level: $this->LOG_LEVEL);
+       //$this->logMessage(message:"Event{$status}: " . $event->__toString(),level: $this->LOG_LEVEL);
     }
 }

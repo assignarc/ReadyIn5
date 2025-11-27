@@ -1,9 +1,9 @@
 $(function() {
     //window.loggedIn=false;
-
 } );
+var phoneInput;
 function processButton(typeStep){
-    processPhoneInput();
+    initializePhoneField("phone","phoneInput",null);
     switch(typeStep) {
         case "sendcode":
             var formData={
@@ -74,4 +74,6 @@ function processButton(typeStep){
             // code block
         }  
 }
+
+
 

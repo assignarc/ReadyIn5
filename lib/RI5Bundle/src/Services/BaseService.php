@@ -5,7 +5,7 @@ namespace RI5\Services;
 use RI5\Services\Traits\CacheAwareTrait;
 
 
-abstract class BaseService 
+class BaseService 
 {
     protected $objectRepository;
     protected $container;

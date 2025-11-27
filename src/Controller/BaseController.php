@@ -17,9 +17,8 @@ use Symfony\Component\HttpFoundation\Response;
 //https://ourcodeworld.com/articles/read/1386/how-to-generate-the-entities-from-a-database-and-create-the-crud-automatically-in-symfony-5
 
 
-abstract class BaseController extends AbstractController
+class BaseController extends AbstractController
 {
-  
     protected $session;
     protected $request;
     protected $cookies;
@@ -29,7 +28,10 @@ abstract class BaseController extends AbstractController
    
     use LoggerAwareTrait;
     // use CacheAwareTrait;
-
+    /**
+     * Summary of __construct
+     * @param \Symfony\Component\HttpFoundation\RequestStack $requestStack
+     */
     public function __construct(RequestStack $requestStack)
     {
         $this->request = $requestStack->getCurrentRequest();
@@ -48,8 +50,13 @@ abstract class BaseController extends AbstractController
     public function setSuccessResponse(string $message = "Success", int $code = 0, mixed $details =[]){
         $this->responseDetails->set($message, $code, $details);  
     }
+    /**
+     * Summary of setExceptionResponse
+     * @param \RI5\Exception\BaseException $exception
+     * @return void
+     */
     public function setExceptionResponse(BaseException $exception){
-        $this->logException($exception->getInnerException());
+        $this->logException($exception);
         $this->responseDetails->set($exception->getMessage(),$exception->getCode(),["exception"=>$exception->getMessage()]);
         $this->responseDetails->addDetail("exception", $exception->__toString());
     }
@@ -67,6 +74,11 @@ abstract class BaseController extends AbstractController
     protected function addFlashMessage(string $type, string $message){
         $this->addFlash($type,$message);
     }
+    /**
+     * Summary of routeExists
+     * @param mixed $name
+     * @return bool
+     */
     protected function routeExists($name) : bool
     {
         // I assume that you have a link to the container in your twig extension class
@@ -74,15 +86,30 @@ abstract class BaseController extends AbstractController
         return (null === $router->getRouteCollection()->get($name)) ? false : true;
     }
     /* HTTP Parameters */
+    /**
+     * Summary of getParm
+     * @param string $parm
+     * @return mixed
+     */
     protected function getParm(string $parm): mixed{
         // https://lindevs.com/methods-to-get-route-parameters-in-symfony
         $data =  $this->request->get($parm);
         return $data ??  WLConstants::NONE;
     }
+    /**
+     * Summary of postParm
+     * @param string $parm
+     * @param mixed $defaultValue
+     * @return string
+     */
     protected function postParm(string $parm, mixed $defaultValue = WLConstants::NONE): string{
         $parameters = json_decode($this->request->getContent(), true);
         return array_key_exists($parm,$parameters) ?  $parameters[$parm] :  $defaultValue;
     }
+    /**
+     * Summary of postJson
+     * @return mixed
+     */
     protected function postJson(): mixed{
         return json_decode($this->request->getContent());
     }
@@ -90,25 +117,55 @@ abstract class BaseController extends AbstractController
     /**
      * Session Functions
      */
+    /**
+     * Summary of logout
+     * @return void
+     */
     protected function logout(){
         $this->session->clear();
     }
+    /**
+     * Summary of getSessionParm
+     * @param string $parm
+     * @param mixed $defaultValue
+     * @return string
+     */
     protected function getSessionParm(string $parm, mixed $defaultValue = WLConstants::NONE) : string {
         $data =  $this->session->get($parm);
         return $data ?? $defaultValue;
     }
+    /**
+     * Summary of getSessionAllParms
+     * @return array
+     */
     protected function getSessionAllParms() : array{
         $data =  $this->session->all();
         return $data ?? [];
     }
+    /**
+     * Summary of setSessionParm
+     * @param string $key
+     * @param mixed $value
+     * @return void
+     */
     protected function setSessionParm(string $key, mixed $value=WLConstants::NONE){
         $this->session->set($key,$value);
     }
+    /**
+     * Summary of getQueryParm
+     * @param string $parm
+     * @return bool|float|int|string
+     */
     protected function getQueryParm(string $parm): mixed{
         //https://lindevs.com/methods-to-get-route-parameters-in-symfony
         $data =  $this->request->query->get($parm);
         return $data ?? WLConstants::NONE;
     }
+    /**
+     * Summary of customResponse
+     * @param \Symfony\Component\HttpFoundation\Response $redirectResponse
+     * @return Response
+     */
     protected function customResponse(Response $redirectResponse) : Response{
         //foreach($this->cookiesResponse as &$value)
         //    $this->log($value);
@@ -120,7 +177,14 @@ abstract class BaseController extends AbstractController
      /**
      * Security Functions
      */
-
+    /**
+     * Summary of checkPlacePermissions
+     * @param array $placePermissionRequired
+     * @param string $placeSlug
+     * @param bool $checkPublicPermissions
+     * @throws \RI5\Exception\SecurityException
+     * @return void
+     */
     public function checkPlacePermissions(array $placePermissionRequired, string $placeSlug = "", bool $checkPublicPermissions = false){
         /** 
          *  $this->setSessionParm(WLConstants::SESSION_AUTH_TOKEN,"1");
@@ -171,6 +235,14 @@ abstract class BaseController extends AbstractController
         }
 
     }
+    /**
+     * Summary of checkCustomerPermissions
+     * @param array $placePermissionRequired
+     * @param string $placeSlug
+     * @param string $phone
+     * @throws \RI5\Exception\SecurityException
+     * @return void
+     */
     public function checkCustomerPermissions(array $placePermissionRequired, string $placeSlug = "", string $phone=""){
         /** 
          *  $this->setSessionParm(WLConstants::SESSION_AUTH_TOKEN,"1");
@@ -224,9 +296,18 @@ abstract class BaseController extends AbstractController
     protected function createSecurityToken():AuthToken{
         return AuthToken::Token($this->session->all());;
     }
-   
+
     
     /* COOKIE FUNCTIONS */
+    /**
+     * Summary of addCookie
+     * @param string $key
+     * @param string $value
+     * @param \DateTimeInterface $expires
+     * @param string $domain
+     * @param bool $secure
+     * @return void
+     */
     protected function addCookie(string $key,string $value, DateTimeInterface $expires, string $domain ="/", bool $secure = false ){
         $this->cookiesResponse[] =Cookie::create($key)
                 ->withValue($value)
@@ -234,7 +315,11 @@ abstract class BaseController extends AbstractController
                 ->withDomain("127.0.0.1")
                 ->withSecure($secure);
     }
-
+    /**
+     * Summary of removeCookie
+     * @param string $key
+     * @return void
+     */
     protected function removeCookie(string $key){
         if(!$this->cookies)
             return;
